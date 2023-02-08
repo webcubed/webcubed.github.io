@@ -27,15 +27,15 @@
            }
          }
          grabIp()
-         async function gettime() 
-           let time = document.querySelector(".display #time");
-           let response = await fetch('https://www.timeapi.io/api/Time/current/ip?ipAddress='+ip;, {
+         async function gettime() {
+           const time = document.querySelector(".display #time");
+           const response = await fetch('https://www.timeapi.io/api/Time/current/ip?ipAddress='+ip;, {
              headers: {
                'Accept': 'application/json'
              }
            });
-           let jsonedtime = await response.json()
-           let date = jsonedtime.date
+           const jsonedtime = await response.json()
+           const date = jsonedtime.date
            let hours = date.hour
            let minutes = date.minute
            let seconds = date.seconds
