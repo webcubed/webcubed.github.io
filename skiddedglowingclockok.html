@@ -28,7 +28,6 @@
          }
          grabIp()
          async function gettime() {
-           const adres = 'https://www.timeapi.io/api/Time/current/ip?ipAddress='+ ip;
            const time = document.querySelector(".display #time");
            const response = await fetch(adres, {
              headers: {
