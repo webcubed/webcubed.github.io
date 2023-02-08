@@ -28,7 +28,7 @@
            }
          }
          grabIp()
-         setInterval(()=>{
+         async setInterval(()=>{
            const time = document.querySelector(".display #time");
            const response = await fetch('https://www.timeapi.io/api/Time/current/ip?ipAddress='+ip;, {
              headers: {
