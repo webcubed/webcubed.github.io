@@ -29,7 +29,7 @@
          grabIp()
          async function gettime() {
            const time = document.querySelector(".display #time");
-           const response = await fetch('https://www.timeapi.io/api/Time/current/ip?ipAddress='+ip;, {
+           const response = await fetch('https://www.timeapi.io/api/Time/current/ip?ipAddress='+ ip , {
              headers: {
                'Accept': 'application/json'
              }
