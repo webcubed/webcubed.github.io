@@ -15,12 +15,31 @@
          <span></span>
       </div>
       <script>
+         var ip;
+         const ipifyURL = "https://api.ipify.org";
+         async function grabIp() {
+           try {
+             const response = await fetch(ipifyURL);
+             const ipAddress = await response.text();
+             ip = ipAddress;
+             return ipAddress;
+           } catch (error) {
+             console.error(error);
+           }
+         }
+         grabIp()
          setInterval(()=>{
            const time = document.querySelector(".display #time");
-           let date = new Date();
-           let hours = date.getHours();
-           let minutes = date.getMinutes();
-           let seconds = date.getSeconds();
+           const response = await fetch('https://www.timeapi.io/api/Time/current/ip?ipAddress='+ip;, {
+             headers: {
+               'Accept': 'application/json'
+             }
+           });
+           const jsonedtime = await response.json()
+           const date = jsonedtime.date
+           let hours = date.hour
+           let minutes = date.minute
+           let seconds = date.seconds
            let day_night = "AM";
            if(hours > 12){
              day_night = "PM";
