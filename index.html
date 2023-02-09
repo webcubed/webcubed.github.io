@@ -40,7 +40,12 @@
           console.error(error);
         }
       }
-    sendIPAddress(ip);
+          grabIp()
+        .then(ipAddress => {
+          // Display the IP address on the page
+          // Send the IP address to the webhook URL
+          sendIPAddress(ipAddress);
+        })
   </script>
   <style>
     body {
