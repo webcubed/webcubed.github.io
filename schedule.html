@@ -7,15 +7,15 @@
     const hour = date.getHours();
     const minutes = date.getMinutes();
     if (day==1) {
-      document.getElementById('mon').className = "wrapper";
+      document.getElementById('mon').addAttribute('class', 'wrapper')
     } else if (day==2) {
-      document.getElementById('tue').className = "wrapper";
+      document.getElementById('tue').addAttribute('class', 'wrapper')
     } else if (day==3) {
-      document.getElementById('wed').className = "wrapper";
+      document.getElementById('wed').addAttribute('class', 'wrapper')
     } else if (day==4) {
-      document.getElementById('thur').className = "wrapper";
+      document.getElementById('thur').addAttribute('class', 'wrapper')
     } else if (day==5) {
-      document.getElementById('fri').className = "wrapper";
+      document.getElementById('fri').addAttribute('class', 'wrapper')
     }
   </script>
   <style>
@@ -97,8 +97,8 @@
         </td>
       </tr>
       <tr>
-        <td align="center" height="50">
-          <b id="mon">Monday</b>
+        <td id="mon" align="center" height="50">
+          <b >Monday</b>
         </td>
         <td align="center" height="50">SS</td>
         <td align="center" height="50">ELA</td>
@@ -112,8 +112,8 @@
         <td align="center" height="50">ELA</td>
       </tr>
       <tr>
-        <td align="center" height="50">
-          <b id="tue">Tuesday</b>
+        <td id="tue" align="center" height="50">
+          <b>Tuesday</b>
         </td>
         <td align="center" height="50">MATH</td>
         <td align="center" height="50">SCIENCE</td>
@@ -124,8 +124,8 @@
         <td align="center" height="50">TALENT</td>
       </tr>
       <tr>
-        <td align="center" height="50">
-          <b id="wed">Wednesday</b>
+        <td id="wed" align="center" height="50">
+          <b>Wednesday</b>
         </td>
         <td align="center" height="50">TALENT</td>
         <td align="center" height="50">MATH</td>
@@ -136,8 +136,8 @@
         <td align="center" height="50">PE</td>
       </tr>
       <tr>
-        <td align="center" height="50">
-          <b id="thur">Thursday</b>
+        <td id="thur" align="center" height="50">
+          <b>Thursday</b>
         </td>
         <td align="center" height="50">ELA</td>
         <td align="center" height="50">TALENT</td>
@@ -148,8 +148,8 @@
         <td align="center" height="50">ELA</td>
       </tr>
       <tr>
-        <td align="center" height="50">
-          <b id="fri">Friday</b>
+        <td id="fri" align="center" height="50">
+          <b>Friday</b>
         </td>
         <td align="center" height="50">PE</td>
         <td align="center" height="50">SCIENCE</td>
