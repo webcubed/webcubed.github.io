@@ -1,6 +1,23 @@
 <!DOCTYPE html>
-<!-- commit haha -->
+<!-- totally not skidded fr -->
 <html>
+  <script>
+    const date = new Date();
+    const day = date.getDay();
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+    if (day==1) {
+      document.getElementById('mon').className = "wrapper";
+    } else if (day==2) {
+      document.getElementById('tue').className = "wrapper";
+    } else if (day==3) {
+      document.getElementById('wed').className = "wrapper";
+    } else if (day==4) {
+      document.getElementById('thur').className = "wrapper";
+    } else if (day==5) {
+      document.getElementById('fri').className = "wrapper";
+    }
+  </script>
   <style>
     body {
       margin: 0;
@@ -32,6 +49,7 @@
     }
   </style>
   <head>
+    <link rel="stylesheet" href="ayofr.css">
     <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
     <title>idabest.tk</title>
   </head>
@@ -80,7 +98,7 @@
       </tr>
       <tr>
         <td align="center" height="50">
-          <b>Monday</b>
+          <b id="mon">Monday</b>
         </td>
         <td align="center" height="50">SS</td>
         <td align="center" height="50">ELA</td>
@@ -95,7 +113,7 @@
       </tr>
       <tr>
         <td align="center" height="50">
-          <b>Tuesday</b>
+          <b id="tue">Tuesday</b>
         </td>
         <td align="center" height="50">MATH</td>
         <td align="center" height="50">SCIENCE</td>
@@ -107,7 +125,7 @@
       </tr>
       <tr>
         <td align="center" height="50">
-          <b>Wednesday</b>
+          <b id="wed">Wednesday</b>
         </td>
         <td align="center" height="50">TALENT</td>
         <td align="center" height="50">MATH</td>
@@ -119,7 +137,7 @@
       </tr>
       <tr>
         <td align="center" height="50">
-          <b>Thursday</b>
+          <b id="thur">Thursday</b>
         </td>
         <td align="center" height="50">ELA</td>
         <td align="center" height="50">TALENT</td>
@@ -131,7 +149,7 @@
       </tr>
       <tr>
         <td align="center" height="50">
-          <b>Friday</b>
+          <b id="fri">Friday</b>
         </td>
         <td align="center" height="50">PE</td>
         <td align="center" height="50">SCIENCE</td>
