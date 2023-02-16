@@ -2,6 +2,7 @@
 <!-- totally not skidded fr -->
 <html>
   <script>
+    window.highlightDate=function() {
     const date = new Date();
     const day = date.getDay();
     const hour = date.getHours();
@@ -16,6 +17,7 @@
       document.getElementById('thur').style.color = "#5d3fd3";
     } else if (day==5) {
       document.getElementById('fri').style.color = "#5d3fd3";
+    }
     }
   </script>
   <style>
@@ -53,7 +55,7 @@
     <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
     <title>idabest.tk</title>
   </head>
-  <body style="background-color: #000000;">
+  <body onload="highlightDate()" style="background-color: #000000;">
     <div class="topnav">
       <a href="https://idabest.tk/">Home</a>
       <a class="active" href="https://idabest.tk/schedule">Schedule</a>
