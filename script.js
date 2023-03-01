@@ -7,10 +7,7 @@ window.goto = function(page) {
   const xhr = new XMLHttpRequest();
   xhr.open('GET', 'https://idabest.tk/' + page, true);
   xhr.send();
-  function stuff() {
+  xhr.onload=function() {
       document.getElementsByTagName('html')[0].innerHTML = xhr.response
   }
-  setTimeout(() => {
-    stuff()
-}, 140)
 }
