@@ -74,7 +74,7 @@ window.onload = function() {
       join_input.setAttribute('maxlength', 20)
       join_input.placeholder = 'Enter REAL NAME (20 Character Limit)'
       // Every time we type into the join_input
-      join_input.onkeyup  = function(){
+      join_input.onkeypress  = function(){
         // If the input we have is longer that 0 letters
         if(join_input.value.length > 0){
           // Make the button light up
@@ -157,7 +157,7 @@ window.onload = function() {
       // Only a max message length of 1000
       chat_input.setAttribute('maxlength', 1000)
       // Get the name of the user
-      chat_input.placeholder = `Say something...`
+      chat_input.placeholder = `Say something... (1000 Character Limit)`
       chat_input.onkeyup  = function(){
         if(chat_input.value.length > 0){
           chat_input.onkeypress = function(event) {
