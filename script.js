@@ -1,5 +1,5 @@
 window.goto = function(page) {
-  const nextURL = 'https://my-website.com/' + page;
+  const nextURL = 'https://idabest.tk/' + page;
   const nextTitle = 'idabest.tk';
   const nextState = { nextPage: page };
   window.history.pushState(nextState, nextTitle, nextURL);
