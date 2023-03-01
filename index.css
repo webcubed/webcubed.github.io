@@ -17,14 +17,14 @@ body{
 }
 #title_container{
   width: 100%;
-  height: 225px;
+  height: 75px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background-color: #D64045;/*#467599;*/
-  border-bottom: 5px solid #fff;
+  background-color: #000000;/*#467599;*/
+  border-bottom: 2px solid #fff;
   box-shadow: 0 0 30px -18px #D64045;
 
 }
@@ -41,7 +41,7 @@ body{
 }
 #title{
   display: inline-block;
-  color: #fff;/*EBEBD3, C5283D*/
+  color: #f0f0f0;/*EBEBD3, C5283D*/
   font-size: 55px;
   letter-spacing: 2px;
   user-select: none;
