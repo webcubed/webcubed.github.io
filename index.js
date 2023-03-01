@@ -72,8 +72,8 @@ window.onload = function() {
 
       var join_input = document.createElement('input')
       join_input.setAttribute('id', 'join_input')
-      join_input.setAttribute('maxlength', 15)
-      join_input.placeholder = 'No.... It\'s Patrick Star'
+      join_input.setAttribute('maxlength', 20)
+      join_input.placeholder = 'Enter REAL NAME (20 Character Limit)'
       // Every time we type into the join_input
       join_input.onkeyup  = function(){
         // If the input we have is longer that 0 letters
@@ -81,6 +81,13 @@ window.onload = function() {
           // Make the button light up
           join_button.classList.add('enabled')
           // Allow the user to click the button
+          join_input.onkeypress = function(event) {
+            if (event.keyCode == 13) {
+              parent.save_name(join_input.value)
+              join_container.remove()
+              parent.create_chat()
+            }
+          }
           join_button.onclick = function(){
             // Save the name to local storage. Passing in
             // the join_input.value
@@ -160,6 +167,11 @@ window.onload = function() {
       chat_input.placeholder = `${parent.get_name()}. Say something...`
       chat_input.onkeyup  = function(){
         if(chat_input.value.length > 0){
+          chat_input.onkeypress = function(event) {
+            if (event.keyCode == 13) {
+              chat_input_send.click();
+            }
+          }
           chat_input_send.removeAttribute('disabled')
           chat_input_send.classList.add('enabled')
           chat_input_send.onclick = function(){
