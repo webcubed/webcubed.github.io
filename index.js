@@ -157,7 +157,7 @@ window.onload = function() {
       // Only a max message length of 1000
       chat_input.setAttribute('maxlength', 1000)
       // Get the name of the user
-      chat_input.placeholder = `${parent.get_name()}. Say something...`
+      chat_input.placeholder = `Say something...`
       chat_input.onkeyup  = function(){
         if(chat_input.value.length > 0){
           chat_input.onkeypress = function(event) {
@@ -192,7 +192,7 @@ window.onload = function() {
 
       var chat_logout = document.createElement('button')
       chat_logout.setAttribute('id', 'chat_logout')
-      chat_logout.textContent = `${parent.get_name()} • logout`
+      chat_logout.textContent = `Logout`
       // "Logout" is really just deleting the name from the localStorage
       chat_logout.onclick = function(){
         localStorage.clear()
