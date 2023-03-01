@@ -12,5 +12,5 @@ window.goto = function(page) {
   }
   setTimeout(() => {
     stuff()
-}, 5000)
+}, 250)
 }
