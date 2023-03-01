@@ -4,4 +4,8 @@ window.goto = function(page) {
   const nextState = { nextPage: page };
   window.history.pushState(nextState, nextTitle, nextURL);
   window.history.replaceState(nextState, nextTitle, nextURL);
+  const xhr = new XMLHttpRequest();
+  xhr.open('GET', 'https://idabest.tk/ + page', true);
+  xhr.send();
+  document.getElementsByTagName('html')[0].innerHTML=xhr.response
 }
