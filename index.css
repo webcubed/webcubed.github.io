@@ -40,11 +40,12 @@ body{
   border-radius: 200px;
 }
 #title{
-  display: inline-block;
-  color: #f0f0f0;/*EBEBD3, C5283D*/
-  font-size: 55px;
-  letter-spacing: 2px;
-  user-select: none;
+  color: #f0f0f0;
+  font-weight: 600;
+  vertical-align: baseline;
+  height: 75px;
+  font-size: 75px;
+  font-family: 'Exo 2';
 }
 
 #join_container{
