@@ -16,7 +16,7 @@ window.onload = function() {
   };
 
   // Initialize Firebase
-  initializeApp(firebaseConfig);
+  firebase.initializeApp(firebaseConfig);
   // This is very IMPORTANT!! We're going to use "db" a lot.
   var db = firebase.database()
   // We're going to use oBjEcT OrIeNtEd PrOgRaMmInG. Lol
