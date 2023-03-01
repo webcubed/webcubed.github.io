@@ -1,7 +1,7 @@
 body{
   /* https://www.color-hex.com/color/d3d3d3 */
-  background-color: #fff; /*#f6f6f6, EBEBD3, fafafa*/
-  font-family: Bungee Outline;
+  background-color: #000000; /*#f6f6f6, EBEBD3, fafafa*/
+  font-family: 'Exo 2';
   font-weight: 900;
 
   overflow: hidden;
