@@ -43,13 +43,11 @@ window.onload = function() {
       var title = document.createElement('h1')
       title.setAttribute('id', 'title')
       title.textContent = 'Chat'
-      var sep = document.createElement('hr')
       
 
       //title_inner_container.append(title)
       //title_container.append(title_inner_container)
       document.body.append(title)
-      document.body.append(sep)
     }
     // create_join_form() creates the join form
     create_join_form(){
