@@ -105,7 +105,7 @@ body{
 #join_button{
   width: 60%;
   height: 40px;
-  background-color: #a2c02c;
+  background-color: #D3D3D3;
   font-family: Varela Round;
   font-size: 15px;
   font-weight: bold;
@@ -232,7 +232,7 @@ body{
 .enabled{
   transition: background-color 0.5s;
   color: #fff;
-  background-color: #D64045; /*#5B7553;*/
+  background-color: #5B7553; /*#5B7553;*/
   cursor: pointer;
 }
 #title_container.chat_title_container{
