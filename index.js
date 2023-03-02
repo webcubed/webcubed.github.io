@@ -311,7 +311,8 @@ window.onload = function() {
           var info_content = document.createElement('p')
           message_content.setAttribute('class', 'info_content')
           message_content.textContent = `${ip} ${index}`
-
+          
+          info_content_container.append(info_content)
           message_user_container.append(message_user)
           message_content_container.append(message_content)
           message_inner_container.append(message_user_container, message_content_container)
