@@ -193,14 +193,13 @@ body{
   border-radius: 25px;
   border:none;
   transition: 0.5s;
-  color: #5d3fd3;
-  background-color: #333;
+  color: #D64045;
+  background-color: #333333;
   cursor: pointer;
 }
 #chat_logout:hover{
   transition: 0.5s;
   background-color: #5d3fd3
-  color: #D64045
 }
 .info_content_container{
   width: 100%;
