@@ -231,8 +231,8 @@ body{
 
 .enabled{
   transition: background-color 0.5s;
-  color: #fff;
-  background-color: #5B7553; /*#5B7553;*/
+  color: #5d3fd3;
+  background-color: #1D3354; /*#5B7553;*/
   cursor: pointer;
 }
 #title_container.chat_title_container{
