@@ -312,7 +312,7 @@ window.onload = function() {
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
           if (name==="Nathan"){
-            info_content.textContent = ` ${index} ` // no ip :skul:
+            info_content.textContent = ` ${index} - Owner ` // no ip :skul:
           } else {
             info_content.textContent = ` ${index} - ${realip} ` // ip :sob:
           }
