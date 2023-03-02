@@ -91,7 +91,7 @@ window.onload = function() {
             }
           }
           join_button.onclick = function(){
-            if (join_input.value.legnth !=0){ //check it again bruh
+            if (join_input.value.length !=0){ //check it again bruh
               // Save the name to local storage. Passing in
               // the join_input.value
               parent.save_name(join_input.value)
