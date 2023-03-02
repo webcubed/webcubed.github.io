@@ -24,30 +24,12 @@ window.onload = function() {
     // Home() is used to create the home page
     home(){
       // First clear the body before adding in
-      // a title and the join form
       document.body.innerHTML = ''
-      this.create_title()
       this.create_join_form()
     }
     // chat() is used to create the chat page
     chat(){
-      this.create_title()
       this.create_chat()
-    }
-    create_title(){
-      //var title_container = document.createElement('div')
-      //title_container.setAttribute('id', 'title_container')
-      //var title_inner_container = document.createElement('div')
-      //title_inner_container.setAttribute('id', 'title_inner_container')
-
-      var title = document.createElement('h1')
-      title.setAttribute('id', 'title')
-      title.textContent = ''
-      
-
-      //title_inner_container.append(title)
-      //title_container.append(title_inner_container)
-      document.body.append(title)
     }
     // create_join_form() creates the join form
     create_join_form(){
