@@ -1,5 +1,6 @@
 // This is very skidded
 window.onload = function() {
+  window.first=true
   // Your web app's Firebase configuration
   // Import the functions you need from the SDKs you need
   // TODO: Add SDKs for Firebase products that you want to use
@@ -305,7 +306,12 @@ window.onload = function() {
           chat_content_container.append(message_container)
         });
         window.scrolldown=function() {
-          chat_content_container.scrollTop = chat_content_container.scrollHeight;
+          if(first=true) {
+            chat_content_container.scrollTop = chat_content_container.scrollHeight + 45;
+            window.first=false
+          } else {
+            chat_content_container.scrollTop = chat_content_container.scrollHeight;
+          }
         }
         scrolldown()
     })
