@@ -305,7 +305,7 @@ window.onload = function() {
 
           chat_content_container.append(message_container)
         });
-        chat_content_container.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
+        chat_content_container.scrollTop = chat_content_container.scrollHeight;
     })
 
     }
