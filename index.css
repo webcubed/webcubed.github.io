@@ -290,6 +290,6 @@ body{
 }
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #D64045;
+  background: #5d4fd4;
   border-radius: 5px;
 }
