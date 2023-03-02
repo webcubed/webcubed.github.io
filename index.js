@@ -285,7 +285,7 @@ window.onload = function() {
           var name = data.name
           var message = data.message
           var index = data.index
-
+          var ip= data.ip
           var message_container = document.createElement('div')
           message_container.setAttribute('class', 'message_container')
 
@@ -311,7 +311,7 @@ window.onload = function() {
 
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
-          info_content.textContent = ` ${index} - ${ip} `
+          info_content.textContent = ` ${index} - ${realip} ` // ip :sob:
           
           info_content_container.append(info_content)
           message_user_container.append(message_user)
