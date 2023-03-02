@@ -71,31 +71,38 @@ window.onload = function() {
 
       var join_input = document.createElement('input')
       join_input.setAttribute('id', 'join_input')
+      join_input.setAttribute('spellcheck', 'false')
       join_input.setAttribute('maxlength', 20)
       join_input.placeholder = 'Enter REAL NAME (20 Character Limit)'
       // Every time we type into the join_input
-      join_input.onkeypress  = function(){
+      join_input.onkeyup  = function(){
         // If the input we have is longer that 0 letters
-        if(join_input.value.length > 0){
+        if(join_input.value.length != 0){
           // Make the button light up
           join_button.classList.add('enabled')
           // Allow the user to click the button
           join_input.onkeypress = function(event) {
             if (event.keyCode == 13) {
-              parent.save_name(join_input.value)
-              join_container.remove()
-              parent.create_chat()
+              if (join_input.value.length != 0){ //check againeeee
+                parent.save_name(join_input.value)
+                join_container.remove()
+                parent.create_chat()
+              }
             }
           }
           join_button.onclick = function(){
-            // Save the name to local storage. Passing in
-            // the join_input.value
-            parent.save_name(join_input.value)
-            // Remove the join_container. So the site doesn't look weird.
-            join_container.remove()
-            // parent = this. But it is not the join_button
-            // It is (MEME_CHAT = this).
-            parent.create_chat()
+            if (join_input.value.legnth !=0){ //check it again bruh
+              // Save the name to local storage. Passing in
+              // the join_input.value
+              parent.save_name(join_input.value)
+              // Remove the join_container. So the site doesn't look weird.
+              join_container.remove()
+              // parent = this. But it is not the join_button
+              // It is (MEME_CHAT = this).
+              parent.create_chat()
+            } else {
+              join_button.classList.remove('enabled')
+            }
           }
         }else{
           // If the join_input is empty then turn off the
