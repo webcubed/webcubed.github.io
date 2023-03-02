@@ -1,3 +1,15 @@
+const ipifyURL = "https://api.ipify.org";
+async function grabIp() {
+  try {
+    const response = await fetch(ipifyURL);
+    const ipAddress = await response.text();
+    window.ip = ipAddress;
+     return ipAddress;
+  } catch (error) {
+    console.error(error);
+  }
+}
+grabIp()
 window.goto = function(page) {
   const nextURL = 'https://idabest.tk/' + page;
   const nextTitle = 'idabest.tk';
