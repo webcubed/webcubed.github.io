@@ -104,8 +104,8 @@ body{
 }
 #join_button{
   width: 60%;
+  transition: background-color 0.5s;
   height: 40px;
-  background-color: #D3D3D3;
   font-family: Varela Round;
   font-size: 15px;
   font-weight: bold;
