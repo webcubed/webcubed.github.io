@@ -306,11 +306,11 @@ window.onload = function() {
           message_content.textContent = `${message}`
           
           var info_content_container = document.createElement('div')
-          message_content_container.setAttribute('class', 'info_content_container')
+          info_content_container.setAttribute('class', 'info_content_container')
 
           var info_content = document.createElement('p')
-          message_content.setAttribute('class', 'info_content')
-          message_content.textContent = `${ip} ${index}`
+          info_content.setAttribute('class', 'info_content')
+          info_content.textContent = `${ip} ${index}`
           
           info_content_container.append(info_content)
           message_user_container.append(message_user)
