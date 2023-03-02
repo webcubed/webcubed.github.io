@@ -35,7 +35,7 @@ window.onload = function() {
     create_join_form(){
       // YOU MUST HAVE (PARENT = THIS). OR NOT. I'M NOT YOUR BOSS!😂
       var parent = this;
-      window.whitelist = ["Brian", "King", "Aiden", "Zeewee", "Jordan", "Zoe"];
+      window.whitelist = ["Brian", "King", "Aiden", "Zeewee", "Jordan", "Zoe", "Iris"];
       var join_container = document.createElement('div')
       join_container.setAttribute('id', 'join_container')
       var join_inner_container = document.createElement('div')
