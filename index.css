@@ -163,6 +163,7 @@ body{
   font-size: 15px;
 }
 #chat_input_send{
+  transition: color 0.5s;
   width: 5%;
   height: 100%;
   float: left;
@@ -172,6 +173,7 @@ body{
   color: #ccc;
 }
 #chat_input_send.enabled{
+  transition: color 0.5s;
   color: #5d3fd3;
   background-color: Transparent;
   cursor: pointer;
