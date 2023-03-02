@@ -185,7 +185,6 @@ body{
   display: flex;
   justify-content: center;
   align-items: center;
-
   float: left;
   margin-top: 20px;
 }
@@ -200,8 +199,6 @@ body{
   transition: color 0.5s;
 }
 #chat_logout:hover{
-  transition: color 0.5s;
-  transition: background-color 0.5s;
   background-color: #5d3fd3
   color: #D64045
 }
