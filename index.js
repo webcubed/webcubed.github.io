@@ -304,7 +304,10 @@ window.onload = function() {
 
           chat_content_container.append(message_container)
         });
-        setTimeout(()=>{chat_content_container.scrollTop = chat_content_container.scrollHeight;}, 500);
+        window.scrolldown=function() {
+          chat_content_container.scrollTop = chat_content_container.scrollHeight;
+        }
+        scrolldown()
     })
 
     }
