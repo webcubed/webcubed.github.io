@@ -1,6 +1,5 @@
 // This is very skidded
 window.onload = function() {
-  window.first=true
   // Your web app's Firebase configuration
   // Import the functions you need from the SDKs you need
   // TODO: Add SDKs for Firebase products that you want to use
@@ -51,7 +50,7 @@ window.onload = function() {
 
       var join_input_container = document.createElement('div')
       join_input_container.setAttribute('id', 'join_input_container')
-
+      const whitelist = ["Brian", "Nathan", "King", "Aiden"];
       var join_input = document.createElement('input')
       join_input.setAttribute('id', 'join_input')
       join_input.setAttribute('spellcheck', 'false')
@@ -67,26 +66,32 @@ window.onload = function() {
           join_input.onkeypress = function(event) {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
-                parent.save_name(join_input.value)
-                join_container.remove()
-                parent.create_chat()
+                if (whitelist.contains(join_input.value)) {
+                  parent.save_name(join_input.value)
+                  join_container.remove()
+                  parent.create_chat()
+                }
               }
             }
           }
           join_button.onclick = function(){
             if (join_input.value.length !=0){ //check it again bruh
-              // Save the name to local storage. Passing in
-              // the join_input.value
-              parent.save_name(join_input.value)
-              // Remove the join_container. So the site doesn't look weird.
-              join_container.remove()
-              // parent = this. But it is not the join_button
-              // It is (MEME_CHAT = this).
-              parent.create_chat()
+              if (whitelist.contains(join_input.value)) {
+                // Save the name to local storage. Passing in
+                // the join_input.value
+                parent.save_name(join_input.value)
+                // Remove the join_container. So the site doesn't look weird.
+                join_container.remove()
+                // parent = this. But it is not the join_button
+                // It is (MEME_CHAT = this).
+               parent.create_chat()
+              } else {
+               join_button.classList.remove('enabled') //whitelist
+              } 
             } else {
-              join_button.classList.remove('enabled')
+               join_button.classList.remove('enabled')
             }
-          }
+          } 
         }else{
           // If the join_input is empty then turn off the
           // join button
@@ -306,14 +311,8 @@ window.onload = function() {
           chat_content_container.append(message_container)
         });
         window.scrolldown=function() {
-          if(first=true) {
-            console.log(chat_content_container.scrollHeight)
-            chat_content_container.scrollTop = chat_content_container.scrollHeight + 230;
-            window.first=false
-          } else {
             console.log(chat_content_container.scrollHeight)
             chat_content_container.scrollTop = chat_content_container.scrollHeight;
-          }
         }
         scrolldown()
     })
