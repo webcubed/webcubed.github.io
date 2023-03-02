@@ -42,7 +42,7 @@ window.onload = function() {
 
       var title = document.createElement('h1')
       title.setAttribute('id', 'title')
-      title.textContent = 'Chat'
+      title.textContent = ''
       
 
       //title_inner_container.append(title)
