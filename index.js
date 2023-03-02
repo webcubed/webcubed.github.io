@@ -56,17 +56,20 @@ window.onload = function() {
       join_input.setAttribute('spellcheck', 'false')
       join_input.setAttribute('maxlength', 20)
       join_input.placeholder = 'Enter REAL NAME (20 Character Limit)'
+      var cont = join_input.value
       // Every time we type into the join_input
       join_input.onkeyup  = function(){
         // If the input we have is longer that 0 letters
-        if(join_input.value.length != 0){
+        if(join_input.value.length != 0){ // if not 0 length
           // Make the button light up
-          join_button.classList.add('enabled')
+          if(whitelist.contains(cont)){    
+            join_button.classList.add('enabled') //nice
+          }
           // Allow the user to click the button
           join_input.onkeypress = function(event) {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
-                if (whitelist.contains(join_input.value)) {
+                if (whitelist.contains(cont)) {
                   parent.save_name(join_input.value)
                   join_container.remove()
                   parent.create_chat()
@@ -76,7 +79,7 @@ window.onload = function() {
           }
           join_button.onclick = function(){
             if (join_input.value.length !=0){ //check it again bruh
-              if (whitelist.contains(join_input.value)) {
+              if (whitelist.contains(cont)) {
                 // Save the name to local storage. Passing in
                 // the join_input.value
                 parent.save_name(join_input.value)
@@ -89,8 +92,8 @@ window.onload = function() {
                join_button.classList.remove('enabled') //whitelist
               } 
             } else {
-               join_button.classList.remove('enabled')
-            }
+               join_button.classList.remove('enabled') //length
+            } //function
           } 
         }else{
           // If the join_input is empty then turn off the
