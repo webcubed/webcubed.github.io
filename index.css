@@ -202,6 +202,11 @@ body{
   background-color: #5d3fd3
   color: #D64045
 }
+.info_content_container{
+  width: 100%;
+  display: inline-block;
+  margin-bottom: 20px;
+}
 .message_container{
   width: 100%;
   display: inline-block;
@@ -232,6 +237,11 @@ body{
 .message_content{
   font-weight: normal;
   font-size: 14px;
+  margin-top: 5px;
+}
+.info_content{
+  font-weight: normal;
+  font-size: 7px;
   margin-top: 5px;
 }
 
