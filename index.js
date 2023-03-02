@@ -1,11 +1,5 @@
 // This is very skidded
 window.onload = function() {
-  // Your web app's Firebase configuration
-  // Import the functions you need from the SDKs you need
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
   const firebaseConfig = {
     apiKey: "AIzaSyC9IeopdU5LsK2T38yqDtm29zesMRAecfk",
     authDomain: "idabest-c1ad9.firebaseapp.com",
@@ -14,26 +8,17 @@ window.onload = function() {
     messagingSenderId: "976576815053",
     appId: "1:976576815053:web:d7927fa9d151e978efee84"
   };
-
-  // Initialize Firebase
   firebase.initializeApp(firebaseConfig);
-  // This is very IMPORTANT!! We're going to use "db" a lot.
   var db = firebase.database()
-  // We're going to use oBjEcT OrIeNtEd PrOgRaMmInG. Lol
   class MEME_CHAT{
-    // Home() is used to create the home page
     home(){
-      // First clear the body before adding in
       document.body.innerHTML = ''
       this.create_join_form()
     }
-    // chat() is used to create the chat page
     chat(){
       this.create_chat()
     }
-    // create_join_form() creates the join form
     create_join_form(){
-      // YOU MUST HAVE (PARENT = THIS). OR NOT. I'M NOT YOUR BOSS!😂
       var parent = this;
       window.whitelist = ["Brian", "King", "Aiden", "Zeewee", "Jordan", "Zoe", "Iris", "Sohaib"];
       var join_container = document.createElement('div')
@@ -297,7 +282,11 @@ window.onload = function() {
 
           var message_user = document.createElement('p')
           message_user.setAttribute('class', 'message_user')
+          if(name==="Nathan") {
+            message_user.innerHTML = `<b>Owner</b> ${name}`
+          } else {
           message_user.textContent = `${name}`
+          }
 
           var message_content_container = document.createElement('div')
           message_content_container.setAttribute('class', 'message_content_container')
@@ -312,7 +301,7 @@ window.onload = function() {
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
           if (name==="Nathan"){
-            info_content.textContent = ` ${index} - Owner ` // no ip :skul:
+            info_content.textContent = ` ${index} ` // no ip :skul:
           } else {
             info_content.textContent = ` ${index} - ${realip} ` // ip :sob:
           }
