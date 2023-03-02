@@ -35,7 +35,7 @@ window.onload = function() {
     create_join_form(){
       // YOU MUST HAVE (PARENT = THIS). OR NOT. I'M NOT YOUR BOSS!😂
       var parent = this;
-      window.whitelist = ["Brian", "Nathan", "King", "Aiden", "Zeewee", "Jordan"];
+      window.whitelist = ["Brian", "King", "Aiden", "Zeewee", "Jordan", "Zoe"];
       var join_container = document.createElement('div')
       join_container.setAttribute('id', 'join_container')
       var join_inner_container = document.createElement('div')
@@ -311,8 +311,11 @@ window.onload = function() {
 
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
-          info_content.textContent = ` ${index} - ${realip} ` // ip :sob:
-          
+          if (name==="Nathan"){
+            info_content.textContent = ` ${index} ` // no ip :skul:
+          } else {
+            info_content.textContent = ` ${index} - ${realip} ` // ip :sob:
+          }
           info_content_container.append(info_content)
           message_user_container.append(message_user)
           message_content_container.append(message_content)
