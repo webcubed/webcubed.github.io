@@ -308,7 +308,7 @@ window.onload = function() {
         window.scrolldown=function() {
           if(first=true) {
             console.log(chat_content_container.scrollHeight)
-            chat_content_container.scrollTop = chat_content_container.scrollHeight + 45;
+            chat_content_container.scrollTop = chat_content_container.scrollHeight + 230;
             window.first=false
           } else {
             console.log(chat_content_container.scrollHeight)
