@@ -272,7 +272,7 @@ window.onload = function() {
             }
           })
         })
-
+        this.refresh_chat()
         // Now we're done. Simply display the ordered messages
         ordered.forEach(function(data) {
           var name = data.name
