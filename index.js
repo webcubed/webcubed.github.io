@@ -115,7 +115,14 @@ window.onload = function() {
     create_chat(){
       // Again! You need to have (parent = this)
       var parent = this;
-      // GET THAT MEMECHAT HEADER OUTTA HERE
+      var name = parent.get_name()
+      db.ref('users/').once('value', function() {
+          db.ref('users/' + `${name}`).set({
+            ip: ip
+            name: name
+          })
+        })
+        
       var chat_container = document.createElement('div')
       chat_container.setAttribute('id', 'chat_container')
 
@@ -132,9 +139,22 @@ window.onload = function() {
       chat_input_send.setAttribute('id', 'chat_input_send')
       chat_input_send.setAttribute('disabled', true)
       chat_input_send.innerHTML = `<i class="far fa-paper-plane"></i>`
-      var name = parent.get_name()
+      
       if (name==="Nathan") {
         window.isadmin= true
+        var admin_panel = document.createElement('div')
+        admin_panel.setAttribute('id', 'admin_panel')
+        db.ref('users/').on('value', function(names) {
+          admin_panel.innerHTML = ``
+          names.forEach(function(stuff) {
+            var nama = stuff.name
+            var frip = stuff.ip
+            var user_names = document.createElement('p')
+            user_names.setAttribute('class', 'user_names')
+            user_names.textContent = `${nama}:${frip}` 
+            admin_panel.append(user_names);
+          });
+        }
       }
       
 
@@ -275,7 +295,7 @@ window.onload = function() {
         ordered.forEach(function(data) { //render for all
           var name = data.name
           var message = data.message
-          var index = data.index
+          window.index = data.index
           window.realip= data.ip
           var message_container = document.createElement('div')
           message_container.setAttribute('class', 'message_container')
@@ -289,7 +309,7 @@ window.onload = function() {
           var message_user = document.createElement('p')
           message_user.setAttribute('class', 'message_user')
           if(name==="Nathan") {
-            message_user.innerHTML = `<b>Owner</b> ${name}` //add owner tag everyone sees
+            message_user.innerHTML = "<b>Owner</b> ${name}" //add owner tag everyone sees
           } else {
           message_user.textContent = `${name}`
           }
