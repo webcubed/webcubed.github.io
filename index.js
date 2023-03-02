@@ -207,7 +207,7 @@ window.onload = function() {
     }
     // Sends message/saves the message to firebase database
     send_message(message){
-      var parent = this
+      var parent = this //again bro wtf
       if(parent.get_name() == null && message == null){
         return
       }
@@ -305,7 +305,7 @@ window.onload = function() {
 
           chat_content_container.append(message_container)
         });
-        chat_content_container.scrollTop = chat_content_container.scrollHeight;
+        chat_content_container.scrollIntoView({ behavior: "smooth", block: "end", inline: "nearest" });
     })
 
     }
