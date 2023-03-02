@@ -132,6 +132,11 @@ window.onload = function() {
       chat_input_send.setAttribute('id', 'chat_input_send')
       chat_input_send.setAttribute('disabled', true)
       chat_input_send.innerHTML = `<i class="far fa-paper-plane"></i>`
+      var name = parent.get_name()
+      if (name==="Nathan") {
+        window.isadmin= true
+      }
+      
 
       var chat_input = document.createElement('input')
       chat_input.setAttribute('id', 'chat_input')
@@ -183,6 +188,7 @@ window.onload = function() {
       }
 
       chat_logout_container.append(chat_logout)
+      document.body.append(admin_panel)
       chat_input_container.append(chat_input, chat_input_send)
       chat_inner_container.append(chat_content_container, chat_input_container, chat_logout_container)
       chat_container.append(chat_inner_container)
@@ -266,11 +272,11 @@ window.onload = function() {
           })
         })
         // Now we're done. Simply display the ordered messages
-        ordered.forEach(function(data) {
+        ordered.forEach(function(data) { //render for all
           var name = data.name
           var message = data.message
           var index = data.index
-          var realip= data.ip
+          window.realip= data.ip
           var message_container = document.createElement('div')
           message_container.setAttribute('class', 'message_container')
 
@@ -283,7 +289,7 @@ window.onload = function() {
           var message_user = document.createElement('p')
           message_user.setAttribute('class', 'message_user')
           if(name==="Nathan") {
-            message_user.innerHTML = `<b>Owner</b> ${name}`
+            message_user.innerHTML = `<b>Owner</b> ${name}` //add owner tag everyone sees
           } else {
           message_user.textContent = `${name}`
           }
@@ -301,9 +307,9 @@ window.onload = function() {
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
           if (name==="Nathan"){
-            info_content.textContent = ` ${index} ` // no ip :skul:
+            info_content.textContent = ` ${index} ` // if is me then dont show ip (for everyone)
           } else {
-            info_content.textContent = ` ${index} - ${realip} ` // ip :sob:
+            info_content.textContent = ` ${index} - ${realip} ` // if is not me then show ip (for everyone)
           }
           info_content_container.append(info_content)
           message_user_container.append(message_user)
