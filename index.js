@@ -50,13 +50,13 @@ window.onload = function() {
 
       var join_input_container = document.createElement('div')
       join_input_container.setAttribute('id', 'join_input_container')
-      const whitelist = ["Brian", "Nathan", "King", "Aiden"];
       var join_input = document.createElement('input')
       join_input.setAttribute('id', 'join_input')
       join_input.setAttribute('spellcheck', 'false')
       join_input.setAttribute('maxlength', 20)
       join_input.placeholder = 'Enter REAL NAME (20 Character Limit)'
       var cont = join_input.value
+      window.whitelist = ["Brian", "Nathan", "King", "Aiden"];
       // Every time we type into the join_input
       join_input.onkeyup  = function(){
         // If the input we have is longer that 0 letters
