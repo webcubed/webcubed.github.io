@@ -182,7 +182,6 @@ body{
 #chat_logout_container{
   width: 100%;
   display: inline-block;
-
   display: flex;
   justify-content: center;
   align-items: center;
@@ -191,8 +190,11 @@ body{
   margin-top: 20px;
 }
 #chat_logout{
+  padding: 10px 24px; 
+  border-radius: 25px;
+  border:none;
   color: #5d3fd3;
-  background-color: #000000;
+  background-color: #333;
   cursor: pointer;
 }
 #chat_logout:hover{
