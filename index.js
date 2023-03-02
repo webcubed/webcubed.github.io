@@ -272,7 +272,6 @@ window.onload = function() {
             }
           })
         })
-        this.refresh_chat()
         // Now we're done. Simply display the ordered messages
         ordered.forEach(function(data) {
           var name = data.name
@@ -305,7 +304,7 @@ window.onload = function() {
 
           chat_content_container.append(message_container)
         });
-        chat_content_container.scrollTop = chat_content_container.scrollHeight;
+        setTimeout(()=>{chat_content_container.scrollTop = chat_content_container.scrollHeight;}, 500);
     })
 
     }
