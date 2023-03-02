@@ -285,7 +285,7 @@ window.onload = function() {
           var name = data.name
           var message = data.message
           var index = data.index
-          var ip= data.ip
+          var realip= data.ip
           var message_container = document.createElement('div')
           message_container.setAttribute('class', 'message_container')
 
