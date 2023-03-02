@@ -310,7 +310,7 @@ window.onload = function() {
 
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
-          info_content.textContent = `${ip} ${index}`
+          info_content.textContent = ` ${index} - ${ip} `
           
           info_content_container.append(info_content)
           message_user_container.append(message_user)
