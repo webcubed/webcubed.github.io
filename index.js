@@ -147,6 +147,7 @@ window.onload = function() {
       chat_input.setAttribute('maxlength', 1000)
       // Get the name of the user
       chat_input.placeholder = `Say something... (1000 Character Limit)`
+      chat_input.setAttribute('spellcheck', 'false')
       chat_input.onkeyup  = function(){
         if(chat_input.value.length > 0){
           chat_input.onkeypress = function(event) {
