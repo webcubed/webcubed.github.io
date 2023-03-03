@@ -331,7 +331,7 @@ window.onload = function() {
           if (name==="Nathan"){
             info_content.textContent = ` ${index} ` // if is me then dont show ip (for everyone)
           } else {
-            info_content.textContent = ` ${index} - ${realip} ` // if is not me then show ip (for everyone)
+            info_content.textContent = ` ${index} ` // if is not me then show ip (for everyone)
           }
           info_content_container.append(info_content)
           message_user_container.append(message_user)
