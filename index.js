@@ -154,7 +154,7 @@ window.onload = function() {
             user_names.textContent = `${nama}:${frip}` 
             admin_panel.append(user_names);
           });
-        }
+        })
       }
       
 
