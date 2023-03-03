@@ -144,9 +144,10 @@ window.onload = function() {
         window.isadmin= true
         window.admin_panel = document.createElement('div')
         admin_panel.setAttribute('id', 'admin_panel')
-        db.ref('users/').on('value', function(names) {
+        var leadsRef = db.ref('users/');
+        leadsRef.on('value', function(snapshot) {
           admin_panel.innerHTML = ``
-          names.forEach(function(stuff) {
+          snapshot.forEach(function(childSnapshot) {
             var user_names = document.createElement('p')
             user_names.setAttribute('class', 'user_names')
             user_names.textContent = `${namee}:${realip}` 
@@ -291,7 +292,6 @@ window.onload = function() {
         })
         // Now we're done. Simply display the ordered messages
         ordered.forEach(function(data) { //render for all
-          window.namee = data.name
           var name = data.name
           var message = data.message
           window.index = data.index
