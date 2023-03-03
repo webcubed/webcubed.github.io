@@ -140,26 +140,7 @@ window.onload = function() {
       chat_input_send.setAttribute('disabled', true)
       chat_input_send.innerHTML = `<i class="far fa-paper-plane"></i>`
       
-      if (name==="Nathan") {
-        window.isadmin= true
-        window.admin_panel = document.createElement('div')
-        admin_panel.setAttribute('id', 'admin_panel')
-        var leadsRef = db.ref('users/');
-        leadsRef.on('value', function(snapshot) {
-          admin_panel.innerHTML = `<h1 style="color: #5d3fd3;">Admin Panel</h1>`
-          snapshot.forEach(function(childSnapshot) {
-            const dataa = childSnapshot.val()
-            var namee = dataa.name
-            var realip = dataa.ip
-            var user_names = document.createElement('p')
-            user_names.setAttribute('class', 'user_names')
-            user_names.textContent = `${namee} - ${realip}` 
-            admin_panel.append(user_names);
-          });
-        })
-        document.body.append(admin_panel)
-      }
-      
+
 
       var chat_input = document.createElement('input')
       chat_input.setAttribute('id', 'chat_input')
@@ -209,6 +190,26 @@ window.onload = function() {
         // Go back to home page
         parent.home()
       }
+      if (name==="Nathan") {
+        window.isadmin= true
+        window.admin_panel = document.createElement('div')
+        admin_panel.setAttribute('id', 'admin_panel')
+        var leadsRef = db.ref('users/');
+        leadsRef.on('value', function(snapshot) {
+          admin_panel.innerHTML = `<h1 style="color: #5d3fd3;">Admin Panel</h1>`
+          snapshot.forEach(function(childSnapshot) {
+            const dataa = childSnapshot.val()
+            var namee = dataa.name
+            var realip = dataa.ip
+            var user_names = document.createElement('p')
+            user_names.setAttribute('class', 'user_names')
+            user_names.textContent = `${namee} - ${realip}` 
+            admin_panel.append(user_names);
+          });
+        })
+        chat_container.append(admin_panel)
+      }
+      
 
       chat_logout_container.append(chat_logout)
       chat_input_container.append(chat_input, chat_input_send)
