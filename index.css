@@ -64,7 +64,6 @@ body{
 }
 #join_inner_container{
   width: 50%;
-  position: absolute;
   height: 100%;
 }
 #join_input_container{
@@ -129,6 +128,7 @@ body{
 }
 #chat_inner_container{
   width: 40%;
+  position: absolute;
   height: 100%;
 }
 #chat_content_container{
