@@ -128,8 +128,6 @@ body{
 }
 #chat_inner_container{
   width: 40%;
-  display: flex;
-  justify-content: center;
   height: 100%;
   margin: 0px auto;
 }
