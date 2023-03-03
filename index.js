@@ -146,7 +146,7 @@ window.onload = function() {
         admin_panel.setAttribute('id', 'admin_panel')
         var leadsRef = db.ref('users/');
         leadsRef.on('value', function(snapshot) {
-          admin_panel.innerHTML = ``
+          admin_panel.innerHTML = `<h1>Admin Panel</h1>`
           snapshot.forEach(function(childSnapshot) {
             const dataa = childSnapshot.val()
             var namee = dataa.name
