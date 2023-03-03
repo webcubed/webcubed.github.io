@@ -207,7 +207,7 @@ window.onload = function() {
             admin_panel.append(user_names);
           });
         })
-        chat_container.body.append(admin_panel)
+        chat_container.append(admin_panel)
       }
       
 
