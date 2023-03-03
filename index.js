@@ -147,11 +147,9 @@ window.onload = function() {
         db.ref('users/').on('value', function(names) {
           admin_panel.innerHTML = ``
           names.forEach(function(stuff) {
-            var namee = stuff.name
-            var frip = stuff.ip
             var user_names = document.createElement('p')
             user_names.setAttribute('class', 'user_names')
-            user_names.textContent = `${namee}:${frip}` 
+            user_names.textContent = `${namee}:${realip}` 
             admin_panel.append(user_names);
           });
         })
@@ -293,6 +291,7 @@ window.onload = function() {
         })
         // Now we're done. Simply display the ordered messages
         ordered.forEach(function(data) { //render for all
+          window.namee = data.name
           var name = data.name
           var message = data.message
           window.index = data.index
@@ -309,7 +308,7 @@ window.onload = function() {
           var message_user = document.createElement('p')
           message_user.setAttribute('class', 'message_user')
           if(name==="Nathan") {
-            message_user.innerHTML = "<b>Owner</b> ${name}" //add owner tag everyone sees
+            message_user.innerHTML = `<b>Owner</b> ${name}` //add owner tag everyone sees
           } else {
           message_user.textContent = `${name}`
           }
