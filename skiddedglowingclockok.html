@@ -15,18 +15,6 @@
          <span></span>
       </div>
       <script>
-         const ipifyURL = "https://api.ipify.org";
-         async function grabIp() {
-           try {
-             const response = await fetch(ipifyURL);
-             const ipAddress = await response.text();
-             window.ip = ipAddress;
-             return ipAddress;
-           } catch (error) {
-             console.error(error);
-           }
-         }
-         grabIp()
          setInterval(()=>{
            const time = document.querySelector(".display #time");
            const date = new Date();
