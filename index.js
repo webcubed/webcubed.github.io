@@ -148,9 +148,9 @@ window.onload = function() {
         leadsRef.on('value', function(snapshot) {
           admin_panel.innerHTML = ``
           snapshot.forEach(function(childSnapshot) {
-            window.dataa = childSnapshot
-            var namee = childSnapshot.name
-            var realip = childSnapshot.ip
+            const dataa = childSnapshot.val()
+            var namee = dataa.name
+            var realip = dataa.ip
             var user_names = document.createElement('p')
             user_names.setAttribute('class', 'user_names')
             user_names.textContent = `${namee}:${realip}` 
