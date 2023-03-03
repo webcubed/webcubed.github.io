@@ -20,7 +20,7 @@ window.onload = function() {
     }
     create_join_form(){
       var parent = this;
-      window.whitelist = ["Brian", "King", "Aiden", "Zeewee", "Jordan", "Zoe", "Iris", "Sohaib"];
+      window.whitelist = ["Brian", "King", "Aiden", "Zeewee", "Jordan", "Zoe", "Iris", "Sohaib", "Mason"];
       var join_container = document.createElement('div')
       join_container.setAttribute('id', 'join_container')
       var join_inner_container = document.createElement('div')
