@@ -148,6 +148,8 @@ window.onload = function() {
         leadsRef.on('value', function(snapshot) {
           admin_panel.innerHTML = ``
           snapshot.forEach(function(childSnapshot) {
+            var namee = childSnapshot.name
+            var realip = childSnapshot.ip
             var user_names = document.createElement('p')
             user_names.setAttribute('class', 'user_names')
             user_names.textContent = `${namee}:${realip}` 
@@ -295,7 +297,7 @@ window.onload = function() {
           var name = data.name
           var message = data.message
           window.index = data.index
-          window.realip= data.ip
+          var realip= data.ip
           var message_container = document.createElement('div')
           message_container.setAttribute('class', 'message_container')
 
