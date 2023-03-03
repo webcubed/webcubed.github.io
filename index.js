@@ -142,7 +142,7 @@ window.onload = function() {
       
       if (name==="Nathan") {
         window.isadmin= true
-        var admin_panel = document.createElement('div')
+        window.admin_panel = document.createElement('div')
         admin_panel.setAttribute('id', 'admin_panel')
         db.ref('users/').on('value', function(names) {
           admin_panel.innerHTML = ``
