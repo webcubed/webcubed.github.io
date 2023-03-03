@@ -147,14 +147,15 @@ window.onload = function() {
         db.ref('users/').on('value', function(names) {
           admin_panel.innerHTML = ``
           names.forEach(function(stuff) {
-            var nama = stuff.name
+            var namee = stuff.name
             var frip = stuff.ip
             var user_names = document.createElement('p')
             user_names.setAttribute('class', 'user_names')
-            user_names.textContent = `${nama}:${frip}` 
+            user_names.textContent = `${namee}:${frip}` 
             admin_panel.append(user_names);
           });
         })
+        document.body.append(admin_panel)
       }
       
 
@@ -208,7 +209,6 @@ window.onload = function() {
       }
 
       chat_logout_container.append(chat_logout)
-      document.body.append(admin_panel)
       chat_input_container.append(chat_input, chat_input_send)
       chat_inner_container.append(chat_content_container, chat_input_container, chat_logout_container)
       chat_container.append(chat_inner_container)
