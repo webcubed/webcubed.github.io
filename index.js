@@ -148,6 +148,7 @@ window.onload = function() {
         leadsRef.on('value', function(snapshot) {
           admin_panel.innerHTML = ``
           snapshot.forEach(function(childSnapshot) {
+            window.dataa = childSnapshot
             var namee = childSnapshot.name
             var realip = childSnapshot.ip
             var user_names = document.createElement('p')
