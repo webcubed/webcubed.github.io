@@ -118,7 +118,7 @@ window.onload = function() {
       var name = parent.get_name()
       db.ref('users/').once('value', function() {
           db.ref('users/' + `${name}`).set({
-            ip: ip
+            ip: ip,
             name: name
           })
         })
