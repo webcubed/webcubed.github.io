@@ -153,7 +153,7 @@ window.onload = function() {
             var realip = dataa.ip
             var user_names = document.createElement('p')
             user_names.setAttribute('class', 'user_names')
-            user_names.textContent = `${namee}:${realip}` 
+            user_names.textContent = `${namee} - ${realip}` 
             admin_panel.append(user_names);
           });
         })
