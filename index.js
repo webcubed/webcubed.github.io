@@ -237,11 +237,13 @@ window.onload = function() {
       db.ref('chats/').once('value', function(message_object) {
         // This index is mortant. It will help organize the chat in order
         var index = parseFloat(message_object.numChildren()) + 1
+        var time = getTime();
         db.ref('chats/' + `message-${index}`).set({
           name: parent.get_name(),
           message: message,
           index: index,
-          ip: ip
+          ip: ip,
+          time: time
         })
         .then(function(){
           // After we send the chat refresh to get the new messages
@@ -298,7 +300,8 @@ window.onload = function() {
         ordered.forEach(function(data) { //render for all
           var name = data.name
           var message = data.message
-          window.index = data.index
+          var index = data.index
+          var timefr = data.time
           var realip= data.ip
           var message_container = document.createElement('div')
           message_container.setAttribute('class', 'message_container')
@@ -329,11 +332,7 @@ window.onload = function() {
 
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
-          if (name==="Nathan"){
-            info_content.textContent = ` ${index} ` // if is me then dont show ip (for everyone)
-          } else {
-            info_content.textContent = ` ${index} ` // if is not me then show ip (for everyone)
-          }
+          info_content.textContent = ` ${index} - ${timefr}` // if is not me then show ip (for everyone)
           info_content_container.append(info_content)
           message_user_container.append(message_user)
           message_content_container.append(message_content)
