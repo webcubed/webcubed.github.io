@@ -63,13 +63,8 @@ window.onload = function() {
           join_button.onclick = function(){
             if (join_input.value.length !=0){ //check it again bruh
               if (whitelist.includes(join_input.value)) {
-                // Save the name to local storage. Passing in
-                // the join_input.value
                 parent.save_name(join_input.value)
-                // Remove the join_container. So the site doesn't look weird.
                 join_container.remove()
-                // parent = this. But it is not the join_button
-                // It is (MEME_CHAT = this).
                parent.create_chat()
               } else {
                join_button.classList.remove('enabled') //whitelist
@@ -187,6 +182,7 @@ window.onload = function() {
       // "Logout" is really just deleting the name from the localStorage
       chat_logout.onclick = function(){
         localStorage.clear()
+        window.onfocus = null
         // Go back to home page
         parent.home()
       }
@@ -250,13 +246,6 @@ window.onload = function() {
           parent.refresh_chat()
         })
       })
-      var name = parent.get_name()
-      db.ref('users/').once('value', function() {
-          db.ref('users/' + `${name}`).set({
-            ip: ip,
-            name: name
-          })
-        })
     }
     // Get name. Gets the username from localStorage
     get_name(){
@@ -270,6 +259,22 @@ window.onload = function() {
     }
     // Refresh chat gets the message/chat data from firebase
     refresh_chat(){
+      var name = parent.get_name()
+      db.ref('users/').once('value', function() {
+          db.ref('users/' + `${name}`).set({
+            ip: ip,
+            name: name
+          })
+        })
+      window.onfocus = function() {
+        var name = parent.get_name()
+        db.ref('users/').once('value', function() {
+            db.ref('users/' + `${name}`).set({
+              ip: ip,
+              name: name
+            })
+          })
+      }
       var chat_content_container = document.getElementById('chat_content_container')
 
       // Get the chats from firebase
@@ -339,7 +344,7 @@ window.onload = function() {
 
           var info_content = document.createElement('p')
           info_content.setAttribute('class', 'info_content')
-          info_content.textContent = ` ${index} - ${timefr}` // if is not me then show ip (for everyone)
+          info_content.textContent = ` ${index} - ${timefr}` // shows time, no more public ips fr
           info_content_container.append(info_content)
           message_user_container.append(message_user)
           message_content_container.append(message_content)
@@ -361,4 +366,5 @@ window.onload = function() {
   if(app.get_name() != null){
     app.chat()
   }
+  
 }
