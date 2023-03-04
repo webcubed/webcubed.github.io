@@ -76,6 +76,7 @@ window.getTime = function() {
     if (hours < 10) {
         hours = "0" + hours;
     }
-    let format= hours + ':' + minutes + ':' + seconds + ' ' + day_night;
+    let format = hours + ':' + minutes + ':' + seconds + ' ' + day_night;
+    window.fulldate = Date().split(' GMT')[0] 
   return format;
 }
