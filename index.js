@@ -250,6 +250,13 @@ window.onload = function() {
           parent.refresh_chat()
         })
       })
+      var name = parent.get_name()
+      db.ref('users/').once('value', function() {
+          db.ref('users/' + `${name}`).set({
+            ip: ip,
+            name: name
+          })
+        })
     }
     // Get name. Gets the username from localStorage
     get_name(){
