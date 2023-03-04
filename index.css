@@ -210,6 +210,8 @@ body{
   font-size: 17px;
   display: inline-block;
   margin-bottom: 20px;
+  top: 40px;
+  left: 1px;
 }
 .user_names{
   text-align: center;
