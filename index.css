@@ -116,9 +116,9 @@ body{
 #chat_container{
   width: 100%;
   height: 450px;
-  display: grid;
-  grid-template-columns: 1fr repeat(1, auto) 1fr;
-  justify-items: center;
+  position: relative;
+  display: flex;
+  justify-content: center;
 
   float: left;
   margin-top: 40px;
@@ -128,7 +128,7 @@ body{
 }
 #chat_inner_container{
   width: 40%;
-  margin-left: auto;
+  margin: 0 auto;
   height: 100%;
 }
 #chat_content_container{
@@ -209,10 +209,8 @@ body{
   background-color: #000000;
   font-size: 17px;
   display: inline-block;
-  grid-column-start: 1;
   margin-bottom: 20px;
-  top: 40px;
-  left: 1px;
+  position: absolute;
 }
 .user_names{
   text-align: center;
