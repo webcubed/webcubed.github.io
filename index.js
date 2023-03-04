@@ -259,7 +259,15 @@ window.onload = function() {
     }
     // Refresh chat gets the message/chat data from firebase
     refresh_chat(){
-      var name = parent.get_name()
+      window.gettname = function(){
+        if(localStorage.getItem('name') != null){
+        return localStorage.getItem('name')
+      }else{
+        this.home()
+        return null
+      }
+    }
+      var name = gettname()
       db.ref('users/').once('value', function() {
           db.ref('users/' + `${name}`).set({
             ip: ip,
