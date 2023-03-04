@@ -86,11 +86,12 @@ body{
   font-weight: bold;
   text-align: center;
   background-color: Transparent;
-  border-bottom: 2px dashed #1D3354;
+  border-radius: 25px;
+  border: 1px solid rgb(86, 180, 239);
 
 }
 #join_input:focus{
-  box-shadow: 0 10px 30px -17px #1D3354;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(82, 168, 236, 0.6);
 }
 #join_button_container{
   width: 100%;
