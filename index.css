@@ -204,12 +204,13 @@ body{
   color: #ffffff;
 }
 #admin_panel{
+  width: 200px;
   border: 1px solid rgb(86, 180, 239);
   box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.05) inset, 0px 0px 8px rgba(82, 168, 236, 0.6);
   background-color: #000000;
   font-size: 17px;
   display: inline-block;
-  left: 1;
+  left: 2px;
   margin-bottom: 20px;
   position: absolute;
 }
