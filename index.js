@@ -49,22 +49,34 @@ window.onload = function() {
       password_input.setAttribute('spellcheck', 'false')
       password_input.setAttribute('maxlength', 20)
       password_input.placeholder = 'Enter Password'
+      function check() {
+          var leadsRef = db.ref('users/');
+          leadsRef.on('value', function(snapshot) {
+            snapshot.forEach(function(childSnapshot) {
+              const data = childSnapshot.val()
+              if (data.password === password_input.value) {
+                return true
+              } else {
+                return false
+              }
+      }
       // Every time we type into the join_input
-      join_input.onkeyup  = function(){
+      join_input.onkeyup = function(){
         // If the input we have is longer that 0 letters
         if(join_input.value.length != 0){ // if not 0 length
           // Make the button light up
           if(whitelist.includes(join_input.value)){    
             join_button.classList.add('enabled') //nice
           }
-          // Allow the user to click the button
           join_input.onkeypress = function(event) {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
                 if (whitelist.includes(join_input.value)) {
-                  parent.save_name(join_input.value)
-                  join_container.remove()
-                  parent.create_chat()
+                  if (check()) {
+                    parent.save_name(join_input.value)
+                    join_container.remove()
+                    parent.create_chat()
+                  }
                 }
               }
             }
@@ -73,9 +85,11 @@ window.onload = function() {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
                 if (whitelist.includes(join_input.value)) {
-                  parent.save_name(join_input.value)
-                  join_container.remove()
-                  parent.create_chat()
+                  if(check()) {
+                    parent.save_name(join_input.value)
+                    join_container.remove()
+                    parent.create_chat()
+                  }
                 }
               }
             }
@@ -83,9 +97,11 @@ window.onload = function() {
           join_button.onclick = function(){
             if (join_input.value.length !=0){ //check it again bruh
               if (whitelist.includes(join_input.value)) {
-                parent.save_name(join_input.value)
-                join_container.remove()
-               parent.create_chat()
+                if(check()) {
+                  parent.save_name(join_input.value)
+                  join_container.remove()
+                  parent.create_chat()
+                }
               } else {
                join_button.classList.remove('enabled') //whitelist
               } 
