@@ -93,7 +93,7 @@ window.onload = function() {
       password_input_container.append(password_input)
       join_button_container.append(join_button)
       join_input_container.append(join_input)
-      join_inner_container.append(join_input_container, join_button_container, password_input_container)
+      join_inner_container.append(join_input_container, password_input_container, join_button_container)
       join_container.append(join_inner_container)
       document.body.append(join_container)
     }
