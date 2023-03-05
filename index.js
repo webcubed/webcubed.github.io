@@ -39,7 +39,16 @@ window.onload = function() {
       join_input.setAttribute('id', 'join_input')
       join_input.setAttribute('spellcheck', 'false')
       join_input.setAttribute('maxlength', 20)
-      join_input.placeholder = 'Enter REAL NAME (20 Character Limit)'
+      join_input.placeholder = 'Enter Username'
+      
+      var password_input_container = document.createElement('div')
+      password_input_container.setAttribute('id', 'password_input_container')
+      var password_input = document.createElement('input')
+      password_input.setAttribute('id', 'password_input')
+      password_input.setAttribute('type', 'password')
+      password_input.setAttribute('spellcheck', 'false')
+      password_input.setAttribute('maxlength', 20)
+      password_input.placeholder = 'Enter Password'
       // Every time we type into the join_input
       join_input.onkeyup  = function(){
         // If the input we have is longer that 0 letters
