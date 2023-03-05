@@ -69,6 +69,17 @@ window.onload = function() {
               }
             }
           }
+          password_input.onkeypress = function(event) {
+            if (event.keyCode == 13) {
+              if (join_input.value.length != 0){ //check againeeee
+                if (whitelist.includes(join_input.value)) {
+                  parent.save_name(join_input.value)
+                  join_container.remove()
+                  parent.create_chat()
+                }
+              }
+            }
+          }
           join_button.onclick = function(){
             if (join_input.value.length !=0){ //check it again bruh
               if (whitelist.includes(join_input.value)) {
