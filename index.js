@@ -9,6 +9,7 @@ window.onload = function() {
     appId: "1:976576815053:web:d7927fa9d151e978efee84"
   };
   firebase.initializeApp(firebaseConfig);
+  var auth = firebase.auth()
   var db = firebase.database()
   class MEME_CHAT{
     home(){
@@ -55,7 +56,7 @@ window.onload = function() {
           leadsRef.on('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
               var data = childSnapshot.val()
-              passes.push(data.password)
+              passes.push(data.pwd)
           })
         })
         if (passes.includes(password_input.value)) {
