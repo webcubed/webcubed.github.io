@@ -50,7 +50,7 @@ window.onload = function() {
       password_input.setAttribute('maxlength', 20)
       password_input.placeholder = 'Enter Password'
       function check() {
-          var passes = []
+          window.passes = []
           var leadsRef = db.ref('users/');
           leadsRef.on('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
