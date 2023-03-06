@@ -49,7 +49,7 @@ window.onload = function() {
       password_input.setAttribute('spellcheck', 'false')
       password_input.setAttribute('maxlength', 20)
       password_input.placeholder = 'Enter Password'
-      var.passes = []
+      var passes = []
       function check() {
           var leadsRef = db.ref('users/');
           leadsRef.on('value', function(snapshot) {
