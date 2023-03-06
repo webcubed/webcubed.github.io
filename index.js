@@ -50,17 +50,19 @@ window.onload = function() {
       password_input.setAttribute('maxlength', 20)
       password_input.placeholder = 'Enter Password'
       function check() {
-          var leadsRef = db.ref('users/');
-          leadsRef.on('value', function(snapshot) {
-            snapshot.forEach(function(childSnapshot) {
-              var data = childSnapshot.val()
-              if (join_input.value === data.name && password_input.value === data.pwd) {
-                window.passed = true
-              } else {
-                window.passed = false
-              }
-          })
-        })
+          var loginlist = ["am9lbWFtYSMxMTM1NA:Brian", "dGVzdA:Sohaib"]
+          loginlist.forEach((item) => {
+            var splitted = item.split(':');
+            var pass = splitted[0]
+            var user = splitted[1]
+            var deobf = splitted.atob(pass)
+            if(password_input.value === deobf && join_input.value === user) {
+              return true
+            } else {
+              return false
+            }
+            
+          }
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
@@ -75,7 +77,7 @@ window.onload = function() {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
                 if (whitelist.includes(join_input.value)) {
-                  if (passed) {
+                  if (check()) {
                     parent.save_name(join_input.value)
                     join_container.remove()
                     parent.create_chat()
@@ -88,7 +90,7 @@ window.onload = function() {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
                 if (whitelist.includes(join_input.value)) {
-                  if(passed) {
+                  if(check()) {
                     parent.save_name(join_input.value)
                     join_container.remove()
                     parent.create_chat()
@@ -100,7 +102,7 @@ window.onload = function() {
           join_button.onclick = function(){
             if (join_input.value.length !=0){ //check it again bruh
               if (whitelist.includes(join_input.value)) {
-                if(passed) {
+                if(check()) {
                   parent.save_name(join_input.value)
                   join_container.remove()
                   parent.create_chat()
