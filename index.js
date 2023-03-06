@@ -62,7 +62,7 @@ window.onload = function() {
               return false
             }
             
-          }
+          });
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
