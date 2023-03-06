@@ -50,11 +50,13 @@ window.onload = function() {
       password_input.setAttribute('maxlength', 20)
       password_input.placeholder = 'Enter Password'
       function check() {
+          var passes = []
           var leadsRef = db.ref('users/');
           leadsRef.on('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
               const data = childSnapshot.val()
-              if (data.password === password_input.value) {
+              passes.push(data.password)
+              if (passes.contains(password_input.value)) {
                 return true
               } else {
                 return false
