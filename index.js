@@ -56,13 +56,13 @@ window.onload = function() {
             snapshot.forEach(function(childSnapshot) {
               const data = childSnapshot.val()
               passes.push(data.password)
-              if (passes.contains(password_input.value)) {
+          })
+        })
+        if (passes.contains(password_input.value)) {
                 return true
               } else {
                 return false
               }
-          })
-        })
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
