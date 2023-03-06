@@ -61,14 +61,10 @@ window.onload = function() {
               }
           })
         })
-        if (passed) {
-          return true
-        } else {
-          return false
-        }
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
+        check()
         // If the input we have is longer that 0 letters
         if(join_input.value.length != 0){ // if not 0 length
           // Make the button light up
@@ -79,7 +75,7 @@ window.onload = function() {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
                 if (whitelist.includes(join_input.value)) {
-                  if (check()) {
+                  if (passed) {
                     parent.save_name(join_input.value)
                     join_container.remove()
                     parent.create_chat()
@@ -92,7 +88,7 @@ window.onload = function() {
             if (event.keyCode == 13) {
               if (join_input.value.length != 0){ //check againeeee
                 if (whitelist.includes(join_input.value)) {
-                  if(check()) {
+                  if(passed) {
                     parent.save_name(join_input.value)
                     join_container.remove()
                     parent.create_chat()
@@ -104,7 +100,7 @@ window.onload = function() {
           join_button.onclick = function(){
             if (join_input.value.length !=0){ //check it again bruh
               if (whitelist.includes(join_input.value)) {
-                if(check()) {
+                if(passed) {
                   parent.save_name(join_input.value)
                   join_container.remove()
                   parent.create_chat()
