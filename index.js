@@ -55,7 +55,7 @@ window.onload = function() {
             var splitted = item.split(':');
             var pass = splitted[0]
             var user = splitted[1]
-            var deobf = splitted.atob(pass)
+            var deobf = atob(pass)
             if(password_input.value === deobf && join_input.value === user) {
               return true
             } else {
