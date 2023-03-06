@@ -9,7 +9,6 @@ window.onload = function() {
     appId: "1:976576815053:web:d7927fa9d151e978efee84"
   };
   firebase.initializeApp(firebaseConfig);
-  var auth = firebase.auth()
   var db = firebase.database()
   class MEME_CHAT{
     home(){
