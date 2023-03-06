@@ -49,12 +49,12 @@ window.onload = function() {
       password_input.setAttribute('spellcheck', 'false')
       password_input.setAttribute('maxlength', 20)
       password_input.placeholder = 'Enter Password'
+      var.passes = []
       function check() {
-          window.passes = []
           var leadsRef = db.ref('users/');
           leadsRef.on('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
-              const data = childSnapshot.val()
+              var data = childSnapshot.val()
               passes.push(data.password)
           })
         })
