@@ -49,20 +49,18 @@ window.onload = function() {
       password_input.setAttribute('spellcheck', 'false')
       password_input.setAttribute('maxlength', 20)
       password_input.placeholder = 'Enter Password'
-      var passes = []
       function check() {
           var leadsRef = db.ref('users/');
           leadsRef.on('value', function(snapshot) {
             snapshot.forEach(function(childSnapshot) {
               var data = childSnapshot.val()
-              passes.push(data.pwd)
-          })
-        })
-        if (passes.includes(password_input.value)) {
+              if (join_input.value === data.name && password_input.value === data.pwd) {
                 return true
               } else {
                 return false
               }
+          })
+        })
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
