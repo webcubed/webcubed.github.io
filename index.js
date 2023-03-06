@@ -55,12 +55,17 @@ window.onload = function() {
             snapshot.forEach(function(childSnapshot) {
               var data = childSnapshot.val()
               if (join_input.value === data.name && password_input.value === data.pwd) {
-                return true
+                window.passed = true
               } else {
-                return false
+                window.passed = false
               }
           })
         })
+        if (passed) {
+          return true
+        } else {
+          return false
+        }
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
