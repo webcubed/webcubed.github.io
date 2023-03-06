@@ -58,7 +58,7 @@ window.onload = function() {
               passes.push(data.password)
           })
         })
-        if (passes.contains(password_input.value)) {
+        if (passes.includes(password_input.value)) {
                 return true
               } else {
                 return false
