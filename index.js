@@ -57,12 +57,16 @@ window.onload = function() {
             var user = splitted[1]
             var deobf = atob(pass)
             if(password_input.value === deobf && join_input.value === user) {
-              return true
+              window.matched = true
             } else {
-              return false
+              return
             }
-            
           });
+        if (matched) {
+          return true
+        } else {
+          return false
+        }
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
