@@ -51,17 +51,16 @@ window.onload = function() {
       password_input.placeholder = 'Enter Password'
       function check() {
           var loginlist = ["am9lbWFtYSMxMTM1NA:Brian", "dGVzdA:Sohaib"]
-          loginlist.forEach((item) => {
-            var splitted = item.split(':');
-            var pass = splitted[0]
-            var user = splitted[1]
-            var deobf = atob(pass)
-            if(password_input.value === deobf && join_input.value === user) {
+          var leadsRef = db.ref('users/');
+          leadsRef.on('value', function(snapshot) {
+          snapshot.forEach(function(childSnapshot) {
+            const data = childSnapshot.val()
+            const pass = atob(data.password)
+            if (password_input === pass) {
               window.matched = true
-            } else {
-              return
-            }
-          });
+            } 
+            })
+          })
         if (matched) {
           return true
         } else {
