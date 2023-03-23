@@ -37,10 +37,14 @@ window.highlightDate = function() {
     if (day==4) thu.style.backgroundColor = '#5d3fd3'; var e = 4
     if (day==5) fri.style.backgroundColor = '#5d3fd3'; var e = 5
     function checkf(period) { 
-        document.getElementsByTagName('tr')[e].children[period].style.backgroundColor = '#5d3fd3'
+        localStorage.setItem('period', period)
+        var rale = localStorage.getItem('period')
+        document.getElementsByTagName('tr')[e].children[rale].style.backgroundColor = '#5d3fd3'
     }
     function checkuf(period) { 
-        document.getElementsByTagName('tr')[e].children[period].style.backgrundColor = '#000000'
+        var rale = localStorage.getItem('period')
+        localStorage.removeItem('period')
+        document.getElementsByTagName('tr')[e].children[rale].style.backgrundColor = '#000000'
     }
     if (hour==8 && minutes==10) checkf(1)
     if (hour==8 && minutes==56) checkuf(1)// 1
