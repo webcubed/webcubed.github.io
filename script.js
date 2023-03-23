@@ -1,19 +1,41 @@
+function bTime() {
+    const date = new Date();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    let seconds = date.getSeconds();
+    let day_night = "am";
+    if (hours > 12) {
+        day_night = "pm";
+        hours = hours - 12;
+    }
+    if (seconds < 10) {
+        seconds = "0" + seconds;
+    }
+    if (minutes < 10) {
+        minutes = "0" + minutes;
+    }
+    if (hours < 10) {
+        hours = "0" + hours;
+    }
+    let format = hours + ':' + minutes + ' ' + day_night;
+  return format;
+}
 window.highlightDate = function() {
     const date = new Date();
     const day = date.getDay();
     const hour = date.getHours();
     const minutes = date.getMinutes();
-    if (day == 1) {
-        document.getElementById('mon').style.color = "#5d3fd3";
-    } else if (day == 2) {
-        document.getElementById('tue').style.color = "#5d3fd3";
-    } else if (day == 3) {
-        document.getElementById('wed').style.color = "#5d3fd3";
-    } else if (day == 4) {
-        document.getElementById('thur').style.color = "#5d3fd3";
-    } else if (day == 5) {
-        document.getElementById('fri').style.color = "#5d3fd3";
-    }
+    const bruge = bTime();
+    var mon = document.getElementsByTagName('td')[9]
+    var tue = document.getElementsByTagName('td')[18]
+    var wed = document.getElementsByTagName('td')[26]
+    var thu = document.getElementsByTagName('td')[34]
+    var fri = document.getElementsByTagName('td')[42]
+    if (day=1) mon.style.backgroundColor = '#5d3fd3'
+    if (day=2) tue.style.backgroundColor = '#5d3fd3'
+    if (day=3) wed.style.backgroundColor = '#5d3fd3'
+    if (day=4) thu.style.backgroundColor = '#5d3fd3'
+    if (day=5) fri.style.backgroundColor = '#5d3fd3'
 }
 
 const ipifyURL = "https://api.ipify.org";
