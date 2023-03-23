@@ -31,11 +31,11 @@ window.highlightDate = function() {
     var wed = document.getElementsByTagName('td')[26]
     var thu = document.getElementsByTagName('td')[34]
     var fri = document.getElementsByTagName('td')[42]
-    if (day=1) mon.style.backgroundColor = '#5d3fd3'
-    if (day=2) tue.style.backgroundColor = '#5d3fd3'
-    if (day=3) wed.style.backgroundColor = '#5d3fd3'
-    if (day=4) thu.style.backgroundColor = '#5d3fd3'
-    if (day=5) fri.style.backgroundColor = '#5d3fd3'
+    if (day==1) mon.style.backgroundColor = '#5d3fd3'
+    if (day==2) tue.style.backgroundColor = '#5d3fd3'
+    if (day==3) wed.style.backgroundColor = '#5d3fd3'
+    if (day==4) thu.style.backgroundColor = '#5d3fd3'
+    if (day==5) fri.style.backgroundColor = '#5d3fd3'
 }
 
 const ipifyURL = "https://api.ipify.org";
