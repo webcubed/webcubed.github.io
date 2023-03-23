@@ -31,11 +31,32 @@ window.highlightDate = function() {
     var wed = document.getElementsByTagName('td')[26]
     var thu = document.getElementsByTagName('td')[34]
     var fri = document.getElementsByTagName('td')[42]
-    if (day==1) mon.style.backgroundColor = '#5d3fd3'
-    if (day==2) tue.style.backgroundColor = '#5d3fd3'
-    if (day==3) wed.style.backgroundColor = '#5d3fd3'
-    if (day==4) thu.style.backgroundColor = '#5d3fd3'
-    if (day==5) fri.style.backgroundColor = '#5d3fd3'
+    if (day==1) mon.style.backgroundColor = '#5d3fd3'; var e = 1
+    if (day==2) tue.style.backgroundColor = '#5d3fd3'; var e = 2
+    if (day==3) wed.style.backgroundColor = '#5d3fd3'; var e = 3
+    if (day==4) thu.style.backgroundColor = '#5d3fd3'; var e = 4
+    if (day==5) fri.style.backgroundColor = '#5d3fd3'; var e = 5
+    function checkf(period) { 
+        document.getElementsByTagName('tr')[e].children[period].style.backgroundColor = '#5d3fd3'
+    }
+    function checkuf(period) { 
+        document.getElementsByTagName('tr')[e].children[period].style.backgrundColor = '#000000'
+    if (hour==8 && minutes==10) checkf(1)
+    if (hour==8 && minutes==56) checkuf(1)// 1
+    if (hour==8 && minutes==58) checkf(2)
+    if (hour==9 && minutes==43) checkuf(2)// 2
+    if (hour==9 && minutes==45) checkf(3)
+    if (hour==10 && minutes==30) checkuf(3) // 3
+    if (hour==10 && minutes==32) checkf(4)
+    if (hour==11 && minutes==18) checkuf(4)// 4
+    if (hour==11 && minutes==20) checkf(5)
+    if (hour==12 && minutes==5) checkuf(5)// 5 lunch
+    if (hour==12 && minutes==7) checkf(6)
+    if (hour==12 && minutes==53) checkuf(6)// 6
+    if (hour==12 && minutes==55) checkf(7)
+    if (hour==13 && minutes==41) checkuf(7)//7
+    if (hour==13 && minutes==43) checkf(8)
+    if (hour==14 && minutes==30) checkuf(8)//8
 }
 
 const ipifyURL = "https://api.ipify.org";
