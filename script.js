@@ -41,6 +41,7 @@ window.highlightDate = function() {
     }
     function checkuf(period) { 
         document.getElementsByTagName('tr')[e].children[period].style.backgrundColor = '#000000'
+    }
     if (hour==8 && minutes==10) checkf(1)
     if (hour==8 && minutes==56) checkuf(1)// 1
     if (hour==8 && minutes==58) checkf(2)
