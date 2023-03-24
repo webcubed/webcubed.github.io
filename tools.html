@@ -1,38 +1,54 @@
 <!DOCTYPE html>
 <!-- commit haha -->
 <html>
-  <script src="script.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
-    .topnav {
-      overflow: hidden;
-      background-color: #333;
-    }
-
-    .topnav a {
-      float: left;
-      color: #f2f2f2;
-      text-align: center;
-      padding: 14px 16px;
-      text-decoration: none;
-      font-size: 17px;
-    }
-
-    .topnav a:hover {
-      background-color: #ddd;
-      color: black;
-    }
-
-    .topnav a.active {
-      background-color: #5d3fd3;
-      color: white;
-    }
-  </style>
   <head>
+    <script src="script.js"></script>
+    <style>
+      .edance2 {
+        display: flex;
+      }
+
+      .bro {
+        flex: 1;
+        text-align: center;
+        box-shadow:
+          rgba(22, 31, 39, 0.42) 0px 60px 123px -25px,
+          rgba(19, 26, 32, 0.08) 0px 35px 75px -35px;
+        border-radius: 10px;
+        border: 1px solid;
+        border-color:
+          rgb(213, 220, 226) rgb(213, 220, 226) rgb(184, 194, 204);
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
+
+      .topnav {
+        overflow: hidden;
+        background-color: #333;
+      }
+
+      .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+      }
+
+      .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+      }
+
+      .topnav a.active {
+        background-color: #5d3fd3;
+        color: white;
+      }
+    </style>
     <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
     <title>idabest.tk</title>
   </head>
@@ -45,19 +61,32 @@
       <a onclick="goto('media')" style="cursor: pointer;">Media</a>
     </div>
     <center>
-      <h1 style="color: #f0f0f0; font-weight: 600; vertical-align: baseline; height: 75px; font-size: 75px; font-family: 'Exo 2'; !important;">Tools</h1>
+      <h1 style="color: #f0f0f0; font-weight: 600; vertical-align: baseline; height: 75px; font-size: 75px; font-family: 'Exo 2'; !important;">Tools (I didn't make any of these)</h1>
     </center>
     <hr>
     <br>
-    <h1 style="color: #ffffff; border:none;">Bypass School Internet (I did not make this)</h1>
-    <button onclick="bypass()" style="color: #ffffff; background-color: #5d3fd3; border:none; border-radius: 25px; padding: 10px 32px; cursor: pointer;">Activate Bypass</button>
+    <div class="edance2">
+      <div class="bro">
+        <h1 style="color: #ffffff;">Internet Proxy</h1>
+        <button onclick="bypass()" style="color: #ffffff; background-color: #5d3fd3; border:none; border-radius: 25px; padding: 10px 32px; cursor: pointer;">Use</button>
+        <br>
+        <br>
+      </div>
+      <div style="margin-left: 10px;" class="bro">
+        <h1 style="color: #ffffff;">GoGuardian Disabler</h1>
+        <button onclick="alert('not made yet')" style="color: #ffffff; background-color: #5d3fd3; border:none; border-radius: 25px; padding: 10px 32px; cursor: pointer;">Use</button>
+        <br>
+        <br>
+      </div>
+    </div>
+    <br>
     <center>
       <iframe id="clockframe" src="https://idabest.tk/skiddedglowingclockok.html" frameborder="0" width="360" height="100"></iframe>
     </center>
     <script>
       var audio = new Audio('Suprise.mp3');
-      audio.loop=true;
+      audio.loop = true;
       audio.play();
-      </script>
+    </script>
   </body>
 </html>
