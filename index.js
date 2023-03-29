@@ -117,6 +117,7 @@ window.onload = function() {
               } //close 2
             } // close 3
           } //close 4
+        } // bro this bracket fr did something :skull:
       }//close onkeyup
       // Append everything to the body
       password_input_container.append(password_input)
