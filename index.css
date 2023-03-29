@@ -134,6 +134,7 @@ body{
   width: 60%;
   transition: background-color 0.5s;
   height: 40px;
+  border-radius: 16px;
   font-family: Varela Round;
   font-size: 15px;
   font-weight: bold;
