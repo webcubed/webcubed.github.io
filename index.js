@@ -1,6 +1,6 @@
 // This is very skidded
 window.onload = function() {
-  localStorage.clear()
+  localStorage.clear() // log out everyone on start lMFAOOAOAOOOO
   const firebaseConfig = {
     apiKey: "AIzaSyC9IeopdU5LsK2T38yqDtm29zesMRAecfk",
     authDomain: "idabest-c1ad9.firebaseapp.com",
