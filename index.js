@@ -70,19 +70,35 @@ window.onload = function() {
       }
       // Every time we type into the join_input
       join_input.onkeyup = function(){
-        check()
+        function login() {
+          parent.save_name(join_input.value)
+          join_container.remove()
+          parent.create_chat()
+        }
         // If the input we have is longer that 0 letters
         if(join_input.value.length != 0){ // if not 0 length
-          // Make the button light up
-          if(whitelist.includes(join_input.value)){    
-            join_button.classList.add('enabled') //nice
+          if(whitelist.includes(join_input.value)){ // and name is in whitelist 
+            join_button.classList.add('enabled') // light up
           }
-          join_input.onkeypress = function(event) {
-            if (event.keyCode == 13) {
-              if (join_input.value.length != 0){ //check againeeee
-                if (whitelist.includes(join_input.value)) {
-                  if (check()) {
-                    parent.save_name(join_input.value)
+          join_input.onkeypress = function(event) { // when press 
+            if (event.keyCode == 13) { // if key is enter
+              if (join_input.value.length != 0){ // then check if length aint 0
+                if (whitelist.includes(join_input.value)) { // then check whitelist 
+                  if (check()) { // then check password
+                    parent.save_name(join_input.value) // then log in
+                    join_container.remove()
+                    parent.create_chat()
+                  }
+                }
+              }
+            }
+          } // end enter
+          password_input.onkeypress = function(event) { // if in password and press
+            if (event.keyCode == 13) { // if key is enter
+              if (join_input.value.length != 0){ // then check if length isn't 0
+                if (whitelist.includes(join_input.value)) { // then check whitelist
+                  if(check()) { // then check password
+                    parent.save_name(join_input.value) // login
                     join_container.remove()
                     parent.create_chat()
                   }
@@ -90,41 +106,18 @@ window.onload = function() {
               }
             }
           }
-          password_input.onkeypress = function(event) {
-            if (event.keyCode == 13) {
-              if (join_input.value.length != 0){ //check againeeee
-                if (whitelist.includes(join_input.value)) {
-                  if(check()) {
-                    parent.save_name(join_input.value)
-                    join_container.remove()
-                    parent.create_chat()
-                  }
-                }
-              }
-            }
-          }
-          join_button.onclick = function(){
-            if (join_input.value.length !=0){ //check it again bruh
-              if (whitelist.includes(join_input.value)) {
-                if(check()) {
-                  parent.save_name(join_input.value)
+          join_button.onclick = function(){ // on click open 1
+            if (join_input.value.length !=0){ // then check length open 2
+              if (whitelist.includes(join_input.value)) { // then check whitelist open 3
+                if(check()) {// then check password open 4
+                  parent.save_name(join_input.value) // login
                   join_container.remove()
                   parent.create_chat()
-                }
-              } else {
-               join_button.classList.remove('enabled') //whitelist
-              } 
-            } else {
-               join_button.classList.remove('enabled') //length
-            } //function
-          } 
-        }else{
-          // If the join_input is empty then turn off the
-          // join button
-          join_button.classList.remove('enabled')
-        }
-      }
-
+                } // close 1
+              } //close 2
+            } // close 3
+          } //close 4
+      }//close onkeyup
       // Append everything to the body
       password_input_container.append(password_input)
       join_button_container.append(join_button)
