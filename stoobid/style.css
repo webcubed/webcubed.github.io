@@ -1,0 +1,23 @@
+body {
+    background-color: #fff;
+    justify-content: center;
+    text-align: center;
+}
+#container {
+    text-align: center;
+    justify-content: center;
+    length: 500px;
+    height: 500px;
+    width: 500px;
+    margin: auto;
+}
+#parent {
+    margin: auto;
+    justify-content: center;
+    text-align: center;
+}
+h1 {
+    vertical-align: middle;
+    margin-top: 250px;
+    margin-bottom: 250px;
+}
