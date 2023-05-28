@@ -10148,7 +10148,7 @@ class Weapon {
         return t
     }
     getWalkSpeedMultiplier() {
-        return 1
+        return 1.35
     }
     getAdditionalWalkAcceleration() {
         return null
