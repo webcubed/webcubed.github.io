@@ -37,4 +37,12 @@ window.onload = function () {
                     .display = "none";
             }, 500);
         });
+        function revealItem(id) {
+            if(id =='military'){
+                console.log('a');
+            } 
+        }
+        document.getElementById('militaryb').addEventListener('click', function() {
+            revealItem('military')
+        });
 }

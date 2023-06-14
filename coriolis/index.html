@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>The Coriolis Effect</title>
+        <script src="script.js"></script>
+        <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div id="title-container">
+            <span id="title-typed"></span>
+        </div>
+        <script>
+            var typed = new Typed('#title-typed', {
+                strings: [
+                    '<b style="color: #fff;">The Coriolis Effect</b> is caused by the Earth\'s rota' +
+                            'tion.',
+                    '<b style="color: #fff;">The Coriolis Effect</b> is reponsible for the formatio' +
+                            'n of ocean currents.',
+                    '<b style="color: #fff;">The Coriolis Effect</b> is strongest at the poles and ' +
+                            'weakest at the equator.',
+                    'This is: <b style="color: #fff;">The Coriolis Effect</b>'
+                ],
+                typeSpeed: 75,
+                onComplete: (self) => {
+                    document
+                        .getElementById('title-container')
+                        .style
+                        .height = '150px'
+                    
+                }
+            });
+        </script>
+        <div id="content">
+            <div class="item" id="item1">
+                <div id="axis">
+                    <span class="sideinfo" id="axist">Because the Earth rotates on its Axis, circulating air is
+                        pushed towards the right in the Northern Hemisphere, and left in the Southern
+                        Hemisphere. This is called the Coriolis Effect.</span>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -3,13 +3,48 @@
     <head>
         <title>Introducing: Rome</title>
         <script src="script.js"></script>
+        <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
         <script src="https://kit.fontawesome.com/b13175371f.js" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="style.css">
     </head>
     <body>
         <div id="title-container">
-            <h1 id="title">Introducing: Rome
-            </h1>
+            <span id="title-typed"></span>
+        </div>
+        <script>
+            var typed = new Typed('#title-typed', {
+                strings: [
+                    '<b style="color: #fff;">Rome</b>\'s military is strong',
+                    '<b style="color: #fff;">Rome </b>houses over 1,000,000 people',
+                    '<b style="color: #fff;">Rome </b>provides great entertainment',
+                    '<b style="color: #fff;">Rome </b>is a city of stunning architecture',
+                    '<b style="color: #fff;">Rome </b>is filled with the latest technology',
+                    'Visit <b style="color: #fff;">Rome</b> today!'
+                ],
+                typeSpeed: 100
+            });
+        </script>
+        <div id="menu">
+            <div id="menuitemcontainer">
+
+                <div class="menuitem" id="militaryb">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <span class="menutext">Military</span>
+                    <i class="fa-solid fa-greater-than"></i>
+                </div>
+
+                <div class="menuitem" id="entertainmentb">
+                    <i class="fa-solid fa-gamepad"></i>
+                    <span class="menutext">Entertainment</span>
+                    <i class="fa-solid fa-greater-than"></i>
+                    </div>
+                <div class="menuitem" id="architectureb">
+                    <i class="fa-solid fa-house"></i>
+                    <span class="menutext">Architecture</span>
+                    <i class="fa-solid fa-greater-than"></i>
+                </div>
+
+            </div>
         </div>
         <div id="content">
             <div id="factbox1" class="factbox">
