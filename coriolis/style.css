@@ -34,11 +34,15 @@
 }
 #axist {
     height: 500px;
-    width: 500px;
 }
 #axis {
     width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     height: 250px;
+}
+#axisimg {
+    margin-left: 100px;
 }
 /* width */
 ::-webkit-scrollbar {

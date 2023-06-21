@@ -1,44 +1,60 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>The Coriolis Effect</title>
-        <script src="script.js"></script>
-        <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
-        <link rel="stylesheet" href="style.css">
-    </head>
-    <body>
-        <div id="title-container">
-            <span id="title-typed"></span>
-        </div>
-        <script>
-            var typed = new Typed('#title-typed', {
-                strings: [
-                    '<b style="color: #fff;">The Coriolis Effect</b> is caused by the Earth\'s rota' +
-                            'tion.',
-                    '<b style="color: #fff;">The Coriolis Effect</b> is reponsible for the formatio' +
-                            'n of ocean currents.',
-                    '<b style="color: #fff;">The Coriolis Effect</b> is strongest at the poles and ' +
-                            'weakest at the equator.',
-                    'This is: <b style="color: #fff;">The Coriolis Effect</b>'
-                ],
-                typeSpeed: 75,
-                onComplete: (self) => {
-                    document
-                        .getElementById('title-container')
-                        .style
-                        .height = '150px'
-                    
-                }
-            });
-        </script>
-        <div id="content">
-            <div class="item" id="item1">
-                <div id="axis">
-                    <span class="sideinfo" id="axist">Because the Earth rotates on its Axis, circulating air is
-                        pushed towards the right in the Northern Hemisphere, and left in the Southern
-                        Hemisphere. This is called the Coriolis Effect.</span>
-                </div>
+
+<head>
+    <title>The Coriolis Effect</title>
+    <script src="script.js"></script>
+    <script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div id="title-container">
+        <span id="title-typed"></span>
+    </div>
+    <script>
+        var typed = new Typed('#title-typed', {
+            strings: [
+                '<b style="color: #fff;">The Coriolis Effect</b> is caused by the Earth\'s rota' +
+                'tion.',
+                '<b style="color: #fff;">The Coriolis Effect</b> is reponsible for the formatio' +
+                'n of ocean currents.',
+                '<b style="color: #fff;">The Coriolis Effect</b> is strongest at the poles and ' +
+                'weakest at the equator.',
+                'This is: <b style="color: #fff;">The Coriolis Effect</b>'
+            ],
+            typeSpeed: 75,
+            onComplete: (self) => {
+                document
+                    .getElementById('title-container')
+                    .style
+                    .height = '150px'
+
+            }
+        });
+    </script>
+    <div id="content">
+        <div class="item" id="item1">
+            <div id="axis">
+                <img id="axisimg"
+                    src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxISEhITExIWFRUVGRgbGBgYFxcXFxcZFxYWFhYYGhkYHSggGRonHhgaITMhJSkrLi4uGR8zODMtNygtLisBCgoKDg0OGxAQGy4lICYtLy0uLy0tNS0vMi0vNS0tLy0vNS0tLS0vLy0tLS8vLTUtLy0tLS0tLS0vLS0tLTUtLf/AABEIAKgBLQMBIgACEQEDEQH/xAAbAAEAAgMBAQAAAAAAAAAAAAAABAUCAwYHAf/EAEAQAAEDAgMFBgIIBAYCAwAAAAEAAhEDIQQSMQUiQVFhBhNxgZGhMmIUM0JSwdHh8AcjkrFygqKy0vEVQyRTk//EABoBAQADAQEBAAAAAAAAAAAAAAADBAUCAQb/xAAzEQABAwIEBAQFBAIDAAAAAAABAAIRAyEEEjFBUWFx8BOBkbEiMqHB0QVS4fEjQhRigv/aAAwDAQACEQMRAD8A8iRERERERERERERERERERERERERERERERERfabC4hrQSXEAACSSTAAA1JPBXuwtmBtSoMThK9QBrg2m2nVzOqtdRc5m4RDhSc51zDQQSDYEioUXfVuzOFc2G0a9N3eUzIo40k0CbiHMIOIcJ0hlm5SLqBtzZOFdTyYPD4g184cWupVw9lN/fHuyDLSWZQ2bfVuOZ14IuQRbcThqlMgVKb2EgOAe1zSWmYcA4XBg36FakREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREREVvsns9Vrw76th+08XP+Bv2vGwXoGxeyeEpNDjS710SDVu0n5WxHt5rumzOYnRVamMoscWzJGw++y822PRrmpTfQpOqOpva4ZWOc3MxwcM0aCQOIXcUKm14k4ahTpgl+V5huY587nHvS90h5Ba4lpAAiy6DF7VxFPIG4YBuhcXANFrQ0XH78VoftNrnNY495XdGVv8A62X+PLO9ETeTItCnFOiDDnGddI+0qsf1AExYWm89jzXM4Ctj6Qyt+jW7oBzm1jBp0RhmaDKZayDmBBOnJTGVNpl76jKWEqPIIfke8lwIqiHA1QWx3z9INxyXT4o06VXD0i0uFRr2GRIdJa6XczMk+JXyq6m2qyhV3i76l984HFpcLgjgZuOutj/is7K7/wCS9eY9ocLjXOY+vhnMyMDJa17hlYXE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"></img>
+                <span class="sideinfo" id="axist">The Coriolis effect exists because the Earth is rotating. The Earth's
+                    rotation causes a force to act on objects moving on the Earth's surface. This force is called the
+                    Coriolis force. The Coriolis force deflects objects to the right in the Northern Hemisphere and to
+                    the left in the Southern Hemisphere.
+                    <br>
+                    The Coriolis force is caused by the Earth's rotation. As an object moves on the Earth's surface, it
+                    is constantly moving relative to the Earth's rotating frame of reference. This movement causes the
+                    object to experience a force that is perpendicular to its direction of motion. This force is the
+                    Coriolis force.
+                    <br>
+                    The Coriolis force is strongest at the equator and weakest at the poles. This is because the Earth's
+                    rotation is fastest at the equator and slowest at the poles.
+                </span>
             </div>
+            <div id=""></div>
         </div>
-    </body>
+    </div>
+</body>
+
 </html>
