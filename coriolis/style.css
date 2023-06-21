@@ -122,9 +122,7 @@ body, html {
     font-family: 'exo 2';
     text-align: center;
     justify-content: center;
-    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-    background-size: 400% 400%;
-    animation: gradient 7.5s ease infinite;
+    background-image: url('https://lh6.googleusercontent.com/kMMPZE3kpsQBhStXYrfQg5AeL8HYaqJ1zhPAsj8PeY6zkjO2ntea3iby1J0bcAvFAohm9rAe9QienCklka7i5JLskljHWiYXLj3eg5lfr_6O2TpZcgkOZSoTK-aZnLSQyibEfR76rI_OSKyPCEhQMumXcA=s2048');
     height: auto;
     overflow: auto;
 }
