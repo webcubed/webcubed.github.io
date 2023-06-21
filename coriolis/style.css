@@ -33,16 +33,69 @@
     margin: auto;
 }
 #axist {
-    height: 500px;
+    height: 250px;
+    text-align: right;
+    margin-right: 100px;
+}
+span {
+    font-size: 20px;
+}
+#randomimg {
+    height: 250px;
+    width: 400px;
+    margin-left: 100px;
+}
+#currentimg {
+    height: 250px;
+    width: 400px;
+    margin-left: 100px;
+}
+#currentst {
+    text-align: right;
+    margin-right: 100px;
+}
+#windpatterns {
+    height: 250px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+#projectiles {
+    height: 250px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+#oceancurrents {
+    height: 250px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+#footer {
+    background: #000;
+    color: #fff;
+    position: absolute;
+    width: 100%;
+}
+#projt {
+    text-align: left;
+    margin-left: 100px;
 }
 #axis {
     width: 100%;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    height: 250px;
+}
+#wpstuff {
+    text-align: left;
+    margin-left: 100px;
 }
 #axisimg {
-    margin-left: 100px;
+    height: 250px;
+    margin-left: 250px;
+}
+#projimg {
+    height: 250px;
+    margin-left: 455px;
+    width: 400px;
 }
 /* width */
 ::-webkit-scrollbar {
@@ -51,7 +104,7 @@
   
 /* Track */
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: transparent !important;
 }
 
 /* Handle */
