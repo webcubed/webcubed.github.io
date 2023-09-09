@@ -14,7 +14,6 @@
  */
 var Stockfish;
 (function () {
-var Stockfish;
 function INIT_ENGINE() {
 
 var Stockfish = (function() {
