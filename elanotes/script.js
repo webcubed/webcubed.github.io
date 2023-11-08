@@ -73,7 +73,7 @@ Analyze folktales and humor\n
 How to use glossary 101\n
 - A glossary is a list of specialized terms and their definitions. They are in alphabetic order, in the back of the book.
 - Format: Entry word: Pronunciation, part of speech, and definition (kinda like dictionary)\n
-## From page 40:
+## From page 41:
 --- 
 “Let’s eat grandma!”\n
 - Commas. Commas are apparently very important because it can decide the fate of grandma. \n
