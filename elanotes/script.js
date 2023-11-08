@@ -109,7 +109,7 @@ Analyze rhyme, rhyme scheme, and mood.\n
     - to create rhythms, or patterns of stressed and unstressed syllables\n
 - Rhyme scheme: A rhyme scheme is a pattern of end rhymes in a poem.\n
 - A rhyme scheme is noted by assigning a letter of the alphabet, starting with a, to each end rhyme, as in the example from the first stanza of "Eldorado."\n
-### RHYME SCHEME example: \n
+- RHYME SCHEME example: \n
     Gaily bedight, a\n
     A gallant knight, a\n
     In sunshine and in shadow, b\n
