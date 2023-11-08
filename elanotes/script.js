@@ -17,7 +17,7 @@ Vocabulary, suffixes, word stuff.
 --- 
 “Watch your language.”\n
 - Learn what dialogue is: \n
-    Use quotation marks to enclose a direct quotation —a character's exact words.\n
+- Use quotation marks to enclose a direct quotation —a character's exact words.\n
 
             "Let me read your diary."\n
 - Direct quotations usually begin with an uppercase letter. However, when the speaker interrupts a quoted sentence, the second part of the quotation begins with a lowercase letter.
