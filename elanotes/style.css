@@ -1,0 +1,48 @@
+:root {
+  /*Variables*/
+  --wborder-radius: 10px;
+  --unhover-color: #5d3fd3;
+  --purple: #5d3fd3;
+  --titlebar-gray: var(--accent-color);
+  --light-purple: rgb(117, 87, 235);
+  --green: #2ca137;
+  --success-green: rgb(0, 200, 0);
+  --console-red: #ff0000;
+  --console-light-red: #ff4d4d;
+  --main-color: rgb(45,45,45);
+  --accent-color: rgb(45, 45, 45);
+  --primary-color: #303030;
+  --secondary-color: #1a1a1a;
+  --dark-color: #1a1a1a;
+  --purple-gradient: linear-gradient(to right, rgb(93, 63, 211), rgb(148, 108, 255));
+  --accent-gradient: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+  --gradient-1: linear-gradient(to right, #5d3fd3, #1a1a1a);
+  --gradient-2: linear-gradient(to right, #5d3fd5, #303030);
+  --gradient-3: linear-gradient(#5d3fd3, #8c61ff);
+}
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
+html,
+body {
+  background-color: #333;
+  color: #fff;
+  font-family: "roboto";
+}
+::-webkit-scrollbar {
+  width: 10px;
+}
+::-webkit-scrollbar-track {
+  border-radius: 10px;
+  position: absolute;
+  background-color: transparent !important;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--light-purple);
+  transition: background-color 0.5s;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gradient-3);
+  border-radius: 10px;
+  transition: background-color 0.5s;
+  margin: auto;
+  border: 1px solid #333;
+}
