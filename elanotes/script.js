@@ -110,12 +110,12 @@ Analyze rhyme, rhyme scheme, and mood.\n
 - Rhyme scheme: A rhyme scheme is a pattern of end rhymes in a poem.\n
 - A rhyme scheme is noted by assigning a letter of the alphabet, starting with a, to each end rhyme, as in the example from the first stanza of "Eldorado."\n
 - RHYME SCHEME example: \n
-    Gaily bedight, a\n
+    \`Gaily bedight, a\n
     A gallant knight, a\n
     In sunshine and in shadow, b\n
     Had journeyed long, c\n
     Singing a song, c\n
-    In search of Eldorado. b\n
+    In search of Eldorado. b\`\n
 - Mood = the feeling the poem creates for the reader. Some words that might describe the mood of a poem are:
     - cheerful, 
     - regretful, 
