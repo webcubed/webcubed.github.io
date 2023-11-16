@@ -1,85 +1,101 @@
 <!DOCTYPE html>
 <!-- gaaa workflow commit -->
 <html>
-  <head>
-    <script src="script.js"></script>
-    <script src="coi-serviceworker.js"></script>
-    <script src="stockfish.worker.js"></script>
-    <style>
-      .ann {
-        margin: -10px auto;
-        width: 30%;
-      }
 
-      body {
-        margin: 0;
-        font-family: Arial, Helvetica, sans-serif;
-      }
+<head>
+  <script src="script.js"></script>
+  <script src="coi-serviceworker.js"></script>
+  <script src="stockfish.worker.js"></script>
+  <style>
+    .ann {
+      margin: -10px auto;
+      width: 30%;
+    }
 
-      .topnav {
-        -webkit-touch-callout: none;
-        -webkit-user-select: none;
-        -khtml-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-        overflow: hidden;
-        background-color: #333;
-      }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-      .topnav a {
-        float: left;
-        color: #f2f2f2;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-        font-size: 17px;
-      }
+    .topnav {
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      -khtml-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+      overflow: hidden;
+      background-color: #333;
+    }
 
-      .topnav a:hover {
-        background-color: #ddd;
-        color: black;
-      }
+    .topnav a {
+      float: left;
+      color: #f2f2f2;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+      font-size: 17px;
+    }
 
-      .topnav a.active {
-        background-color: #5d3fd3;
-        color: white;
-      }
-    </style>
-    <link href='https://fonts.googleapis.com/css?family=Exo 2' rel='stylesheet'>
-    <title>idabest.tk</title>
-  </head>
-  <body style="background-color: #000000;">
-    <div class="topnav">
-      <a class="active">Home</a>
-      <a onclick="goto('schedule')" style="cursor: pointer;">Schedule</a>
-      <a onclick="goto('chat')" style="cursor: pointer;">Chat</a>
-      <a onclick="goto('tools')" style="cursor: pointer;">Tools</a>
-      <a onclick="goto('media')" style="cursor: pointer;">Media</a>
-      <a onclick="goto('games')" style="cursor: pointer;">Games</a>
-    </div>
-    <center>
-      <h1 style="color: #ffffff; font-weight: 600; vertical-align: baseline; height: 75px; font-size: 75px; font-family: 'Exo 2'; !important;">Welcome to idabest.tk</h1>
-    </center>
-    <hr>
-    <br>
-    <center>
-      <h1 style="color: #ffffff; font-weight: 600; vertical-align: baseline; height: 45px; font-size: 45px; font-family: 'Exo 2'; !important;">Announcements</h1>
-    </center>
-    <div class="ann">
-      <span id="anfirstchild" style="color: #ffffff; font-family: 'Exo 2'; left: 75px;">- Click me for ela notes :)) (not useful anymore)</span>
-<script>document.getElementById("anfirstchild").addEventListener("click", (e)=> {
-window.open("https://idabest.tk/elanotes")})</script>
-      <br>
-    </div>
-    <br>
-    <center>
-      <iframe id="clockframe" src="https://idabest.tk/skiddedglowingclockok.html" frameborder="0" width="360" height="100"></iframe>
-    </center>
+    .topnav a:hover {
+      background-color: #ddd;
+      color: black;
+    }
+
+    .topnav a.active {
+      background-color: #5d3fd3;
+      color: white;
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css?family=Exo 2" rel="stylesheet" />
+  <title>idabest.tk</title>
+</head>
+
+<body style="background-color: #000000">
+  <div class="topnav">
+    <a class="active">Home</a>
+    <a onclick="goto('schedule')" style="cursor: pointer">Schedule</a>
+    <a onclick="goto('chat')" style="cursor: pointer">Chat</a>
+    <a onclick="goto('tools')" style="cursor: pointer">Tools</a>
+    <a onclick="goto('media')" style="cursor: pointer">Media</a>
+    <a onclick="goto('games')" style="cursor: pointer">Games</a>
+  </div>
+  <center>
+    <h1
+      style="color: #ffffff; font-weight: 600; vertical-align: baseline; height: 75px; font-size: 75px; font-family: 'Exo 2' !important;">
+      Welcome to idabest.tk
+    </h1>
+  </center>
+  <hr />
+  <br />
+  <center>
+    <h1
+      style="color: #ffffff; font-weight: 600; vertical-align: baseline; height: 45px; font-size: 45px; font-family: 'Exo 2' !important;">
+      Announcements
+    </h1>
+  </center>
+  <div class="ann">
+    <span id="anfirstchild" style="color: #ffffff; font-family: 'Exo 2'; left: 75px">- Click me for ela notes :)) (not
+      useful anymore)</span>
     <script>
-      var audio = new Audio('Suprise.mp3');
-      audio.loop = true;
-      audio.play();
+      document
+        .getElementById("anfirstchild")
+        .addEventListener("click", (e) => {
+          window.open("https://idabest.tk/elanotes");
+        });
     </script>
-  </body>
+    <br />
+  </div>
+  <br />
+  <center>
+    <iframe id="clockframe" src="https://idabest.tk/skiddedglowingclockok.html" frameborder="0" width="360"
+      height="100"></iframe>
+  </center>
+  <script>
+    var audio = new Audio("Suprise.mp3");
+    audio.loop = true;
+    audio.play();
+  </script>
+</body>
+
 </html>
