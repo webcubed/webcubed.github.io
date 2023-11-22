@@ -2915,7 +2915,7 @@ span.CodeMirror-selectedtext {
 }
 
 .lrn_widget .lrn_textinput.lrn_correct:after {
-    content: "";
+    content: "";
     color: #fff;
     border: none
 }
@@ -2924,8 +2924,7 @@ span.CodeMirror-selectedtext {
     border-color: transparent;
     -webkit-box-shadow: none;
     box-shadow: none;
-    border-left: .21429em solid #4a700a;
-    background-color: #f0f8ed
+    background-color: rgb(245.5, 245.5, 245.5) !important;
 }
 
 .lrn_widget .lrn_textinput.lrn_correct .lrn_responseIndex {
@@ -2934,14 +2933,12 @@ span.CodeMirror-selectedtext {
 
 .lrn_widget .lrn_textinput.lrn_incorrect:after {
     content: "";
-    color: #dd002f
 }
 
 .lrn_widget .lrn_textinput.lrn_incorrect input,.lrn_widget .lrn_textinput.lrn_incorrect textarea,.lrn_widget .lrn_textinput.lrn_incorrect.lrn-clozeformula-input {
     border-color: transparent;
     -webkit-box-shadow: none;
     box-shadow: none;
-    border-left: .21429em solid #dd002f;
     background-color: #fbe3e3
 }
 
@@ -4080,8 +4077,7 @@ span.CodeMirror-selectedtext {
 }
 
 .lrn_widget.lrn_sortlist .lrn_response .lrn_btn_sort.lrn_correct {
-    border-left: .21429em solid #4a700a;
-    background-color: #f0f8ed;
+    background-color: rgb(245.5, 245.5, 245.5);
     border-top-left-radius: 0;
     border-bottom-left-radius: 0
 }
@@ -19236,4 +19232,8 @@ body#lrn-hidden-element-helper.lrn-hidden-element-shown,body.lrn-hidden-element-
     .lrn_widget {
         page-break-inside: avoid
     }
+}
+.lrn_correct {
+    background: rgb(245.5, 245.5, 245.5) !important;
+    border: none;
 }
