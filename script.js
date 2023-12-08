@@ -196,7 +196,7 @@ window.addEventListener("load", function () {
     if (currentPeriods) {
       currentPeriods.forEach((period) => {
         if (isCurrentPeriod(period)) {
-          if (!period.period == 6) {
+          if (period.period != 6) {
             const periodCells = document.querySelectorAll(`td:nth-child(${period.period + 1})`);
             const date = new Date();
             const day = date.getDay();
