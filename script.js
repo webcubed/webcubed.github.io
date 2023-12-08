@@ -116,75 +116,96 @@ window.getTime = function () {
   window.fulldate = Date().split(" GMT")[0];
   return format;
 };
+var selectperiod;
 window.addEventListener("load", function () {
-  // Get the current time
-  const currentTime = new Date();
+selectperiod = function () {
+  const currentTime = bTime();
 
-  // Get the current day of the week (0-6, where 0 is Sunday and 6 is Saturday)
-  const currentDay = currentTime.getDay();
-
-  // Get the current hour and minute
-  const currentHour = currentTime.getHours();
-  const currentMinute = currentTime.getMinutes();
-
-  // Calculate the current period based on the current time
-  let currentPeriod = -1;
-  if (
-    (currentHour === 8 && currentMinute >= 10) ||
-    (currentHour === 8 && currentMinute < 56)
-  ) {
-    currentPeriod = 1; // Period 1
-  } else if (
-    (currentHour === 8 && currentMinute >= 58) ||
-    (currentHour === 9 && currentMinute < 43)
-  ) {
-    currentPeriod = 2; // Period 2
-  } else if (
-    (currentHour === 9 && currentMinute >= 45) ||
-    (currentHour === 10 && currentMinute < 30)
-  ) {
-    currentPeriod = 3; // Period 3
-  } else if (
-    (currentHour === 10 && currentMinute >= 32) ||
-    (currentHour === 11 && currentMinute < 18)
-  ) {
-    currentPeriod = 4; // Period 4
-  } else if (
-    (currentHour === 11 && currentMinute >= 20) ||
-    (currentHour === 12 && currentMinute < 5)
-  ) {
-    currentPeriod = 5; // Period 5
-  } else if (
-    (currentHour === 12 && currentMinute >= 7) ||
-    (currentHour === 12 && currentMinute < 53)
-  ) {
-    currentPeriod = 6; // Period 6
-  } else if (
-    (currentHour === 12 && currentMinute >= 55) ||
-    (currentHour === 1 && currentMinute < 41)
-  ) {
-    currentPeriod = 7; // Period 7
-  } else if (
-    (currentHour === 1 && currentMinute >= 43) ||
-    (currentHour === 2 && currentMinute <= 30)
-  ) {
-    currentPeriod = 8; // Period 8
+  function timeToMinutes(time) {
+    const [hours, minutes, period] = time.match(/(\d+):(\d+) (\w+)/).slice(1);
+    return ((parseInt(hours) % 12) + (period.toLowerCase() === 'pm' ? 12 : 0)) * 60 + parseInt(minutes);
   }
 
-  // Highlight the current period in the table
-  const table = document.querySelector("table");
-  const rows = table.getElementsByTagName("tr");
-  const cells = rows[currentDay + 1].getElementsByTagName("td"); // Add 1 to skip the first row with the day/period labels
+  const currentTimeInMinutes = timeToMinutes(currentTime);
 
-  // Remove any existing highlighting
-  for (let i = 1; i < cells.length; i++) {
-    // Start from 1 to skip the first cell with the day label
-    cells[i].style.backgroundColor = "";
+  const periods = {
+    Monday: [
+      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+    ],
+    Tuesday: [
+      // Add periods for Tuesday here
+      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+    ],
+    Wednesday: [
+      // Add periods for Wednesday here
+      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+    ],
+    Thursday: [
+      // Add periods for Thursday here
+      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+    ],
+    Friday: [
+      // Add periods for Friday here
+      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+    ],
+  };
+
+  function isCurrentPeriod(period) {
+    return currentTimeInMinutes >= period.start && currentTimeInMinutes <= period.end;
   }
 
-  if (currentPeriod !== -1 && currentDay > 0 && currentDay < 6) {
-    // Check that it is a weekday and within school hours
-    // Highlight the current period, subtract 1 as the index is 0-based
-    cells[currentPeriod].style.backgroundColor = "#5d3fd3";
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  const currentPeriods = periods[today];
+
+  if (currentPeriods) {
+    currentPeriods.forEach((period) => {
+      if (isCurrentPeriod(period)) {
+        const periodCells = document.querySelectorAll(`td:nth-child(${period.period + 1})`);
+          const date = new Date();
+        const day = date.getDay();
+        if (day == 1) periodCells[1].style.backgroundColor = '#5d3fd3';
+        if (day == 2) periodCells[2].style.backgroundColor = '#5d3fd3';
+        if (day == 3) periodCells[3].style.backgroundColor = '#5d3fd3';
+        if (day == 4) periodCells[4].style.backgroundColor = '#5d3fd3';
+        if (day == 5) periodCells[5].style.backgroundColor = '#5d3fd3';
+      }
+    });
   }
+  }
+  selectperiod()
 });
