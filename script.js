@@ -41,6 +41,7 @@ window.highlightDate = function () {
   var e = 4;
   if (day == 5) fri.style.backgroundColor = "#5d3fd3";
   var e = 5;
+  selectperiod();
 };
 
 const ipifyURL = "https://api.ipify.org";
@@ -118,94 +119,98 @@ window.getTime = function () {
 };
 var selectperiod;
 window.addEventListener("load", function () {
-selectperiod = function () {
-  const currentTime = bTime();
+  selectperiod = function () {
+    const currentTime = bTime();
 
-  function timeToMinutes(time) {
-    const [hours, minutes, period] = time.match(/(\d+):(\d+) (\w+)/).slice(1);
-    return ((parseInt(hours) % 12) + (period.toLowerCase() === 'pm' ? 12 : 0)) * 60 + parseInt(minutes);
-  }
+    function timeToMinutes(time) {
+      const [hours, minutes, period] = time.match(/(\d+):(\d+) (\w+)/).slice(1);
+      return ((parseInt(hours) % 12) + (period.toLowerCase() === "pm" ? 12 : 0)) * 60 + parseInt(minutes);
+    }
 
-  const currentTimeInMinutes = timeToMinutes(currentTime);
+    const currentTimeInMinutes = timeToMinutes(currentTime);
 
-  const periods = {
-    Monday: [
-      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
-      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
-      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
-      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
-      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
-      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
-      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
-      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
-    ],
-    Tuesday: [
-      // Add periods for Tuesday here
-      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
-      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
-      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
-      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
-      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
-      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
-      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
-      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
-    ],
-    Wednesday: [
-      // Add periods for Wednesday here
-      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
-      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
-      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
-      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
-      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
-      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
-      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
-      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
-    ],
-    Thursday: [
-      // Add periods for Thursday here
-      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
-      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
-      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
-      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
-      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
-      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
-      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
-      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
-    ],
-    Friday: [
-      // Add periods for Friday here
-      { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
-      { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
-      { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
-      { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
-      { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
-      { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
-      { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
-      { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
-    ],
+    const periods = {
+      Monday: [
+        { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+        { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+        { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+        { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+        { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+        { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+        { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+        { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+      ],
+      Tuesday: [
+        // Add periods for Tuesday here
+        { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+        { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+        { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+        { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+        { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+        { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+        { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+        { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+      ],
+      Wednesday: [
+        // Add periods for Wednesday here
+        { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+        { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+        { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+        { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+        { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+        { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+        { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+        { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+      ],
+      Thursday: [
+        // Add periods for Thursday here
+        { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+        { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+        { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+        { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+        { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+        { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+        { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+        { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+      ],
+      Friday: [
+        // Add periods for Friday here
+        { start: timeToMinutes("8:10 am"), end: timeToMinutes("8:56 am"), period: 1 },
+        { start: timeToMinutes("8:58 am"), end: timeToMinutes("9:43 am"), period: 2 },
+        { start: timeToMinutes("9:45 am"), end: timeToMinutes("10:30 am"), period: 3 },
+        { start: timeToMinutes("10:32 am"), end: timeToMinutes("11:17 am"), period: 4 },
+        { start: timeToMinutes("11:19 am"), end: timeToMinutes("12:04 pm"), period: 5 },
+        { start: timeToMinutes("12:06 pm"), end: timeToMinutes("12:51 pm"), period: 6 },
+        { start: timeToMinutes("12:53 pm"), end: timeToMinutes("1:38 pm"), period: 7 },
+        { start: timeToMinutes("1:43 pm"), end: timeToMinutes("2:30 pm"), period: 8 },
+      ],
+    };
+
+    function isCurrentPeriod(period) {
+      return currentTimeInMinutes >= period.start && currentTimeInMinutes <= period.end;
+    }
+
+    const today = new Date().toLocaleDateString("en-US", { weekday: "long" });
+    const currentPeriods = periods[today];
+
+    if (currentPeriods) {
+      currentPeriods.forEach((period) => {
+        if (isCurrentPeriod(period)) {
+          if (!period.period == 6) {
+            const periodCells = document.querySelectorAll(`td:nth-child(${period.period + 1})`);
+            const date = new Date();
+            const day = date.getDay();
+            if (day == 1) periodCells[1].style.backgroundColor = "#5d3fd3";
+            if (day == 2) periodCells[2].style.backgroundColor = "#5d3fd3";
+            if (day == 3) periodCells[3].style.backgroundColor = "#5d3fd3";
+            if (day == 4) periodCells[4].style.backgroundColor = "#5d3fd3";
+            if (day == 5) periodCells[5].style.backgroundColor = "#5d3fd3";
+          } else {
+            document.querySelectorAll(`td:nth-child(7)`)[1].style.backgroundColor = "#5d3fd3";
+          }
+        }
+      });
+    }
   };
-
-  function isCurrentPeriod(period) {
-    return currentTimeInMinutes >= period.start && currentTimeInMinutes <= period.end;
-  }
-
-  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
-  const currentPeriods = periods[today];
-
-  if (currentPeriods) {
-    currentPeriods.forEach((period) => {
-      if (isCurrentPeriod(period)) {
-        const periodCells = document.querySelectorAll(`td:nth-child(${period.period + 1})`);
-          const date = new Date();
-        const day = date.getDay();
-        if (day == 1) periodCells[1].style.backgroundColor = '#5d3fd3';
-        if (day == 2) periodCells[2].style.backgroundColor = '#5d3fd3';
-        if (day == 3) periodCells[3].style.backgroundColor = '#5d3fd3';
-        if (day == 4) periodCells[4].style.backgroundColor = '#5d3fd3';
-        if (day == 5) periodCells[5].style.backgroundColor = '#5d3fd3';
-      }
-    });
-  }
-  }
-  selectperiod()
+  
 });
