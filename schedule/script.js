@@ -55,45 +55,47 @@ const additionalTeachers = {
 };
 function getPeriod() {
     // Get current day, ensure that it is monday through friday
-    const now = new Date(2024,12,20,9,30); // testing purposes
-        const day = now.getDay();
-        if (day === 0 || day === 6) {
-            return null;
-        }
-
-        // Get current time, ensure that it is between 8:10 am and 2:30 pm
-        const hour = now.getHours();
-        const minute = now.getMinutes();
-        const currentTimeInMinutes = hour * 60 + minute;
-
-        if (!(currentTimeInMinutes >= 490 && currentTimeInMinutes <= 870)) {
-            return null;
-        }
-
-        // Get current day in text
-        const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
-        const todaySchedule = schedule[daysOfWeek[day]];
-
-        // Check which period it currently is
-        for (const period of todaySchedule) {
-            const [start, end] = period.timeRange.split("-");
-            const [startHour, startMinute] = start.split(":").map(Number);
-            const [endHour, endMinute] = end.split(":").map(Number);
-
-            const startTimeInMinutes = startHour * 60 + startMinute;
-            const endTimeInMinutes = endHour * 60 + endMinute;
-
-            if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
-                return period;
-            }
-        }
+    const now = new Date(2024, 12, 20, 9, 30); // testing purposes
+    const day = now.getDay();
+    if (day === 0 || day === 6) {
         return null;
+    }
+
+    // Get current time, ensure that it is between 8:10 am and 2:30 pm
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const currentTimeInMinutes = hour * 60 + minute;
+
+    if (!(currentTimeInMinutes >= 490 && currentTimeInMinutes <= 870)) {
+        return null;
+    }
+
+    // Get current day in text
+    const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+    const todaySchedule = schedule[daysOfWeek[day]];
+
+    // Check which period it currently is
+    for (const period of todaySchedule) {
+        const [start, end] = period.timeRange.split("-");
+        const [startHour, startMinute] = start.split(":").map(Number);
+        const [endHour, endMinute] = end.split(":").map(Number);
+
+        const startTimeInMinutes = startHour * 60 + startMinute;
+        const endTimeInMinutes = endHour * 60 + endMinute;
+
+        if (currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes) {
+            return period;
+        }
+    }
+    return null;
 }
 document.addEventListener("DOMContentLoaded", function () {
+    // Get current period
     const period = getPeriod();
     if (period === null) {
         return;
     }
+    /* ----------------------------- table creation ----------------------------- */
     function createDefaultTable() {
         const daysOfWeek = ["monday", "tuesday", "wednesday", "thursday", "friday"];
         const table = document.getElementById("defaultschedule");
@@ -128,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function () {
         table.appendChild(tbody);
         return table;
     }
-
-    // Usage: Append the table to a container element in your HTML
+    /* ------------------------------ append tables ----------------------------- */
+    // append default table
     document.body.appendChild(createDefaultTable());
 });
