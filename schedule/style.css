@@ -26,11 +26,42 @@
     --base: #24273a;
     --mantle: #1e2030;
     --crust: #181926;
+
+    --border: 1px solid var(--text);
+
     font-family: "Lexend", sans-serif;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 13px;
+    color: var(--text);
+    border-color: var(--text);
 }
-/*border radius 15*/
+/*custom scrollbar*/
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-radius: 15px;
+}
+::-webkit-scrollbar-track {
+    background: var(--crust);
+    border-radius: 15px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--surface0);
+    border-radius: 15px;
+    border: 3px solid var(--crust);
+}
+/*
+Notes:
+title 26px
+h1 20px
+h2 16px
+h3 14px
+h4 12px
+h5 11px
+h7 11px italic
+text 13
+
+border radius 15*/
 /* ------------------------------ compatibility ----------------------------- */
 
 /* -------------------------------- elements -------------------------------- */
@@ -41,7 +72,6 @@ html {
     height: 100%;
     width: 100%;
     background-color: var(--crust);
-    color: var(--text);
 }
 a {
     color: var(--lavender);
@@ -49,10 +79,88 @@ a {
 a:hover {
     color: var(--blue);
 }
-/*table*/
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-align: center;
+    font-weight: 400;
+}
+h1 {
+    font-size: 20px;
+}
+h2 {
+    font-size: 16px;
+}
+h3 {
+    font-size: 14px;
+    color: var(--subtext0);
+}
+h4,
+h5,
+h6 {
+    color: var(--subtext1);
+}
+h4 {
+    font-size: 12px;
+}
+h5,
+h6 {
+    font-size: 11px;
+}
+h6 {
+    font-style: italic;
+}
+/* ---------------------------------- table --------------------------------- */
 table {
-    width: 100%;
-    border-collapse: collapse;
+    margin: auto;
     border-spacing: 0;
-    border-radius: 15px;
+    position: relative;
+}
+
+th,
+td {
+    border-bottom: var(--border);
+    border-right: var(--border);
+    padding: 0.5rem;
+}
+th {
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 450;
+}
+
+/* overengineered round table */
+
+table tr td:first-child,
+table tr th:first-child {
+    border-left: var(--border);
+}
+
+table tr th {
+    border-top: var(--border);
+}
+
+table tr:first-child th:first-child {
+    border-top-left-radius: 0.5rem;
+}
+
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 0.5rem;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 0.5rem;
+}
+
+table tr:first-child th:last-child {
+    border-top-right-radius: 0.5rem;
+}
+/* ----------------------------- specific tables ---------------------------- */
+/*default*/
+#defaultschedule {
+    width: 75%;
+    border-collapse: separate;
 }

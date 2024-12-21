@@ -26,10 +26,27 @@
     --base: #24273a;
     --mantle: #1e2030;
     --crust: #181926;
+
+    --border: 1px solid var(--text);
+
     font-family: "Lexend", sans-serif;
     font-weight: 400;
-    font-size: 16px;
+    font-size: 13px;
+    color: var(--text);
+    border-color: var(--text);
 }
+/*
+title 26px
+h1 20px
+h2 16px
+h3 14px
+h4 12px
+h5 11px
+h7 11px italic
+text 13
+
+
+border radius 15*/
 /* ------------------------------ compatibility ----------------------------- */
 
 /* -------------------------------- elements -------------------------------- */
@@ -40,11 +57,82 @@ html {
     height: 100%;
     width: 100%;
     background-color: var(--crust);
-    color: var(--text);
 }
 a {
     color: var(--lavender);
 }
 a:hover {
     color: var(--blue);
+}
+h1,h2,h3,h4,h5,h6 {
+    text-align: center;
+    font-weight: 400;
+}
+h1 {
+    font-size: 20px;
+}
+h2 {
+    font-size: 16px;
+}
+h3 {
+    font-size: 14px;
+    color: var(--subtext0);
+}
+h4,h5,h6 {
+    color: var(--subtext1);
+}
+h4 {
+    font-size: 12px;
+}
+h5,
+h6 {
+    font-size: 11px;
+}
+h6 {
+    font-style: italic;
+}
+/* ---------------------------------- table --------------------------------- */
+table {
+    margin: auto;
+    border-spacing: 0;
+    position: relative;
+}
+
+th,
+td {
+    border-bottom: var(--border);
+    border-right: var(--border);
+    padding: 0.5rem;
+}
+th {
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 450;
+}
+
+/* overengineered round table */
+
+table tr td:first-child,
+table tr th:first-child {
+    border-left: var(--border);
+}
+
+table tr th {
+    border-top: var(--border);
+}
+
+table tr:first-child th:first-child {
+    border-top-left-radius: 0.5rem;
+}
+
+table tr:last-child td:first-child {
+    border-bottom-left-radius: 0.5rem;
+}
+
+table tr:last-child td:last-child {
+    border-bottom-right-radius: 0.5rem;
+}
+
+table tr:first-child th:last-child {
+    border-top-right-radius: 0.5rem;
 }
