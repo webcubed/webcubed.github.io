@@ -61,6 +61,8 @@ h5 11px
 h7 11px italic
 text 13
 
+quint animation: cubic-bezier(0.64, 0, 0.78, 0)
+
 border radius 15*/
 /* ------------------------------ compatibility ----------------------------- */
 
@@ -163,4 +165,15 @@ table tr:first-child th:last-child {
 #defaultschedule {
     width: 75%;
     border-collapse: separate;
+    cursor: pointer;
+    background-color: var(--crust);
+}
+#defaultschedule > thead > tr > th,
+#defaultschedule > tbody > tr > td {
+    transition: background-color 0.2s;
+}
+#defaultschedule > thead > tr > th:hover,
+#defaultschedule > tbody > tr > td:hover {
+    transition: background-color 0.2s;
+    background-color: var(--surface0);
 }
