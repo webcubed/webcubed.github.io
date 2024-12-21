@@ -35,7 +35,23 @@
     color: var(--text);
     border-color: var(--text);
 }
+/*custom scrollbar*/
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+    border-radius: 15px;
+}
+::-webkit-scrollbar-track {
+    background: var(--crust);
+    border-radius: 15px;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--surface0);
+    border-radius: 15px;
+    border: 3px solid var(--crust);
+}
 /*
+Notes:
 title 26px
 h1 20px
 h2 16px
@@ -44,7 +60,6 @@ h4 12px
 h5 11px
 h7 11px italic
 text 13
-
 
 border radius 15*/
 /* ------------------------------ compatibility ----------------------------- */
@@ -64,7 +79,12 @@ a {
 a:hover {
     color: var(--blue);
 }
-h1,h2,h3,h4,h5,h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
     text-align: center;
     font-weight: 400;
 }
@@ -78,7 +98,9 @@ h3 {
     font-size: 14px;
     color: var(--subtext0);
 }
-h4,h5,h6 {
+h4,
+h5,
+h6 {
     color: var(--subtext1);
 }
 h4 {
