@@ -53,6 +53,18 @@ const schedule = {
 const additionalTeachers = {
     // TODO
 };
+const defaultColors = {
+    Algebra: "#ed8796",
+    Biology: "",
+    ELA: "",
+    History: "",
+    "Non-Core ELA": "",
+    "Non-Core Math": "",
+    Spanish: "",
+    Talent: "",
+    PE: "",
+    Lunch: "", 
+};
 function getPeriod() {
     // Get current day, ensure that it is monday through friday
     const now = new Date(2024, 12, 20, 9, 30); // testing purposes
