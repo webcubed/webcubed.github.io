@@ -50,20 +50,37 @@ const schedule = {
         { period: 8, timeRange: "13:43-14:30", subject: "Spanish", room: "126A", teacher: "Varkey" },
     ],
 };
+const options = {
+    left: [
+        {
+            colored: false,
+        },
+    ],
+    middle: [{}],
+    right: [
+        {
+            colors: {
+                border: "#cad3f5",
+                text: "#cad3f5",
+                background: "#181926",
+            },
+        },
+    ],
+};
 const additionalTeachers = {
     // TODO
 };
 const defaultColors = {
-    Algebra: "#ed8796",
-    Biology: "",
-    ELA: "",
-    History: "",
+    Algebra: "#8aadf4",
+    Biology: "#a6da95",
+    ELA: "#ed8796",
+    History: "#eed49f",
     "Non-Core ELA": "",
     "Non-Core Math": "",
-    Spanish: "",
+    Spanish: "#c6a0f6",
     Talent: "",
-    PE: "",
-    Lunch: "", 
+    PE: "#f5a97f",
+    Lunch: "#ee99a0",
 };
 function getPeriod() {
     // Get current day, ensure that it is monday through friday
@@ -145,4 +162,11 @@ document.addEventListener("DOMContentLoaded", function () {
     /* ------------------------------ append tables ----------------------------- */
     // append default table
     document.body.appendChild(createDefaultTable());
+    function createOptions() {
+        const table = document.getElementById("options");
+        const thead = document.createElement("thead");
+        const tbody = document.createElement("tbody");
+        
+    }
+    document.body.appendChild(createOptions());
 });
