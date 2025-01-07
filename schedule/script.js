@@ -164,9 +164,10 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.appendChild(createDefaultTable());
     function createOptions() {
         const table = document.getElementById("options");
-        const thead = document.createElement("thead");
         const tbody = document.createElement("tbody");
+
         
+        table.appendChild(tbody);
     }
     document.body.appendChild(createOptions());
 });
