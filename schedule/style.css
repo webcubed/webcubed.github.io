@@ -179,3 +179,4 @@ table tr:first-child th:last-child {
     transition: background-color 0.2s;
     background-color: var(--mantle);
 }
+/* ------------------------------ options table ----------------------------- */
