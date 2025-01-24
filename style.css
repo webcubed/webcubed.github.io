@@ -81,6 +81,7 @@ a {
 a:hover {
     color: var(--blue);
 }
+title,
 h1,
 h2,
 h3,
@@ -89,6 +90,9 @@ h5,
 h6 {
     text-align: center;
     font-weight: 400;
+}
+title {
+    font-size: 26px;
 }
 h1 {
     font-size: 20px;
