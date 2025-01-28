@@ -14,18 +14,29 @@
         <div id="titlecontainer">
             <h1>Guess the number!</h1>
         </div>
-        <hr>
+        <hr />
         <div id="game">
             <div id="optionscontainer">
-                <input type="range" id="maxdigits" min="1" max="10" value="4" />
-                <input type="checkbox" id="showcorrectdigits" />
-                <label for="showcorrectdigits">Show correct digits</label>
-                <input type="checkbox" id="showcorrectpositions" />
-                <label for="showcorrectpositions">Show correct positions</label>
-                <input type="checkbox" id="showpreviousguesses" />
-                <label for="showpreviousguesses">Show previous guesses</label>
-                <input type="checkbox" id="showpreviouscorrect" />
-                <label for="showpreviouscorrect">Show previous guesses' correct digits</label>
+                <div class="options-slider" data-min="1"data-max="10" >
+                    <div class="title">asdf</div>
+                    <input type="range" id="maxdigits"value="4" />
+                </div>
+                <div class="options-checkbox">
+                    <input type="checkbox" id="showcorrectdigits" />
+                    <label for="showcorrectdigits">Show correct digits</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="showcorrectpositions" />
+                    <label for="showcorrectpositions">Show correct positions</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="showpreviousguesses" />
+                    <label for="showpreviousguesses">Show previous guesses</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="showpreviouscorrect" />
+                    <label for="showpreviouscorrect">Show previous guesses' correct digits</label>
+                </div>
             </div>
             <div id="guesscontainer">
                 <table id="previousguesses">

@@ -139,8 +139,7 @@ button {
     border-radius: 0.5rem;
     transition: background-color 0.2s;
 }
-button
-button:hover {
+button button:hover {
     background-color: var(--surface1);
     transition: background-color 0.2s;
 }
@@ -181,6 +180,21 @@ input[type="range"]:hover {
     background-color: var(--surface1);
     transition: background-color 0.2s;
 }
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #cad3f5;
+    cursor: pointer;
+    transition: all 0.15s ease-in-out;
+}
+input[type="range"]::-webkit-slider-thumb:hover {
+    background-color: var(--blue);
+    transition: all 0.15s ease-in-out;
+    transform: scale(1.2);
+}
+
 /* ------------------------------- checkboxes ------------------------------- */
 input[type="checkbox"] {
     accent-color: var(--blue);
