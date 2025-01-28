@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
+        <script src="script.js"></script>
+        <link rel="stylesheet" href="../style.css" />
+        <link rel="stylesheet" href="style.css" />
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width" />
+    </head>
+    <body>
+        <div id="titlecontainer">
+            <h1>Guess the number!</h1>
+        </div>
+        <hr>
+        <div id="game">
+            <div id="optionscontainer">
+                <input type="range" id="maxdigits" min="1" max="10" value="4" />
+                <input type="checkbox" id="showcorrectdigits" />
+                <label for="showcorrectdigits">Show correct digits</label>
+                <input type="checkbox" id="showcorrectpositions" />
+                <label for="showcorrectpositions">Show correct positions</label>
+                <input type="checkbox" id="showpreviousguesses" />
+                <label for="showpreviousguesses">Show previous guesses</label>
+                <input type="checkbox" id="showpreviouscorrect" />
+                <label for="showpreviouscorrect">Show previous guesses' correct digits</label>
+            </div>
+            <div id="guesscontainer">
+                <table id="previousguesses">
+                    <!--one column of the guess, one column of the amount of digits correct-->
+                    <thead>
+                        <tr>
+                            <th id="guessheader">Guess</th>
+                            <th id="correctdigitsheader">Correct Digits</th>
+                        </tr>
+                    </thead>
+                    <tbody id="guessbody">
+                        <!--tr should be created containing the th of the guess and correct digits as content-->
+                    </tbody>
+                </table>
+                <div id="submissioncontainer">
+                    <input type="number" id="guess" />
+                    <button id="submit">Guess</button>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

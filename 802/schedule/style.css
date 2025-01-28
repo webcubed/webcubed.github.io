@@ -6,13 +6,4 @@
     cursor: pointer;
     background-color: var(--crust);
 }
-#defaultschedule > thead > tr > th,
-#defaultschedule > tbody > tr > td {
-    transition: background-color 0.2s;
-}
-#defaultschedule > thead > tr > th:hover,
-#defaultschedule > tbody > tr > td:hover {
-    transition: background-color 0.2s;
-    background-color: var(--mantle);
-}
 /* ------------------------------ options table ----------------------------- */

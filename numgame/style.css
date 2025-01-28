@@ -1,0 +1,45 @@
+/* ---------------------------- specific elements --------------------------- */
+#game {
+    width: 100%;
+    height: calc(100% - 26px);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+#optionscontainer {
+    width: 50%;
+    height: max-content;
+    overflow:auto;
+    padding: 1rem;
+    background-color: var(--base);
+    border-radius: 15px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+#guesscontainer {
+    border-radius: 15px;
+    background-color: var(--base);
+    height: 75%;
+    aspect-ratio: 9/16;
+    position: relative;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+#submissioncontainer {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+#previousguesses {
+    border-radius: 15px;
+}

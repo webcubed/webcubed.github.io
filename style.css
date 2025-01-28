@@ -65,8 +65,10 @@ quint animation: cubic-bezier(0.64, 0, 0.78, 0)
 
 border radius 15*/
 /* ------------------------------ compatibility ----------------------------- */
-
-/* -------------------------------- elements -------------------------------- */
+/*tbd xd*/
+/* -------------------------------------------------------------------------- */
+/*                                  elements                                  */
+/* -------------------------------------------------------------------------- */
 body,
 html {
     margin: 0;
@@ -75,6 +77,13 @@ html {
     width: 100%;
     background-color: var(--crust);
 }
+hr {
+    margin: auto;
+    border: none;
+    height: 1px;
+    background-color: var(--overlay0);
+}
+/* ---------------------------------- text ---------------------------------- */
 a {
     color: var(--lavender);
 }
@@ -118,6 +127,75 @@ h6 {
 }
 h6 {
     font-style: italic;
+}
+/* --------------------------------- button --------------------------------- */
+button {
+    background-color: var(--surface0);
+    color: var(--text);
+    font-family: Lexend;
+    cursor: pointer;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+button
+button:hover {
+    background-color: var(--surface1);
+    transition: background-color 0.2s;
+}
+button:active {
+    background-color: var(--surface2);
+    transition: background-color 0.1s;
+}
+/* ---------------------------------- input --------------------------------- */
+input {
+    background-color: var(--surface0);
+    border: none;
+    color: var(--text);
+    font-family: Lexend;
+    border: none;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    transition: background-color 0.2s;
+}
+input:hover {
+    background-color: var(--surface1);
+    transition: background-color 0.2s;
+}
+input:focus {
+    outline: none;
+}
+input::-webkit-inner-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+}
+/* -------------------------- range input (sliders) ------------------------- */
+input[type="range"] {
+    border: none;
+    outline: none;
+    background-color: var(--surface0);
+    transition: background-color 0.2s;
+}
+input[type="range"]:hover {
+    background-color: var(--surface1);
+    transition: background-color 0.2s;
+}
+/* ------------------------------- checkboxes ------------------------------- */
+input[type="checkbox"] {
+    accent-color: var(--blue);
+    outline: none;
+    background-color: var(--surface0);
+    transition: background-color 0.2s;
+}
+input[type="checkbox"]:hover {
+    cursor: pointer;
+}
+input[type="checkbox"]:active {
+    background-color: var(--surface1);
+}
+input[type="checkbox"]:focus {
+    outline: none;
 }
 /* ---------------------------------- table --------------------------------- */
 table {
@@ -163,4 +241,13 @@ table tr:last-child td:last-child {
 
 table tr:first-child th:last-child {
     border-top-right-radius: 0.5rem;
+}
+table > thead > tr > th,
+table > tbody > tr > td {
+    transition: background-color 0.2s;
+}
+table > thead > tr > th:hover,
+table > tbody > tr > td:hover {
+    transition: background-color 0.2s;
+    background-color: var(--mantle);
 }
