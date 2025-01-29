@@ -135,6 +135,7 @@
 .options-checkbox:has(> input:disabled) {
   display: none;
 }
+/* ------------------------------ slider stuff ------------------------------ */
 .options-slider input:disabled + label:after,
 .options-slider input:disabled + label:before {
   cursor: not-allowed;
@@ -158,7 +159,6 @@
 .options-slider {
   position: relative;
   margin-left: 20px;
-  width: 247px;
   margin-right: 32.5px;
   height: 50px;
   display: flex;
@@ -210,6 +210,7 @@
   appearance: none;
   width: calc(100% - (70px));
   height: 2px;
+  border-radius: 15px;
   background: var(--mauve);
   width: 100%;
   cursor: pointer;

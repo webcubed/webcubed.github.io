@@ -153,9 +153,6 @@ input {
     border: none;
     color: var(--text);
     font-family: Lexend;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
     transition: background-color 0.2s;
 }
 input:hover {
