@@ -1,3 +1,4 @@
+//tbd: config system
 let allowedDigits = [1, 2, 3, 4, 5, 6];
 class game {
     constructor(allowedDigits, numberLength) {
@@ -11,11 +12,31 @@ class game {
         }
         return number;
     }
-    getPossibleCombinations() {
+    calculatePossibleCombinations() {
         // possible combinations formula
+        // length of allowed digits array = possible combination for 1 digit
+        // for the second digit, the possible amount of combinations
+        // is each item in array * length of array, which is the possible combination for 2 digits
+        // in other words, length of array squared = possible combinations for 2 digits
+        // following this pattern, the possible combinations for n digits is length of array to the power of n
+        // some rando on github is probably gonna see this and go man this guy is stupid he probably didn't pass middle school yet
+        
+        return this.allowedDigits.length ** this.numberLength;
     }
     checkNumber(guess) {
         // check digits that match up exactly (split guess into array and generated number into array, compare)
+        // split guess into array
+        const guessArray = guess.split("");
+        // split generated number into array
+        const generatedNumberArray = this.generateNumber().split(""); //to be changed
+        // compare arrays
+        let correctDigits = 0;
+        for (let i = 0; i < guessArray.length; i++) {
+            if (guessArray[i] === generatedNumberArray[i]) {
+                correctDigits++;
+            }
+        }
+        return correctDigits;
     }
 }
 document.addEventListener("DOMContentLoaded", function () {
@@ -75,5 +96,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 return;
             }
         });
+    });
+    /* --------------------------- input functionality -------------------------- */
+    document.getElementById("guess").addEventListener("input", () => {
+        // cancel event if greater than generated number length or contains non-allowed digits
+        const guess = document.getElementById("guess").value;
+        if (guess.length > game.numberLength || !allowedDigits.includes(parseInt(guess))) {
+            document.getElementById("guess").value = "";
+            return;
+        }
+    });
+    /* ------------------------ submission functionality ------------------------ */
+    document.getElementById("submit").addEventListener("click", () => {
+        const guess = document.getElementById("guess").value;
+        const correctDigits = game.checkNumber(guess);
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${guess}</td><td>${correctDigits}</td>`;
+        document.getElementById("guessbody").appendChild(row);
     });
 });

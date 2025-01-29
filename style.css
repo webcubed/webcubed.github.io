@@ -90,7 +90,7 @@ a {
 a:hover {
     color: var(--blue);
 }
-span#title,
+span.title,
 h1,
 h2,
 h3,
@@ -100,7 +100,7 @@ h6 {
     text-align: center;
     font-weight: 400;
 }
-span#title {
+span.title {
     font-size: 26px;
 }
 h1 {
@@ -225,6 +225,7 @@ input[type="checkbox"]:focus {
 .options-checkbox {
     position: relative;
     height: 30px;
+    min-width: max-content;
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -242,7 +243,6 @@ input[type="checkbox"]:focus {
     height: 100%;
     display: flex;
     align-items: center;
-    width: max-content;
     position: relative;
     font-size: small;
 }
@@ -329,8 +329,6 @@ input[type="checkbox"]:focus {
 
 .options-slider {
     position: relative;
-    margin-left: 20px;
-    margin-right: 32.5px;
     height: 50px;
     display: flex;
     justify-content: center;

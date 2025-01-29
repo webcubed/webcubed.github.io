@@ -9,7 +9,7 @@
 }
 #optionscontainer {
     overflow: auto;
-    width: fit-content;
+    width: 70%;
     padding: 1rem;
     background-color: var(--base);
     border-radius: 15px;
