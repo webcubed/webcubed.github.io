@@ -1,3 +1,4 @@
+let allowedDigits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 class game {
     constructor(allowedDigits, numberLength) {
         this.allowedDigits = allowedDigits;
@@ -18,6 +19,7 @@ class game {
     }
 }
 document.addEventListener("DOMContentLoaded", function () {
+    /* -------------------------- slider functionality -------------------------- */
     const sliderProps = {
         fill: "var(--blue), var(--mauve)",
         background: "var(--crust)",
@@ -45,6 +47,33 @@ document.addEventListener("DOMContentLoaded", function () {
             input.style.background = bg;
             title.setAttribute("data-value", input.value);
             input.setAttribute("value", input.value);
+        });
+    });
+    /* -------------------------- button functionality -------------------------- */
+    document.querySelectorAll("button.digitbutton").forEach((button) => {
+        // highlight buttons with values included in alloweddigits
+        if (allowedDigits.includes(parseInt(button.textContent))) {
+            button.classList.add("active");
+        }
+        button.addEventListener("click", () => {
+            const value = button.textContent;
+            // highlight button
+            // check if number is in alloweddigits
+            if (allowedDigits.includes(parseInt(value))) {
+                button.classList.remove("active");
+                // remove value from array
+                allowedDigits.splice(allowedDigits.indexOf(parseInt(value)), 1);
+                return;
+            } else {
+                button.classList.add("active");
+                // add to array
+                allowedDigits.push(parseInt(value));
+                // re sort array
+                allowedDigits.sort(function (a, b) {
+                    return a - b;
+                });
+                return;
+            }
         });
     });
 });

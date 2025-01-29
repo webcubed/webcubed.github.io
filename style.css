@@ -147,6 +147,10 @@ button:active {
     background-color: var(--surface2);
     transition: background-color 0.1s;
 }
+button.active {
+    background-color: var(--blue);
+    transition: background-color 0.2s;
+}
 /* ---------------------------------- input --------------------------------- */
 input {
     background-color: var(--surface0);
