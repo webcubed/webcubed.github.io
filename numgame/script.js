@@ -1,3 +1,22 @@
+class game {
+    constructor(allowedDigits, numberLength) {
+        this.allowedDigits = allowedDigits;
+        this.numberLength = numberLength;
+    }
+    generateNumber() {
+        let number = "";
+        for (let i = 0; i < this.numberLength; i++) {
+            number += this.allowedDigits[Math.floor(Math.random() * this.allowedDigits.length)];
+        }
+        return number;
+    }
+    getPossibleCombinations() {
+        // possible combinations formula
+    }
+    checkNumber(guess) {
+        // check digits that match up exactly (split guess into array and generated number into array, compare)
+    }
+}
 document.addEventListener("DOMContentLoaded", function () {
     const sliderProps = {
         fill: "var(--blue), var(--mauve)",
