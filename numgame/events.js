@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
-    updateConfig();
     document.getElementById("optionscontainer").addEventListener("click", () => {
+        updateConfig();
         if (!configValues?.twoPlayer) {
             document.getElementById("customnumberselection").style.display = "none";
         } else {
