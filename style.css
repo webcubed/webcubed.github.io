@@ -137,7 +137,7 @@ button {
     border: none;
     padding: 0.5rem;
     border-radius: 0.5rem;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, color 0.2s;
 }
 button:hover {
     background-color: var(--surface1);
@@ -149,7 +149,8 @@ button:active {
 }
 button.active {
     background-color: var(--blue);
-    transition: background-color 0.2s;
+    color: var(--mantle);
+    transition: background-color 0.2s, color 0.2s;
 }
 /* ---------------------------------- input --------------------------------- */
 input {
@@ -165,6 +166,11 @@ input:hover {
 }
 input:focus {
     outline: none;
+}
+input:disabled {
+    background-color: var(--surface0);
+    color: var(--overlay0);
+    cursor: not-allowed;
 }
 /* ------------------------------ number input ------------------------------ */
 input[type="number"] {

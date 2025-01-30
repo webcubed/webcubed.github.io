@@ -33,6 +33,16 @@
     align-items: center;
     justify-content: space-between;
 }
+
+#previousguesses {
+    position: relative;
+    top: 10px;
+    width: 85%;
+    height: min-content;
+    border-radius: 15px;
+    margin: unset;
+}
+/* --------------------------- submission elements -------------------------- */
 #submissioncontainer {
     width: 100%;
     display: flex;
@@ -43,11 +53,19 @@
     position: relative;
     bottom: 10px;
 }
-#previousguesses {
-    position: relative;
-    top: 10px;
-    width: 85%;
-    height: min-content;
-    border-radius: 15px;
-    margin: unset;
+/* ------------------------------ start button ------------------------------ */
+button#startbutton {
+    background-color: var(--blue);
+    transition: background-color 0.2s;
+}
+button#startbutton:hover {
+    background-color: var(--mauve);
+    transition: background-color 0.2s;
+}
+button#startbutton:active {
+    background-color: var(--surface2);
+    transition: background-color 0.1s;
+}
+#customnumberselection > h6, #customnumberselection > h2 {
+    margin: 0 0 6px 0;
 }

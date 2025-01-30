@@ -1,6 +1,22 @@
 //tbd: config system
 let allowedDigits = [1, 2, 3, 4, 5, 6];
-class game {
+var configValues;
+var updateConfig = () => {
+    configValues = {
+        numberLength: document.getElementById("maxdigits").value,
+        twoPlayer: document.getElementById("twoplayermode").checked,
+        showCorrectPositions: document.getElementById("showcorrectpositions").checked,
+        allowRepeats: document.getElementById("allowrepeats").checked,
+        showPreviousGuesses: document.getElementById("showpreviousguesses").checked,
+        showPreviousCorrect: document.getElementById("showpreviouscorrect").checked,
+    };
+};
+let game;
+let numberLength = 6;
+let number;
+let gameinsession = false;
+
+class Game {
     constructor(allowedDigits, numberLength) {
         this.allowedDigits = allowedDigits;
         this.numberLength = numberLength;
@@ -20,15 +36,16 @@ class game {
         // in other words, length of array squared = possible combinations for 2 digits
         // following this pattern, the possible combinations for n digits is length of array to the power of n
         // some rando on github is probably gonna see this and go man this guy is stupid he probably didn't pass middle school yet
-        
+
         return this.allowedDigits.length ** this.numberLength;
     }
     checkNumber(guess) {
+        // should only be run after number generation
         // check digits that match up exactly (split guess into array and generated number into array, compare)
         // split guess into array
         const guessArray = guess.split("");
         // split generated number into array
-        const generatedNumberArray = this.generateNumber().split(""); //to be changed
+        const generatedNumberArray = number.split(""); //to be changed
         // compare arrays
         let correctDigits = 0;
         for (let i = 0; i < guessArray.length; i++) {
@@ -40,6 +57,17 @@ class game {
     }
 }
 document.addEventListener("DOMContentLoaded", function () {
+    configValues = {
+        numberLength: document.getElementById("maxdigits").value,
+        twoPlayer: document.getElementById("twoplayermode").checked,
+        showCorrectPositions: document.getElementById("showcorrectpositions").checked,
+        allowRepeats: document.getElementById("allowrepeats").checked,
+        showPreviousGuesses: document.getElementById("showpreviousguesses").checked,
+        showPreviousCorrect: document.getElementById("showpreviouscorrect").checked,
+    };
+
+    const guessElement = document.getElementById("guess");
+    const submitElement = document.getElementById("submit");
     /* -------------------------- slider functionality -------------------------- */
     const sliderProps = {
         fill: "var(--blue), var(--mauve)",
@@ -68,10 +96,12 @@ document.addEventListener("DOMContentLoaded", function () {
             input.style.background = bg;
             title.setAttribute("data-value", input.value);
             input.setAttribute("value", input.value);
+            // set global number length value
+            numberLength = value;
         });
     });
     /* -------------------------- button functionality -------------------------- */
-    document.querySelectorAll("button.digitbutton").forEach((button) => {
+    document.querySelectorAll("#digitselection > button.digitbutton").forEach((button) => {
         // highlight buttons with values included in alloweddigits
         if (allowedDigits.includes(parseInt(button.textContent))) {
             button.classList.add("active");
@@ -97,21 +127,51 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     });
+    // hide custom number selector if 2 player mode off
+    if (configValues.twoPlayer === false) {
+        document.getElementById("customnumberselection").style.display = "none";
+    } else {
+        document.getElementById("customnumberselection").style.display = "block";
+    }
+    // this check is continuously done on click of options container in events.js
     /* --------------------------- input functionality -------------------------- */
-    document.getElementById("guess").addEventListener("input", () => {
+    guessElement.addEventListener("input", (event) => {
         // cancel event if greater than generated number length or contains non-allowed digits
-        const guess = document.getElementById("guess").value;
-        if (guess.length > game.numberLength || !allowedDigits.includes(parseInt(guess))) {
-            document.getElementById("guess").value = "";
+        const guess = guessElement.value;
+        const key = event.data;
+        if (guess.length > game.numberLength || !allowedDigits.includes(parseInt(key))) {
+            // remove last character from input
+            guessElement.value = guess.slice(0, -1);
             return;
         }
     });
     /* ------------------------ submission functionality ------------------------ */
-    document.getElementById("submit").addEventListener("click", () => {
-        const guess = document.getElementById("guess").value;
+    submitElement.addEventListener("click", () => {
+        const guess = guessElement.value;
         const correctDigits = game.checkNumber(guess);
         const row = document.createElement("tr");
         row.innerHTML = `<td>${guess}</td><td>${correctDigits}</td>`;
         document.getElementById("guessbody").appendChild(row);
+        // if guess matches the number, game ends and resets; disable guess input
+        if (correctDigits === game.numberLength) {
+            guessElement.disabled = true;
+            guessElement.value = "";
+            gameinsession = false;
+            guessElement.placeholder = "No game in session";
+        }
+    });
+    /* -------------------------------------------------------------------------- */
+    /*                                 game start                                 */
+    /* -------------------------------------------------------------------------- */
+    document.getElementById("startbutton").addEventListener("click", () => {
+        game = new Game(allowedDigits, numberLength);
+        number = game.generateNumber();
+        // clear guess table
+        document.getElementById("guessbody").innerHTML = "";
+        // clear submission field
+        guessElement.value = "";
+        gameinsession = true;
+        guessElement.disabled = false;
+        guessElement.placeholder = "Enter your guess";
     });
 });

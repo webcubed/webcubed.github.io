@@ -5,6 +5,7 @@
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
         <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap" rel="stylesheet" />
         <script src="script.js"></script>
+        <script src="events.js"></script>
         <link rel="stylesheet" href="../style.css" />
         <link rel="stylesheet" href="style.css" />
         <meta charset="UTF-8" />
@@ -23,15 +24,19 @@
                     <input type="range" id="maxdigits" value="4" />
                 </div>
                 <div class="options-checkbox">
-                    <input type="checkbox" id="showcorrectdigits" />
-                    <label for="showcorrectdigits">Show correct digits</label>
+                    <input type="checkbox" id="allowrepeats" />
+                    <label for="allowrepeats">Allow Repeat Digits</label>
+                </div>
+                <div class="options-checkbox">
+                    <input type="checkbox" id="twoplayermode" />
+                    <label for="twoplayermode">2 Player Mode</label>
                 </div>
                 <div class="options-checkbox">
                     <input type="checkbox" id="showcorrectpositions" />
                     <label for="showcorrectpositions">Show correct positions</label>
                 </div>
                 <div class="options-checkbox">
-                    <input type="checkbox" id="showpreviousguesses" />
+                    <input type="checkbox" id="showpreviousguesses" checked/>
                     <label for="showpreviousguesses">Show previous guesses</label>
                 </div>
                 <div class="options-checkbox">
@@ -55,7 +60,22 @@
                     <button class="digitbutton">8</button>
                     <button class="digitbutton">9</button>
                 </div>
+                <div id="customnumberselection">
+                    <h2>Custom number</h2>
+                    <h6>(Click in order of number)</h6>
+                    <button class="digitbutton">0</button>
+                    <button class="digitbutton">1</button>
+                    <button class="digitbutton">2</button>
+                    <button class="digitbutton">3</button>
+                    <button class="digitbutton">4</button>
+                    <button class="digitbutton">5</button>
+                    <button class="digitbutton">6</button>
+                    <button class="digitbutton">7</button>
+                    <button class="digitbutton">8</button>
+                    <button class="digitbutton">9</button>
+                </div>
             </div>
+            <button id="startbutton">New game</button>
             <div id="guesscontainer">
                 <table id="previousguesses">
                     <!--one column of the guess, one column of the amount of digits correct-->
@@ -70,7 +90,7 @@
                     </tbody>
                 </table>
                 <div id="submissioncontainer">
-                    <input type="number" id="guess" />
+                    <input type="number" id="guess" disabled placeholder="No game in session" />
                     <button id="submit">Guess</button>
                 </div>
             </div>
