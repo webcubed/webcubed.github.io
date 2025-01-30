@@ -68,6 +68,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const guessElement = document.getElementById("guess");
     const submitElement = document.getElementById("submit");
+    /* ---------------------- settings toggle functionality --------------------- */
+    document.getElementById("settingsbutton").addEventListener("click", () => {
+        document.getElementById("optionscontainer").style.display =
+            document.getElementById("optionscontainer").style.display === "none" ? "flex" : "none";
+    })
     /* -------------------------- slider functionality -------------------------- */
     const sliderProps = {
         fill: "var(--blue), var(--mauve)",
@@ -139,7 +144,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // cancel event if greater than generated number length or contains non-allowed digits
         const guess = guessElement.value;
         const key = event.data;
-        if (guess.length > game.numberLength || !allowedDigits.includes(parseInt(key))) {
+        if (guess.length > game.numberLength || (!allowedDigits.includes(parseInt(key)) && key !== "")) {
             // remove last character from input
             guessElement.value = guess.slice(0, -1);
             return;
