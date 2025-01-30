@@ -10,6 +10,9 @@
         <link rel="stylesheet" href="../style.css" />
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css" />
+        <!--api-->
+        <script src="../api/libs.js"></script>
+        <link rel="stylesheet" href="../api/libs.css" />
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width" />
     </head>
@@ -25,7 +28,8 @@
                 </button>
             </div>
             <div id="optionscontainer">
-                <div style="width: calc(50% - 13px)"><h1>options</h1></div>
+                <h1 style="margin-bottom: 0;">options</h1>
+                <h4 id="possiblecombinations" style="margin-top: 0;">Possible Combinations: N/A</h4>
                 <div class="options-slider" data-min="1" data-max="10">
                     <div class="title">Number Length:</div>
                     <input type="range" id="maxdigits" value="4" />
@@ -47,11 +51,7 @@
                     <label for="showpreviousguesses">Show previous guesses</label>
                 </div>
                 <div class="options-checkbox">
-                    <input type="checkbox" id="showpreviouscorrect" />
-                    <label for="showpreviouscorrect">Show previous correct digits</label>
-                </div>
-                <div class="options-checkbox">
-                    <input type="checkbox" id="shownumpossiblecombinations" />
+                    <input type="checkbox" id="shownumpossiblecombinations" checked/>
                     <label for="shownumpossiblecombinations">Show # of possible combinations</label>
                 </div>
                 <div id="digitselection">
@@ -102,5 +102,6 @@
                 </div>
             </div>
         </div>
+        <div id="toastscontainer"></div>
     </body>
 </html>
