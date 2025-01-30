@@ -10,16 +10,20 @@
 #optionscontainer {
     overflow: auto;
     width: 70%;
+    height: 120px;
     padding: 1rem;
     background-color: var(--base);
     border-radius: 15px;
     margin: 1rem;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 15px;
+}
+#optionscontainer > * {
+    flex: 1 1 0px;
 }
 #guesscontainer {
     border-radius: 15px;
@@ -68,4 +72,7 @@ button#startbutton:active {
 }
 #customnumberselection > h6, #customnumberselection > h2 {
     margin: 0 0 6px 0;
+}
+.options-slider {
+    width: 50% !important;
 }

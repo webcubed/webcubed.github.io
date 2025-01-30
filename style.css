@@ -231,7 +231,7 @@ input[type="checkbox"]:focus {
 .options-checkbox {
     position: relative;
     height: 30px;
-    min-width: max-content;
+    min-width: calc(50% - 13px);
     border-radius: 15px;
     display: flex;
     align-items: center;
@@ -248,6 +248,7 @@ input[type="checkbox"]:focus {
 .options-checkbox label {
     height: 100%;
     display: flex;
+    min-width: 50%;
     align-items: center;
     position: relative;
     font-size: small;
