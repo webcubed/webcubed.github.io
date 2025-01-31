@@ -158,10 +158,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // cancel event if greater than generated number length or contains non-allowed digits
         const guess = guessElement.value;
         const key = event.data;
-        if (guess.length > game.numberLength || (!allowedDigits.includes(parseInt(key)) && key !== "")) {
+        if (!key) return
+        if (guess.length > game.numberLength || !allowedDigits.includes(parseInt(key))) {
             // remove last character from input
             guessElement.value = guess.slice(0, -1);
-            return;
+            return
         }
     });
     // make enter submit guess if the input is active
@@ -199,6 +200,40 @@ document.addEventListener("DOMContentLoaded", function () {
             row.innerHTML = `<td>${guess}</td><td>${correctDigits}</td>`;
         }
         document.getElementById("guessbody").appendChild(row);
+        // Auto scroll to bottom if overflow
+        const table = document.getElementById("guessbody");
+        if ('scrollBehavior' in document.documentElement.style) {
+            table.scrollTo({
+                top: table.scrollHeight,
+                behavior: 'smooth'
+            });
+        } else {
+            // Fallback for browsers without smooth scroll
+            let start = table.scrollTop;
+            const change = table.scrollHeight - start;
+            const duration = 500; // duration in ms
+            let currentTime = 0;
+            const increment = 20;
+
+            function animateScroll(){
+                currentTime += increment;
+                const val = Math.easeInOutQuad(currentTime, start, change, duration);
+                table.scrollTop = val;
+                if(currentTime < duration) {
+                    setTimeout(animateScroll, increment);
+                }
+            }
+            animateScroll();
+        }
+
+        // Easing function
+        Math.easeInOutQuad = function (t, b, c, d) {
+            t /= d/2;
+            if (t < 1) return c/2*t*t + b;
+            t--;
+            return -c/2 * (t*(t-2) - 1) + b;
+        };
+
         // if guess matches the number, game ends and resets; disable guess input
         if (correctDigits === game.numberLength) {
             /* -------------------------------------------------------------------------- */

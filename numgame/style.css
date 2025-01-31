@@ -46,7 +46,6 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
 }
 
 #previousguesses {
@@ -68,8 +67,8 @@
     align-items: center;
     justify-content: center;
     gap: 15px;
-    position: absolute;
-    bottom: 10px;
+    position: fixed;
+    bottom: 60px;
 }
 #submissioncontainer > button {
     user-select: none;

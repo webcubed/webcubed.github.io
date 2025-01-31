@@ -10,6 +10,8 @@
         <link rel="stylesheet" href="../style.css" />
         <link rel="stylesheet" href="style.css" />
         <link rel="stylesheet" href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css" />
+        <link rel="icon" type="image/x-icon" href="/hashtag.svg" />
+
         <!--api-->
         <script src="../api/libs.js"></script>
         <link rel="stylesheet" href="../api/libs.css" />
@@ -28,8 +30,8 @@
                 </button>
             </div>
             <div id="optionscontainer">
-                <h1 style="margin-bottom: 0;">options</h1>
-                <h4 id="possiblecombinations" style="margin-top: 0;">Possible Combinations: N/A</h4>
+                <h1 style="margin-bottom: 0">options</h1>
+                <h4 id="possiblecombinations" style="margin-top: 0">Possible Combinations: N/A</h4>
                 <div class="options-slider" data-min="1" data-max="10">
                     <div class="title">Number Length:</div>
                     <input type="range" id="maxdigits" value="6" />
@@ -51,7 +53,7 @@
                     <label for="showpreviousguesses">Show previous guesses</label>
                 </div>
                 <div class="options-checkbox">
-                    <input type="checkbox" id="shownumpossiblecombinations" checked/>
+                    <input type="checkbox" id="shownumpossiblecombinations" checked />
                     <label for="shownumpossiblecombinations">Show # of possible combinations</label>
                 </div>
                 <div id="digitselection">
@@ -84,6 +86,7 @@
             </div>
             <div id="startcontainer"><button id="startbutton">New game</button></div>
             <div id="guesscontainer">
+                <h1>Guesses</h1>
                 <table id="previousguesses">
                     <!--one column of the guess, one column of the amount of digits correct-->
                     <thead>
