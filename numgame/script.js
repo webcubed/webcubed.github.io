@@ -164,6 +164,12 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
     });
+    // make enter submit guess if the input is active
+    guessElement.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            submitElement.click();
+        }
+    });
     /* ------------------------ submission functionality ------------------------ */
     submitElement.addEventListener("click", () => {
         updateConfig();
