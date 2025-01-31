@@ -21,6 +21,7 @@ class Game {
     constructor(allowedDigits, numberLength) {
         this.allowedDigits = allowedDigits;
         this.numberLength = numberLength;
+        this.guesses = [];
     }
     generateNumber() {
         let number = "";
@@ -167,6 +168,7 @@ document.addEventListener("DOMContentLoaded", function () {
     submitElement.addEventListener("click", () => {
         updateConfig();
         const guess = guessElement.value;
+        game.guesses.push(guess);
         const correctDigits = game.checkNumber(guess);
         const row = document.createElement("tr");
         var correctPositions = "";
@@ -205,6 +207,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     button.classList.remove("active");
                 }
             });
+            new Toast("info", "Game Over!", "You have correctly guessed the number after" + " " + game.guesses.length + " " + "guesses!", 2500);
             // re enable options
             document.getElementById("optionscontainer").style.pointerEvents = "all";
             document.getElementById("optionscontainer").style.cursor = "unset";
@@ -245,6 +248,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     button.classList.add("active");
                 }
             });
+            number = customnumber.join("");
             new Toast("info", "Game started", "All items in custom number selection now appear active for hiding purposes.", 2500);
         }
         if (configValues.shownumpossiblecombinations) {
