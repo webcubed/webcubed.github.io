@@ -47,7 +47,6 @@ class Game {
         this.guesses = [];
     }
     generateNumber() {
-        let forceAllowRepeats = false;
         let number = "";
         const possibleDigits = this.allowedDigits.slice();
         for (let i = 0; i < this.numberLength; i++) {
@@ -56,18 +55,17 @@ class Game {
             if (!configValues.allowRepeats && parseInt(this.numberLength) < parseInt(this.allowedDigits.length)) {
                 possibleDigits.splice(index, 1);
             } else {
-                forceAllowRepeats = true;
+                if (i == parseInt(this.numberLength) - 1) {
+                    document.getElementById("allowrepeats").checked = true;
+                    configValues.allowRepeats = true;
+                    new Toast(
+                        "warning",
+                        "Repeats Allowed",
+                        "Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
+                        5000
+                    );
+                }
             }
-        }
-        if (forceAllowRepeats) {
-            document.getElementById("allowrepeats").checked = true;
-            configValues.allowRepeats = true;
-            new Toast(
-                "warning",
-                "Repeats Allowed",
-                "Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
-                5000
-            );
         }
 
         return number;
