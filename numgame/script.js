@@ -53,28 +53,28 @@ class Game {
 		this.numberLength = numberLength;
 		this.guesses = [];
 	}
+
 	generateNumber() {
 		let number = "";
 		const possibleDigits = this.allowedDigits.slice();
 		for (let i = 0; i < this.numberLength; i++) {
-			let index = Math.floor(Math.random() * possibleDigits.length);
+			const index = Math.floor(Math.random() * possibleDigits.length);
 			number += possibleDigits[index];
 			if (
 				!configValues.allowRepeats &&
-				parseInt(this.numberLength) <= parseInt(this.allowedDigits.length)
+				Number.parseInt(this.numberLength) <=
+					Number.parseInt(this.allowedDigits.length)
 			) {
 				possibleDigits.splice(index, 1);
-			} else {
-				if (number.length == parseInt(this.numberLength)) {
-					document.getElementById("allowrepeats").checked = true;
-					configValues.allowRepeats = true;
-					new Toast(
-						"warning",
-						"Repeats Allowed",
-						"Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
-						5000
-					);
-				}
+			} else if (number.length == Number.parseInt(this.numberLength)) {
+				document.querySelector("#allowrepeats").checked = true;
+				configValues.allowRepeats = true;
+				new Toast(
+					"warning",
+					"Repeats Allowed",
+					"Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
+					5000
+				);
 			}
 		}
 
@@ -372,7 +372,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			guessElement.value = "";
 			gameinsession = false;
 			guessElement.placeholder = "No game in session";
-			document.querySelector("#possiblecombinations").innerText =
+			document.querySelector("#possiblecombinations").textContent =
 				"Possible Combinations: ";
 		}
 	});
@@ -424,7 +424,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 
 		if (configValues.shownumpossiblecombinations) {
-			document.querySelector("#possiblecombinations").innerText =
+			document.querySelector("#possiblecombinations").textContent =
 				"Possible Combinations: " + game.calculatePossibleCombinations();
 		}
 
@@ -432,17 +432,15 @@ document.addEventListener("DOMContentLoaded", () => {
 			// Create a heading in the guess table titled "Correct Possitions"
 			if (!document.querySelector("#correctpositionsheader")) {
 				const heading = document.createElement("th");
-				heading.innerText = "Correct Positions";
+				heading.textContent = "Correct Positions";
 				heading.id = "correctpositionsheader";
 				document
 					.querySelector("#previousguesses")
 					.children[0].children[0].append(heading);
 			}
-		} else {
+		} else if (document.querySelector("#correctpositionsheader")) {
 			// Remove the element if present
-			if (document.querySelector("#correctpositionsheader")) {
-				document.querySelector("#correctpositionsheader").remove();
-			}
+			document.querySelector("#correctpositionsheader").remove();
 		}
 
 		// Disable options until game over

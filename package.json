@@ -26,7 +26,8 @@
 		],
 		"rules": {
 			"no-new": "off",
-			"no-undef": "off"
+			"no-undef": "off",
+			"radix": "off"
 		},
 		"ignores": [
 			"workbox-config.js",
