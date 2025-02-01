@@ -345,4 +345,7 @@ document.addEventListener("DOMContentLoaded", function () {
         guessElement.disabled = false;
         guessElement.placeholder = "Enter your guess";
     });
+    // add TOOLTIPS!!!
+    new Tooltip(document.getElementById("startbutton"), "follow-bottom", "Start Game");
+    new Tooltip(document.getElementById("enforcenumberlength").parentNode, "follow-right", "Enforce number length (Will not allow submissions under specified number length)");
 });

@@ -385,7 +385,7 @@ Tooltip = class {
 
     showTooltip() {
         this.updateTooltipPosition();
-        this.tooltipElement.style.opacity = "1";
+        this.tooltipElement.style.opacity = "0.8";
     }
 
     hideTooltip() {

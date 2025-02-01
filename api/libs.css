@@ -85,6 +85,7 @@
 }
 .tcontent {
     margin-left: 5px;
+    padding: 5px;
     width: 100%;
     height: calc(100% - 40px);
     position: absolute;
@@ -183,7 +184,7 @@
     left: 50%;
     transform: translateX(-50%);
     border-width: 5px 5px 0;
-    border-color: rgba(36, 39, 58, 0.5) transparent transparent transparent;
+    border-color: var(--crust) transparent transparent transparent;
 }
 
 .tooltip[data-position="bottom"]::after,
@@ -192,7 +193,7 @@
     left: 50%;
     transform: translateX(-50%);
     border-width: 0 5px 5px;
-    border-color: transparent transparent rgba(36, 39, 58, 0.5) transparent;
+    border-color: transparent transparent var(--crust) transparent;
 }
 
 .tooltip[data-position="left"]::after,
@@ -201,7 +202,7 @@
     right: -5px; /* Arrow size */
     transform: translateY(-50%);
     border-width: 5px 0 5px 5px;
-    border-color: transparent transparent transparent rgba(36, 39, 58, 0.5);
+    border-color: transparent transparent transparent var(--crust);
 }
 
 .tooltip[data-position="right"]::after,
@@ -210,7 +211,7 @@
     left: -5px; /* Arrow size */
     transform: translateY(-50%);
     border-width: 5px 5px 5px 0;
-    border-color: transparent rgba(36, 39, 58, 0.5) transparent transparent;
+    border-color: transparent var(--crust) transparent transparent;
 }
 /* -------------------------------------------------------------------------- */
 /*                                    icons                                   */
