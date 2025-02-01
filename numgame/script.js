@@ -55,12 +55,13 @@ class Game {
             if (!configValues.allowRepeats || this.numberLength > this.allowedDigits.length) {
                 possibleDigits.splice(index, 1);
             } else {
+                document.getElementById("allowrepeats").checked = true;
                 configValues.allowRepeats = true;
                 new Toast(
                     "warning",
                     "Repeats Allowed",
                     "Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
-                    2500
+                    5000
                 );
             }
         }
