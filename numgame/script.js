@@ -281,7 +281,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     button.classList.remove("active");
                 }
             });
-            new Toast("info", "Game Over!", "You have correctly guessed the number after" + " " + game.guesses.length + " " + "guesses!", 2500);
+            new Toast("info", "Game Over!", "You have correctly guessed the number after" + " " + game.guesses.length + " " + "guesses!", 5000);
             // re enable options
             document.getElementById("optionscontainer").style.pointerEvents = "all";
             document.getElementById("optionscontainer").style.cursor = "unset";
@@ -289,6 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
             guessElement.value = "";
             gameinsession = false;
             guessElement.placeholder = "No game in session";
+            document.getElementById("possiblecombinations").innerText = "Possible Combinations: " ;
         }
     });
     /* --------------------- number selection functionality --------------------- */
@@ -360,5 +361,11 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("enforcenumberlength").parentNode,
         "follow-right",
         "Enforce number length (Will not allow submissions under specified number length)"
+    );
+    new Tooltip(document.getElementById("twoplayermode").parentNode, "follow-right", "Two Player Mode (Will not allow custom number selection)");
+    new Tooltip(
+        document.getElementById("showcorrectpositions").parentNode,
+        "follow-right",
+        "Will create a column for showing correct positions (- = incorrect, # = correct position). This setting is better left off unless you are really bad at this game"
     );
 });
