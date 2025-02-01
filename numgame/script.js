@@ -48,32 +48,35 @@ if ("serviceWorker" in navigator) {
 }
 
 class Game {
-    constructor(allowedDigits, numberLength) {
-        this.allowedDigits = allowedDigits;
-        this.numberLength = numberLength;
-        this.guesses = [];
-    }
-    generateNumber() {
-        let number = "";
-        const possibleDigits = this.allowedDigits.slice();
-        for (let i = 0; i < this.numberLength; i++) {
-            let index = Math.floor(Math.random() * possibleDigits.length);
-            number += possibleDigits[index];
-            if (!configValues.allowRepeats && parseInt(this.numberLength) <= parseInt(this.allowedDigits.length)) {
-                possibleDigits.splice(index, 1);
-            } else {
-                if (number.length == parseInt(this.numberLength)) {
-                    document.getElementById("allowrepeats").checked = true;
-                    configValues.allowRepeats = true;
-                    new Toast(
-                        "warning",
-                        "Repeats Allowed",
-                        "Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
-                        5000
-                    );
-                }
-            }
-        }
+	constructor(allowedDigits, numberLength) {
+		this.allowedDigits = allowedDigits;
+		this.numberLength = numberLength;
+		this.guesses = [];
+	}
+	generateNumber() {
+		let number = "";
+		const possibleDigits = this.allowedDigits.slice();
+		for (let i = 0; i < this.numberLength; i++) {
+			let index = Math.floor(Math.random() * possibleDigits.length);
+			number += possibleDigits[index];
+			if (
+				!configValues.allowRepeats &&
+				parseInt(this.numberLength) <= parseInt(this.allowedDigits.length)
+			) {
+				possibleDigits.splice(index, 1);
+			} else {
+				if (number.length == parseInt(this.numberLength)) {
+					document.getElementById("allowrepeats").checked = true;
+					configValues.allowRepeats = true;
+					new Toast(
+						"warning",
+						"Repeats Allowed",
+						"Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
+						5000
+					);
+				}
+			}
+		}
 
 		return number;
 	}
