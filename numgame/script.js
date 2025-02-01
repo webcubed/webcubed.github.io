@@ -52,7 +52,7 @@ class Game {
         for (let i = 0; i < this.numberLength; i++) {
             let index = Math.floor(Math.random() * possibleDigits.length);
             number += possibleDigits[index];
-            if (!configValues.allowRepeats || parseInt(this.numberLength) > parseInt(this.allowedDigits.length)) {
+            if (!configValues.allowRepeats && parseInt(this.numberLength) < parseInt(this.allowedDigits.length)) {
                 possibleDigits.splice(index, 1);
             } else {
                 document.getElementById("allowrepeats").checked = true;
