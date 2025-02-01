@@ -55,7 +55,7 @@ class Game {
             if (!configValues.allowRepeats && parseInt(this.numberLength) < parseInt(this.allowedDigits.length)) {
                 possibleDigits.splice(index, 1);
             } else {
-                if (i == parseInt(this.numberLength) - 1) {
+                if (i == parseInt(this.numberLength)) {
                     document.getElementById("allowrepeats").checked = true;
                     configValues.allowRepeats = true;
                     new Toast(
