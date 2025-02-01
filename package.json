@@ -32,7 +32,7 @@
 		"ignores": [
 			"workbox-config.js",
 			"sw.js",
-			"workbox-c9c1d482.js",
+			"workbox-*.js",
 			"**/*.old.js"
 		]
 	}
