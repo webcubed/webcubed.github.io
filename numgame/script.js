@@ -4,6 +4,7 @@ var configValues;
 var updateConfig = () => {
     configValues = {
         numberLength: document.getElementById("maxdigits").value,
+        enforcenumberlength: document.getElementById("enforcenumberlength").checked,
         twoPlayer: document.getElementById("twoplayermode").checked,
         showCorrectPositions: document.getElementById("showcorrectpositions").checked,
         allowRepeats: document.getElementById("allowrepeats").checked,
@@ -16,6 +17,27 @@ let numberLength = 6;
 let number;
 let customnumber = [];
 let gameinsession = false;
+// let page work offline
+if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function () {
+        navigator.serviceWorker
+            .register("serviceworker.js")
+            .then((registration) => {
+                // Registration was successful
+                console.log("ServiceWorker registration successful with scope: ", registration.scope);
+                new Toast(
+                    "success",
+                    "ServiceWorker Registered",
+                    "ServiceWorker has been registered successfully. (You can probably use this website offline now!)",
+                    2500
+                );
+            })
+            .catch((err) => {
+                // registration failed :(
+                console.log("ServiceWorker registration failed: ", err);
+            });
+    });
+}
 
 class Game {
     constructor(allowedDigits, numberLength) {
@@ -75,6 +97,7 @@ document.addEventListener("DOMContentLoaded", function () {
         numberLength: document.getElementById("maxdigits").value,
         twoPlayer: document.getElementById("twoplayermode").checked,
         showCorrectPositions: document.getElementById("showcorrectpositions").checked,
+        enforcenumberlength: document.getElementById("enforcenumberlength").checked,
         allowRepeats: document.getElementById("allowrepeats").checked,
         showPreviousGuesses: document.getElementById("showpreviousguesses").checked,
         shownumpossiblecombinations: document.getElementById("shownumpossiblecombinations").checked,
@@ -158,11 +181,11 @@ document.addEventListener("DOMContentLoaded", function () {
         // cancel event if greater than generated number length or contains non-allowed digits
         const guess = guessElement.value;
         const key = event.data;
-        if (!key) return
+        if (!key) return;
         if (guess.length > game.numberLength || !allowedDigits.includes(parseInt(key))) {
             // remove last character from input
             guessElement.value = guess.slice(0, -1);
-            return
+            return;
         }
     });
     // make enter submit guess if the input is active
@@ -173,6 +196,13 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     /* ------------------------ submission functionality ------------------------ */
     submitElement.addEventListener("click", () => {
+        // return if nothing in input
+        if (guessElement.value === "") return;
+        // return if guess is under number length AND enforcenumberlength is enabled
+        if (guessElement.value.length < game.numberLength && configValues.enforcenumberlength) {
+            new Toast("warning", "Number length", "Enforce number length is on. Guess must be " + game.numberLength + " digits long.", 2500)
+            return;
+        }
         updateConfig();
         const guess = guessElement.value;
         game.guesses.push(guess);
@@ -202,36 +232,30 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("guessbody").appendChild(row);
         // Auto scroll to bottom if overflow
         const table = document.getElementById("guessbody");
-        if ('scrollBehavior' in document.documentElement.style) {
-            table.scrollTo({
-                top: table.scrollHeight,
-                behavior: 'smooth'
-            });
-        } else {
-            // Fallback for browsers without smooth scroll
-            let start = table.scrollTop;
-            const change = table.scrollHeight - start;
-            const duration = 500; // duration in ms
-            let currentTime = 0;
-            const increment = 20;
 
-            function animateScroll(){
-                currentTime += increment;
-                const val = Math.easeInOutQuad(currentTime, start, change, duration);
-                table.scrollTop = val;
-                if(currentTime < duration) {
-                    setTimeout(animateScroll, increment);
-                }
+        // Fallback for browsers without smooth scroll
+        let start = table.scrollTop;
+        const change = table.scrollHeight - start;
+        const duration = 500; // duration in ms
+        let currentTime = 0;
+        const increment = 20;
+
+        function animateScroll() {
+            currentTime += increment;
+            const val = Math.easeInOutQuad(currentTime, start, change, duration);
+            table.scrollTop = val;
+            if (currentTime < duration) {
+                setTimeout(animateScroll, increment);
             }
-            animateScroll();
         }
+        animateScroll();
 
         // Easing function
         Math.easeInOutQuad = function (t, b, c, d) {
-            t /= d/2;
-            if (t < 1) return c/2*t*t + b;
+            t /= d / 2;
+            if (t < 1) return (c / 2) * t * t + b;
             t--;
-            return -c/2 * (t*(t-2) - 1) + b;
+            return (-c / 2) * (t * (t - 2) - 1) + b;
         };
 
         // if guess matches the number, game ends and resets; disable guess input
