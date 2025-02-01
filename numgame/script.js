@@ -379,4 +379,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "follow-right",
         "Will allow the same digit to be used multiple times in both a guess and generated number. Functionality for two player mode has not been implemented yet."
     );
+    new Tooltip(
+        document.getElementById("refreshbutton"),
+        "follow-bottom",
+        "(Force) Refreshes the page (not reccomended if offline, but helps remove old cache in order to update the website)"
+    );
 });

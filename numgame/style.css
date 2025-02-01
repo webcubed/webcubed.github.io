@@ -14,6 +14,13 @@
     height: 30px;
     width: 30px;
 }
+#refreshbutton {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    height: 30px;
+    width: 30px;
+}
 #optionscontainer {
     overflow: auto;
     width: 275px;
