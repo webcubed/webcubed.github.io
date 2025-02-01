@@ -16,7 +16,7 @@
 }
 #refreshbutton {
     position: absolute;
-    left: calc(100% - 10px);
+    left: calc(100% - 40px);
     top: 10px;
     height: 30px;
     width: 30px;
