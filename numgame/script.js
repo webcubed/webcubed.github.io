@@ -198,9 +198,14 @@ document.addEventListener("DOMContentLoaded", function () {
     submitElement.addEventListener("click", () => {
         // return if nothing in input
         if (guessElement.value === "") return;
+        // return if guess contains repeat digits and allowrepeats is on
+        if (!configValues.allowRepeats && new Set(guessElement.value).size !== guessElement.value.length) {
+            new Toast("warning", "Repeats", "Repeats are not allowed in this game.", 2500);
+            return;
+        }
         // return if guess is under number length AND enforcenumberlength is enabled
         if (guessElement.value.length < game.numberLength && configValues.enforcenumberlength) {
-            new Toast("warning", "Number length", "Enforce number length is on. Guess must be " + game.numberLength + " digits long.", 2500)
+            new Toast("warning", "Number length", "Enforce number length is on. Guess must be " + game.numberLength + " digits long.", 2500);
             return;
         }
         updateConfig();
@@ -239,6 +244,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const duration = 500; // duration in ms
         let currentTime = 0;
         const increment = 20;
+        Math.easeInOutQuad = function (t, b, c, d) {
+            t /= d / 2;
+            if (t < 1) return (c / 2) * t * t + b;
+            t--;
+            return (-c / 2) * (t * (t - 2) - 1) + b;
+        };
 
         function animateScroll() {
             currentTime += increment;
@@ -251,15 +262,13 @@ document.addEventListener("DOMContentLoaded", function () {
         animateScroll();
 
         // Easing function
-        Math.easeInOutQuad = function (t, b, c, d) {
-            t /= d / 2;
-            if (t < 1) return (c / 2) * t * t + b;
-            t--;
-            return (-c / 2) * (t * (t - 2) - 1) + b;
-        };
 
         // if guess matches the number, game ends and resets; disable guess input
-        if (correctDigits === game.numberLength) {
+        // correctDigits = int
+        // game.numberLength = string
+        // guess = string
+        // number = string
+        if (correctDigits === parseInt(game.numberLength) || guess === number || correctDigits == game.numberLength || guess == number) {
             /* -------------------------------------------------------------------------- */
             /*                                 game over!!                                */
             /* -------------------------------------------------------------------------- */
@@ -347,5 +356,9 @@ document.addEventListener("DOMContentLoaded", function () {
     });
     // add TOOLTIPS!!!
     new Tooltip(document.getElementById("startbutton"), "follow-bottom", "Start Game");
-    new Tooltip(document.getElementById("enforcenumberlength").parentNode, "follow-right", "Enforce number length (Will not allow submissions under specified number length)");
+    new Tooltip(
+        document.getElementById("enforcenumberlength").parentNode,
+        "follow-right",
+        "Enforce number length (Will not allow submissions under specified number length)"
+    );
 });

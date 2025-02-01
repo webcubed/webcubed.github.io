@@ -10,18 +10,16 @@ self.addEventListener("install", function (event) {
     );
 });
 // Listens to request from application.
-self.addEventListener('fetch', function(event) {
+self.addEventListener("fetch", function (event) {
     event.respondWith(
-        caches.match(event.request)
-            .then(function(response) {
-                if (response) {
-                    // The requested file exists in the cache so we return it from the cache.
-                    return response;
-                }
-                // The requested file is not present in cache so we send it forward to the internet
-                return fetch(event.request);
+        caches.match(event.request).then(function (response) {
+            if (response) {
+                // The requested file exists in the cache so we return it from the cache.
+                return response;
             }
-        )
+            // The requested file is not present in cache so we send it forward to the internet
+            return fetch(event.request);
+        })
     );
 });
 
