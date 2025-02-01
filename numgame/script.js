@@ -21,7 +21,8 @@ let gameinsession = false;
 if ("serviceWorker" in navigator) {
     window.addEventListener("load", function () {
         navigator.serviceWorker
-            .register("serviceworker.js")
+            //.register("serviceworker.js")
+            .register("../sw.js")
             .then((registration) => {
                 // Registration was successful
                 console.log("ServiceWorker registration successful with scope: ", registration.scope);

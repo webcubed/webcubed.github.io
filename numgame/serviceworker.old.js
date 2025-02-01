@@ -1,4 +1,4 @@
-const CACHE_NAME = "numcache";
+const CACHE_NAME = "numcachev2";
 const urlsToCache = ["index.html", "script.js", "style.css", "../style.css", "events.js", "../api/libs.js", "../api/libs.css"];
 
 // Install the service worker and open the cache and add files mentioned in array to cache
@@ -24,6 +24,7 @@ self.addEventListener("fetch", function (event) {
 });
 
 self.addEventListener("activate", function (event) {
+    self.clients.claim();
     var cacheWhitelist = []; // add cache names which you do not want to delete
     cacheWhitelist.push(CACHE_NAME);
     event.waitUntil(
