@@ -1,242 +1,244 @@
 #toastscontainer {
-    position: absolute;
-    bottom: 12.5px;
-    right: 0px;
-    max-height: calc(100% - 42.5px);
-    max-width: 250px;
-    height: min-content;
-    display: flex;
-    flex-direction: row-reverse;
-    padding: 0;
-    margin: 0;
-    align-items: center;
-    overflow: hidden;
-    flex-wrap: wrap;
-    align-content: flex-end;
-    gap: 10px;
+	position: absolute;
+	bottom: 12.5px;
+	right: 0px;
+	max-height: calc(100% - 42.5px);
+	max-width: 250px;
+	height: min-content;
+	display: flex;
+	flex-direction: row-reverse;
+	padding: 0;
+	margin: 0;
+	align-items: center;
+	overflow: hidden;
+	flex-wrap: wrap;
+	align-content: flex-end;
+	gap: 10px;
 }
 .successtoast {
-    background-color: var(--teal);
+	background-color: var(--teal);
 }
 .warningtoast {
-    background-color: var(--peach);
+	background-color: var(--peach);
 }
 .errortoast {
-    background-color: var(--red);
+	background-color: var(--red);
 }
 .infotoast {
-    background-color: var(--blue);
+	background-color: var(--blue);
 }
 .toast {
-    color: var(--crust);
-    width: 225px;
-    height: 120px;
-    position: relative;
-    z-index: 105;
-    overflow: hidden;
-    margin: auto;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    opacity: 0.7;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	color: var(--crust);
+	width: 225px;
+	height: 120px;
+	position: relative;
+	z-index: 105;
+	overflow: hidden;
+	margin: auto;
+	border-radius: 15px;
+	display: flex;
+	align-items: center;
+	opacity: 0.7;
+	transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .toast:hover {
-    opacity: 1 !important;
-    transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+	opacity: 1 !important;
+	transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .ttitle {
-    position: absolute;
-    top: 0px;
-    border-bottom: 1px solid var(--text);
-    height: 30px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+	position: absolute;
+	top: 0px;
+	border-bottom: 1px solid var(--text);
+	height: 30px;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 .tdismiss {
-    position: relative;
-    margin: auto;
-    right: 5px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+	position: relative;
+	margin: auto;
+	right: 5px;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 .ttitleseperator {
-    position: relative;
-    display: flex;
-    top: 0px;
-    width: max-content;
-    height: 100%;
-    gap: 5px;
-    left: 5px;
-    justify-content: space-between;
-    justify-items: center;
-    align-items: center;
+	position: relative;
+	display: flex;
+	top: 0px;
+	width: max-content;
+	height: 100%;
+	gap: 5px;
+	left: 5px;
+	justify-content: space-between;
+	justify-items: center;
+	align-items: center;
 }
 .ttitletext {
-    position: relative;
+	position: relative;
 }
 .tinfoicon:before {
-    position: relative;
-    height: 18px;
-    width: 18px;
-    margin: auto;
+	position: relative;
+	height: 18px;
+	width: 18px;
+	margin: auto;
 }
 .tcontent {
-    margin-left: 5px;
-    padding: 5px;
-    width: 100%;
-    height: calc(100% - 40px);
-    position: absolute;
-    bottom: 0px;
+	margin-left: 5px;
+	padding: 5px;
+	width: 100%;
+	height: calc(100% - 40px);
+	position: absolute;
+	bottom: 0px;
 }
 .tcontenttext {
-    margin-right: 2.5px;
-    position: relative;
-    top: 0px;
+	margin-right: 2.5px;
+	position: relative;
+	top: 0px;
 }
 .tprogressbar {
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
-    height: 5px;
-    background-color: var(--text);
-    opacity: 0.5;
+	position: absolute;
+	bottom: 0px;
+	width: 100%;
+	height: 5px;
+	background-color: var(--text);
+	opacity: 0.5;
 }
 @keyframes tickdown {
-    0% {
-        width: 100%;
-    }
-    100% {
-        width: 0%;
-    }
+	0% {
+		width: 100%;
+	}
+	100% {
+		width: 0%;
+	}
 }
 
 @keyframes tslidein {
-    0% {
-        right: -230px;
-    }
-    100% {
-        right: 0px;
-    }
+	0% {
+		right: -230px;
+	}
+	100% {
+		right: 0px;
+	}
 }
 
 @keyframes tslideout {
-    0% {
-        right: 0px;
-    }
-    100% {
-        right: -230px;
-    }
+	0% {
+		right: 0px;
+	}
+	100% {
+		right: -230px;
+	}
 }
 @keyframes tfadein {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 0.7;
-    }
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 0.7;
+	}
 }
 
 @keyframes tfadeout {
-    0% {
-        opacity: 0.7;
-    }
-    100% {
-        opacity: 0;
-    }
+	0% {
+		opacity: 0.7;
+	}
+	100% {
+		opacity: 0;
+	}
 }
 /* -------------------------------------------------------------------------- */
 /*                                  tooltips                                  */
 /* -------------------------------------------------------------------------- */
 /* Styles for the tooltip */
 .tooltip {
-    max-width: 15em;
-    width: auto;
-    font-size: small;
-    padding: 6px;
-    position: absolute;
-    z-index: 1000;
-    background-color: var(--crust);
-    backdrop-filter: blur(5px);
-    color: var(--text);
-    border-radius: 5px;
-    opacity: 0;
-    transition: opacity 0.3s, background-color 0.3s;
-    pointer-events: none; /* Allows mouse events to pass through */
+	max-width: 15em;
+	width: auto;
+	font-size: small;
+	padding: 6px;
+	position: absolute;
+	z-index: 1000;
+	background-color: var(--crust);
+	backdrop-filter: blur(5px);
+	color: var(--text);
+	border-radius: 5px;
+	opacity: 0;
+	transition:
+		opacity 0.3s,
+		background-color 0.3s;
+	pointer-events: none; /* Allows mouse events to pass through */
 }
 
 /* Arrow styles */
 .tooltip::after {
-    content: "";
-    position: absolute;
-    border-style: solid;
-    display: block;
-    width: 0;
-    height: 0;
+	content: "";
+	position: absolute;
+	border-style: solid;
+	display: block;
+	width: 0;
+	height: 0;
 }
 
 /* Positioning and styling for the tooltip arrow */
 .tooltip[data-position="top"]::after,
 .tooltip[data-position="follow-top"]::after {
-    bottom: -5px; /* Arrow size */
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 5px 5px 0;
-    border-color: var(--crust) transparent transparent transparent;
+	bottom: -5px; /* Arrow size */
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 5px 5px 0;
+	border-color: var(--crust) transparent transparent transparent;
 }
 
 .tooltip[data-position="bottom"]::after,
 .tooltip[data-position="follow-bottom"]::after {
-    top: -5px; /* Arrow size */
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 0 5px 5px;
-    border-color: transparent transparent var(--crust) transparent;
+	top: -5px; /* Arrow size */
+	left: 50%;
+	transform: translateX(-50%);
+	border-width: 0 5px 5px;
+	border-color: transparent transparent var(--crust) transparent;
 }
 
 .tooltip[data-position="left"]::after,
 .tooltip[data-position="follow-left"]::after {
-    top: 50%;
-    right: -5px; /* Arrow size */
-    transform: translateY(-50%);
-    border-width: 5px 0 5px 5px;
-    border-color: transparent transparent transparent var(--crust);
+	top: 50%;
+	right: -5px; /* Arrow size */
+	transform: translateY(-50%);
+	border-width: 5px 0 5px 5px;
+	border-color: transparent transparent transparent var(--crust);
 }
 
 .tooltip[data-position="right"]::after,
 .tooltip[data-position="follow-right"]::after {
-    top: 50%;
-    left: -5px; /* Arrow size */
-    transform: translateY(-50%);
-    border-width: 5px 5px 5px 0;
-    border-color: transparent var(--crust) transparent transparent;
+	top: 50%;
+	left: -5px; /* Arrow size */
+	transform: translateY(-50%);
+	border-width: 5px 5px 5px 0;
+	border-color: transparent var(--crust) transparent transparent;
 }
 /* -------------------------------------------------------------------------- */
 /*                                    icons                                   */
 /* -------------------------------------------------------------------------- */
 .wc {
-    height: 30px;
-    width: 30px;
-    justify-content: center;
-    display: flex;
-    transition: background-color 0.5s;
-    background-color: transparent;
-    align-items: center;
+	height: 30px;
+	width: 30px;
+	justify-content: center;
+	display: flex;
+	transition: background-color 0.5s;
+	background-color: transparent;
+	align-items: center;
 }
 .cr {
-    cursor: pointer;
-    transition: color 0.5s;
-    margin: 0;
-    color: var(--text);
+	cursor: pointer;
+	transition: color 0.5s;
+	margin: 0;
+	color: var(--text);
 }
 .cr:hover {
-    transition: color 0.5s;
-    color: var(--red);
+	transition: color 0.5s;
+	color: var(--red);
 }
 .tsp {
-    position: relative;
+	position: relative;
 }

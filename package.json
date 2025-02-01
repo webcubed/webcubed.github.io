@@ -1,0 +1,38 @@
+{
+	"name": "webcubed.github.io",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "xo",
+		"gensw": "workbox generateSW workbox-config.js",
+		"format": "prettier --write .",
+		"xo": "xo --prettier"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"prettier": "^3.4.2",
+		"workbox-cli": "^7.3.0"
+	},
+	"devDependencies": {
+		"globals": "^15.14.0",
+		"xo": "^0.60.0"
+	},
+	"xo": {
+		"envs": [
+			"browser"
+		],
+		"rules": {
+			"no-new": "off",
+			"no-undef": "off"
+		},
+		"ignores": [
+			"workbox-config.js",
+			"sw.js",
+			"workbox-c9c1d482.js",
+			"**/*.old.js"
+		]
+	}
+}

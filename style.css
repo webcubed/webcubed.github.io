@@ -1,54 +1,54 @@
 /* ---------------------------------- root ---------------------------------- */
 :root {
-    --rosewater: #f4dbd6;
-    --flamingo: #f0c6c6;
-    --pink: #f5bde6;
-    --mauve: #c6a0f6;
-    --red: #ed8796;
-    --maroon: #ee99a0;
-    --peach: #f5a97f;
-    --yellow: #eed49f;
-    --green: #a6da95;
-    --teal: #8bd5ca;
-    --sky: #91d7e3;
-    --sapphire: #7dc4e4;
-    --blue: #8aadf4;
-    --lavender: #b7bdf8;
-    --text: #cad3f5;
-    --subtext1: #b8c0e0;
-    --subtext0: #a5adcb;
-    --overlay2: #939ab7;
-    --overlay1: #8087a2;
-    --overlay0: #6e738d;
-    --surface2: #5b6078;
-    --surface1: #494d64;
-    --surface0: #363a4f;
-    --base: #24273a;
-    --mantle: #1e2030;
-    --crust: #181926;
+	--rosewater: #f4dbd6;
+	--flamingo: #f0c6c6;
+	--pink: #f5bde6;
+	--mauve: #c6a0f6;
+	--red: #ed8796;
+	--maroon: #ee99a0;
+	--peach: #f5a97f;
+	--yellow: #eed49f;
+	--green: #a6da95;
+	--teal: #8bd5ca;
+	--sky: #91d7e3;
+	--sapphire: #7dc4e4;
+	--blue: #8aadf4;
+	--lavender: #b7bdf8;
+	--text: #cad3f5;
+	--subtext1: #b8c0e0;
+	--subtext0: #a5adcb;
+	--overlay2: #939ab7;
+	--overlay1: #8087a2;
+	--overlay0: #6e738d;
+	--surface2: #5b6078;
+	--surface1: #494d64;
+	--surface0: #363a4f;
+	--base: #24273a;
+	--mantle: #1e2030;
+	--crust: #181926;
 
-    --border: 1px solid var(--text);
+	--border: 1px solid var(--text);
 
-    font-family: "Lexend", sans-serif;
-    font-weight: 400;
-    font-size: 13px;
-    color: var(--text);
-    border-color: var(--text);
+	font-family: "Lexend", sans-serif;
+	font-weight: 400;
+	font-size: 13px;
+	color: var(--text);
+	border-color: var(--text);
 }
 /*custom scrollbar*/
 ::-webkit-scrollbar {
-    width: 10px;
-    height: 10px;
-    border-radius: 15px;
+	width: 10px;
+	height: 10px;
+	border-radius: 15px;
 }
 ::-webkit-scrollbar-track {
-    background: var(--crust);
-    border-radius: 15px;
+	background: var(--crust);
+	border-radius: 15px;
 }
 ::-webkit-scrollbar-thumb {
-    background: var(--surface0);
-    border-radius: 15px;
-    border: 3px solid var(--crust);
+	background: var(--surface0);
+	border-radius: 15px;
+	border: 3px solid var(--crust);
 }
 /*
 Notes:
@@ -71,24 +71,24 @@ border radius 15*/
 /* -------------------------------------------------------------------------- */
 body,
 html {
-    margin: 0;
-    padding: 0;
-    height: 100%;
-    width: 100%;
-    background-color: var(--crust);
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+	background-color: var(--crust);
 }
 hr {
-    margin: auto;
-    border: none;
-    height: 1px;
-    background-color: var(--overlay0);
+	margin: auto;
+	border: none;
+	height: 1px;
+	background-color: var(--overlay0);
 }
 /* ---------------------------------- text ---------------------------------- */
 a {
-    color: var(--lavender);
+	color: var(--lavender);
 }
 a:hover {
-    color: var(--blue);
+	color: var(--blue);
 }
 span.title,
 h1,
@@ -97,367 +97,371 @@ h3,
 h4,
 h5,
 h6 {
-    text-align: center;
-    font-weight: 400;
+	text-align: center;
+	font-weight: 400;
 }
 span.title {
-    font-size: 26px;
+	font-size: 26px;
 }
 h1 {
-    font-size: 20px;
+	font-size: 20px;
 }
 h2 {
-    font-size: 16px;
+	font-size: 16px;
 }
 h3 {
-    font-size: 14px;
-    color: var(--subtext0);
+	font-size: 14px;
+	color: var(--subtext0);
 }
 h4,
 h5,
 h6 {
-    color: var(--subtext1);
+	color: var(--subtext1);
 }
 h4 {
-    font-size: 12px;
+	font-size: 12px;
 }
 h5,
 h6 {
-    font-size: 11px;
+	font-size: 11px;
 }
 h6 {
-    font-style: italic;
+	font-style: italic;
 }
 /* --------------------------------- button --------------------------------- */
 button {
-    background-color: var(--surface0);
-    color: var(--text);
-    font-family: Lexend;
-    cursor: pointer;
-    border: none;
-    padding: 0.5rem;
-    border-radius: 0.5rem;
-    transition: background-color 0.2s, color 0.2s;
+	background-color: var(--surface0);
+	color: var(--text);
+	font-family: Lexend;
+	cursor: pointer;
+	border: none;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	transition:
+		background-color 0.2s,
+		color 0.2s;
 }
 button:hover {
-    background-color: var(--surface1);
-    transition: background-color 0.2s;
+	background-color: var(--surface1);
+	transition: background-color 0.2s;
 }
 button:active {
-    background-color: var(--surface2);
-    transition: background-color 0.1s;
+	background-color: var(--surface2);
+	transition: background-color 0.1s;
 }
 button.active {
-    background-color: var(--blue);
-    color: var(--mantle);
-    transition: background-color 0.2s, color 0.2s;
+	background-color: var(--blue);
+	color: var(--mantle);
+	transition:
+		background-color 0.2s,
+		color 0.2s;
 }
 /* ---------------------------------- input --------------------------------- */
 input {
-    background-color: var(--surface0);
-    border: none;
-    color: var(--text);
-    font-family: Lexend;
-    transition: background-color 0.2s;
+	background-color: var(--surface0);
+	border: none;
+	color: var(--text);
+	font-family: Lexend;
+	transition: background-color 0.2s;
 }
 input:hover {
-    background-color: var(--surface1);
-    transition: background-color 0.2s;
+	background-color: var(--surface1);
+	transition: background-color 0.2s;
 }
 input:focus {
-    outline: none;
+	outline: none;
 }
 input:disabled {
-    background-color: var(--surface0);
-    color: var(--overlay0);
-    cursor: not-allowed;
+	background-color: var(--surface0);
+	color: var(--overlay0);
+	cursor: not-allowed;
 }
 /* ------------------------------ number input ------------------------------ */
 input[type="number"] {
-    padding: 0.5rem;
-    border-radius: 0.5rem;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
 }
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+	-webkit-appearance: none;
+	margin: 0;
 }
 /* -------------------------- range input (sliders) ------------------------- */
 input[type="range"] {
-    border: none;
-    outline: none;
-    background-color: var(--surface0);
-    transition: background-color 0.2s;
+	border: none;
+	outline: none;
+	background-color: var(--surface0);
+	transition: background-color 0.2s;
 }
 input[type="range"]:hover {
-    background-color: var(--surface1);
-    transition: background-color 0.2s;
+	background-color: var(--surface1);
+	transition: background-color 0.2s;
 }
 input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #cad3f5;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
+	-webkit-appearance: none;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background: #cad3f5;
+	cursor: pointer;
+	transition: all 0.15s ease-in-out;
 }
 input[type="range"]::-webkit-slider-thumb:hover {
-    background-color: var(--blue);
-    transition: all 0.15s ease-in-out;
-    transform: scale(1.2);
+	background-color: var(--blue);
+	transition: all 0.15s ease-in-out;
+	transform: scale(1.2);
 }
 
 /* ------------------------------- checkboxes ------------------------------- */
 input[type="checkbox"] {
-    accent-color: var(--blue);
-    outline: none;
-    background-color: var(--surface0);
-    transition: background-color 0.2s;
+	accent-color: var(--blue);
+	outline: none;
+	background-color: var(--surface0);
+	transition: background-color 0.2s;
 }
 input[type="checkbox"]:hover {
-    cursor: pointer;
+	cursor: pointer;
 }
 input[type="checkbox"]:active {
-    background-color: var(--surface1);
+	background-color: var(--surface1);
 }
 input[type="checkbox"]:focus {
-    outline: none;
+	outline: none;
 }
 /* -------------------------------------------------------------------------- */
 /*                                option inputs                               */
 /* -------------------------------------------------------------------------- */
 /* ------------------------------- checkboxes ------------------------------- */
 .options-checkbox {
-    position: relative;
-    height: 30px;
-    min-width: 100%;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
+	position: relative;
+	height: 30px;
+	min-width: 100%;
+	border-radius: 15px;
+	display: flex;
+	align-items: center;
 }
 
 .options-checkbox input {
-    opacity: 0;
-    position: absolute;
+	opacity: 0;
+	position: absolute;
 }
 
 .options-checkbox input + label {
-    user-select: none;
+	user-select: none;
 }
 .options-checkbox label {
-    height: 100%;
-    display: flex;
-    min-width: 100%;
-    align-items: center;
-    position: relative;
-    font-size: small;
+	height: 100%;
+	display: flex;
+	min-width: 100%;
+	align-items: center;
+	position: relative;
+	font-size: small;
 }
 
 /* ------------------------------ checkbox icon ----------------------------- */
 .options-checkbox input + label::after,
 .options-checkbox input + label::before {
-    content: "";
-    position: absolute;
-    transition: 150ms cubic-bezier(0.24, 0, 0.5, 1);
-    transform: translateY(-50%);
-    top: 50%;
-    right: 0px;
-    cursor: pointer;
+	content: "";
+	position: absolute;
+	transition: 150ms cubic-bezier(0.24, 0, 0.5, 1);
+	transform: translateY(-50%);
+	top: 50%;
+	right: 0px;
+	cursor: pointer;
 }
 
 .options-checkbox input + label::before {
-    height: 20px;
-    width: 33px;
-    border-radius: 20px;
-    background: rgba(214, 214, 214, 0.434);
+	height: 20px;
+	width: 33px;
+	border-radius: 20px;
+	background: rgba(214, 214, 214, 0.434);
 }
 
 .options-checkbox input + label::after {
-    height: 16px;
-    width: 16px;
-    border-radius: 60px;
-    right: 14px;
-    background: var(--text);
+	height: 16px;
+	width: 16px;
+	border-radius: 60px;
+	right: 14px;
+	background: var(--text);
 }
 
 .options-checkbox input:checked + label:before {
-    background: var(--blue);
-    transition: all 150ms cubic-bezier(0, 0, 0, 0.1);
+	background: var(--blue);
+	transition: all 150ms cubic-bezier(0, 0, 0, 0.1);
 }
 
 .options-checkbox input:checked + label:after {
-    right: 4px;
+	right: 4px;
 }
 
 .options-checkbox input:focus + label:before {
-    box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75);
+	box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.75);
 }
 /* ----------------------------- disabled stuff ----------------------------- */
 .options-checkbox input:disabled + label:after,
 .options-checkbox input:disabled + label:before {
-    cursor: not-allowed;
+	cursor: not-allowed;
 }
 
 .options-checkbox input:disabled + label:before {
-    background: #4f4f6a;
+	background: #4f4f6a;
 }
 .options-checkbox input:disabled + label:after {
-    background: #909090;
+	background: #909090;
 }
 /*Remove the next 4 lines to create the disabled effect*/
 .options-checkbox input:disabled + label {
-    display: none;
-    pointer-events: none;
+	display: none;
+	pointer-events: none;
 }
 .options-checkbox:has(> input:disabled) {
-    display: none;
+	display: none;
 }
 /* ------------------------------ slider stuff ------------------------------ */
 .options-slider input:disabled + label:after,
 .options-slider input:disabled + label:before {
-    cursor: not-allowed;
+	cursor: not-allowed;
 }
 
 .options-slider input:disabled + label:before {
-    background: #4f4f6a;
+	background: #4f4f6a;
 }
 .options-slider input:disabled + label:after {
-    background: #909090;
+	background: #909090;
 }
 /*Remove the next 4 lines to create the disabled effect*/
 .options-slider input:disabled + label {
-    display: none !important;
-    pointer-events: none;
+	display: none !important;
+	pointer-events: none;
 }
 .options-slider:has(> input:disabled) {
-    display: none !important;
+	display: none !important;
 }
 
 .options-slider {
-    position: relative;
-    height: 50px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: inherit;
+	position: relative;
+	height: 50px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	background: inherit;
 }
 
 .options-slider::after,
 .options-slider::before {
-    position: relative;
-    font-size: small;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    font-size: 0.65rem;
-    margin-top: -28px;
+	position: relative;
+	font-size: small;
+	font-weight: 700;
+	color: rgba(255, 255, 255, 0.5);
+	text-transform: uppercase;
+	font-size: 0.65rem;
+	margin-top: -28px;
 }
 
 .options-slider::before {
-    content: attr(data-min);
+	content: attr(data-min);
 }
 
 .options-slider::after {
-    content: attr(data-max);
+	content: attr(data-max);
 }
 
 .options-slider .title {
-    display: inline;
-    position: absolute;
-    margin-top: -15px;
-    margin-left: auto;
-    margin-right: auto;
-    transform: translateY(-50%);
-    font-size: small;
-    font-weight: 700;
-    color: rgba(255, 255, 255, 0.5);
-    text-transform: uppercase;
-    font-size: 0.65rem;
-    margin-top: -28px;
+	display: inline;
+	position: absolute;
+	margin-top: -15px;
+	margin-left: auto;
+	margin-right: auto;
+	transform: translateY(-50%);
+	font-size: small;
+	font-weight: 700;
+	color: rgba(255, 255, 255, 0.5);
+	text-transform: uppercase;
+	font-size: 0.65rem;
+	margin-top: -28px;
 }
 
 .options-slider .title::after {
-    content: attr(data-value);
-    margin-left: 2.5px;
+	content: attr(data-value);
+	margin-left: 2.5px;
 }
 
 .options-slider input {
-    appearance: none;
-    width: 100%;
-    height: 2px;
-    border-radius: 15px;
-    background: var(--mauve);
-    cursor: pointer;
-    margin-top: 10px;
+	appearance: none;
+	width: 100%;
+	height: 2px;
+	border-radius: 15px;
+	background: var(--mauve);
+	cursor: pointer;
+	margin-top: 10px;
 }
 
 .options-slider input::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 15px;
-    height: 15px;
-    border-radius: 50%;
-    background: #cad3f5;
-    cursor: pointer;
-    transition: all 0.15s ease-in-out;
+	-webkit-appearance: none;
+	width: 15px;
+	height: 15px;
+	border-radius: 50%;
+	background: #cad3f5;
+	cursor: pointer;
+	transition: all 0.15s ease-in-out;
 }
 
 .options-slider input::-webkit-slider-thumb:hover {
-    background: #d4d4d4;
-    transform: scale(1.2);
+	background: #d4d4d4;
+	transform: scale(1.2);
 }
 /* ---------------------------------- table --------------------------------- */
 table {
-    margin: auto;
-    border-spacing: 0;
-    position: relative;
+	margin: auto;
+	border-spacing: 0;
+	position: relative;
 }
 
 th,
 td {
-    border-bottom: var(--border);
-    border-right: var(--border);
-    padding: 0.5rem;
+	border-bottom: var(--border);
+	border-right: var(--border);
+	padding: 0.5rem;
 }
 th {
-    font-size: 16px;
-    text-decoration: none;
-    font-weight: 450;
+	font-size: 16px;
+	text-decoration: none;
+	font-weight: 450;
 }
 
 /* overengineered round table */
 
 table tr td:first-child,
 table tr th:first-child {
-    border-left: var(--border);
+	border-left: var(--border);
 }
 
 table tr th {
-    border-top: var(--border);
+	border-top: var(--border);
 }
 
 table tr:first-child th:first-child {
-    border-top-left-radius: 0.5rem;
+	border-top-left-radius: 0.5rem;
 }
 
 table tr:last-child td:first-child {
-    border-bottom-left-radius: 0.5rem;
+	border-bottom-left-radius: 0.5rem;
 }
 
 table tr:last-child td:last-child {
-    border-bottom-right-radius: 0.5rem;
+	border-bottom-right-radius: 0.5rem;
 }
 
 table tr:first-child th:last-child {
-    border-top-right-radius: 0.5rem;
+	border-top-right-radius: 0.5rem;
 }
 table > thead > tr > th,
 table > tbody > tr > td {
-    transition: background-color 0.2s;
+	transition: background-color 0.2s;
 }
 table > thead > tr > th:hover,
 table > tbody > tr > td:hover {
-    transition: background-color 0.2s;
-    background-color: var(--mantle);
+	transition: background-color 0.2s;
+	background-color: var(--mantle);
 }

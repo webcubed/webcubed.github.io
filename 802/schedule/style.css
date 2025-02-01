@@ -1,9 +1,9 @@
 /* ----------------------------- specific tables ---------------------------- */
 /*default*/
 #defaultschedule {
-    width: 75%;
-    border-collapse: separate;
-    cursor: pointer;
-    background-color: var(--crust);
+	width: 75%;
+	border-collapse: separate;
+	cursor: pointer;
+	background-color: var(--crust);
 }
 /* ------------------------------ options table ----------------------------- */

@@ -1,100 +1,100 @@
 /* ---------------------------- specific elements --------------------------- */
 #game {
-    width: 100%;
-    height: calc(100% - 26px);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+	width: 100%;
+	height: calc(100% - 26px);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
 }
 #settingsbuttoncontainer {
-    position: absolute;
-    left: 10px;
-    top: 10px;
-    height: 30px;
-    width: 30px;
+	position: absolute;
+	left: 10px;
+	top: 10px;
+	height: 30px;
+	width: 30px;
 }
 #refreshbutton {
-    position: absolute;
-    left: calc(100% - 40px);
-    top: 10px;
-    height: 30px;
-    width: 30px;
+	position: absolute;
+	left: calc(100% - 40px);
+	top: 10px;
+	height: 30px;
+	width: 30px;
 }
 #optionscontainer {
-    overflow: auto;
-    width: 275px;
-    height: max-content;
-    padding: 1rem;
-    background-color: var(--base);
-    border-radius: 15px;
-    position: fixed;
-    left: 10px;
-    top: 65px;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    z-index: 1;
-    gap: 15px;
+	overflow: auto;
+	width: 275px;
+	height: max-content;
+	padding: 1rem;
+	background-color: var(--base);
+	border-radius: 15px;
+	position: fixed;
+	left: 10px;
+	top: 65px;
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	z-index: 1;
+	gap: 15px;
 }
 #optionscontainer > * {
-    flex: 1 1 0px;
+	flex: 1 1 0px;
 }
 #guesscontainer {
-    border-radius: 15px;
-    background-color: var(--base);
-    height: 75%;
-    aspect-ratio: 9/16;
-    position: relative;
-    margin: auto;
-    overflow: auto;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+	border-radius: 15px;
+	background-color: var(--base);
+	height: 75%;
+	aspect-ratio: 9/16;
+	position: relative;
+	margin: auto;
+	overflow: auto;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
 }
 
 #previousguesses {
-    position: relative;
-    top: 10px;
-    width: 85%;
-    height: min-content;
-    border-radius: 15px;
-    margin: unset;
+	position: relative;
+	top: 10px;
+	width: 85%;
+	height: min-content;
+	border-radius: 15px;
+	margin: unset;
 }
 #startcontainer {
-    margin: 2rem;
+	margin: 2rem;
 }
 /* --------------------------- submission elements -------------------------- */
 #submissioncontainer {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 15px;
-    position: fixed;
-    bottom: 60px;
+	width: 100%;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: center;
+	gap: 15px;
+	position: fixed;
+	bottom: 60px;
 }
 #submissioncontainer > button {
-    user-select: none;
+	user-select: none;
 }
 /* ------------------------------ start button ------------------------------ */
 button#startbutton {
-    background-color: var(--blue);
-    transition: background-color 0.2s;
-    user-select: none;
+	background-color: var(--blue);
+	transition: background-color 0.2s;
+	user-select: none;
 }
 button#startbutton:hover {
-    background-color: var(--mauve);
-    transition: background-color 0.2s;
+	background-color: var(--mauve);
+	transition: background-color 0.2s;
 }
 button#startbutton:active {
-    background-color: var(--surface2);
-    transition: background-color 0.1s;
+	background-color: var(--surface2);
+	transition: background-color 0.1s;
 }
 #customnumberselection > h6,
 #customnumberselection > h2 {
-    margin: 0 0 6px 0;
+	margin: 0 0 6px 0;
 }
