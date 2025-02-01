@@ -50,6 +50,7 @@ class Game {
         let number = "";
         const possibleDigits = this.allowedDigits.slice();
         for (let i = 0; i < this.numberLength; i++) {
+new Toast("info", "asd", i, 2500);
             let index = Math.floor(Math.random() * possibleDigits.length);
             number += possibleDigits[index];
             if (!configValues.allowRepeats && parseInt(this.numberLength) <= parseInt(this.allowedDigits.length)) {
