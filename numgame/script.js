@@ -54,6 +54,7 @@ class Game {
             if (!configValues.allowRepeats || this.numberLength > this.allowedDigits.length) {
                 possibleDigits.splice(index, 1);
             } else {
+                configValues.allowRepeats = true;
                 new Toast(
                     "warning",
                     "Repeats Allowed",
@@ -289,7 +290,7 @@ document.addEventListener("DOMContentLoaded", function () {
             guessElement.value = "";
             gameinsession = false;
             guessElement.placeholder = "No game in session";
-            document.getElementById("possiblecombinations").innerText = "Possible Combinations: " ;
+            document.getElementById("possiblecombinations").innerText = "Possible Combinations: ";
         }
     });
     /* --------------------- number selection functionality --------------------- */
@@ -367,5 +368,15 @@ document.addEventListener("DOMContentLoaded", function () {
         document.getElementById("showcorrectpositions").parentNode,
         "follow-right",
         "Will create a column for showing correct positions (- = incorrect, # = correct position). This setting is better left off unless you are really bad at this game"
+    );
+    new Tooltip(
+        document.getElementById("shownumpossiblecombinations").parentNode,
+        "follow-right",
+        "Will display the number of possible combinations for the game on start. Formula: # of allowed digits ^ number length"
+    );
+    new Tooltip(
+        document.getElementById("allowrepeats").parentNode,
+        "follow-right",
+        "Will allow the same digit to be used multiple times in both a guess and generated number. Functionality for two player mode has not been implemented yet."
     );
 });
