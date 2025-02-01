@@ -59,14 +59,17 @@ class Game {
                 forceAllowRepeats = true;
             }
         }
-        document.getElementById("allowrepeats").checked = true;
-        configValues.allowRepeats = true;
-        new Toast(
-            "warning",
-            "Repeats Allowed",
-            "Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
-            5000
-        );
+        if (forceAllowRepeats) {
+            document.getElementById("allowrepeats").checked = true;
+            configValues.allowRepeats = true;
+            new Toast(
+                "warning",
+                "Repeats Allowed",
+                "Repeats are allowed in this game. This is usually because the amount of possible digits was less than the Number Length.",
+                5000
+            );
+        }
+
         return number;
     }
     calculatePossibleCombinations() {
