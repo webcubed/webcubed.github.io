@@ -65,7 +65,7 @@ class Game {
 	generateNumber() {
 		let number = "";
 		const possibleDigits = this.allowedDigits.slice();
-		for (let i = 0; i < this.numberLength; i++) {
+		for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
 			const index = Math.floor(Math.random() * possibleDigits.length);
 			number += possibleDigits[index];
 			if (
@@ -97,16 +97,26 @@ class Game {
 		// in other words, length of array squared = possible combinations for 2 digits
 		// following this pattern, the possible combinations for n digits is length of array to the power of n
 		// some rando on github is probably gonna see this and go man this guy is stupid he probably didn't pass middle school yet
-		return configValues.allowRepeats
-			? factorial(this.allowedDigits.length)
-			: this.allowedDigits.length ** this.numberLength;
+		if (configValues.allowRepeats) {
+			return this.allowedDigits.length ** this.numberLength;
+		} else {
+			let a = 1;
+			for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
+				a *= this.allowedDigits.length - i;
+				if (i === Number.parseInt(this.numberLength) - 1) return a.toString();
+			}
+		}
 
 		// account for non-repeating digits; which theoretically is just the factorial of the allowed digits
 		// the first digit can be anything so it's just allowedDigits
 		// second digit is that times allowedDigits - 1
 		// now one of two things will happen
 		// don't allow repeats means that the amount of possible digits must be greater than or equal to the number length
-		// so this must iterate until
+		// so this must iterate until no more
+		// ex. 6 digits 6 possible
+		// 6*5*4*3*2*1
+		// ex 6 digits 9 possible
+		// 9*7*6*5*4*3
 	}
 
 	checkNumber(guess) {
@@ -389,7 +399,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			gameinsession = false;
 			guessElement.placeholder = "No game in session";
 			document.querySelector("#possiblecombinations").textContent =
-				"Possible Combinations: ";
+				"Possible Combinations: N/A";
+			document.querySelector("#startbutton").textContent = "New Game";
+			document.querySelector("#startbutton").style.backgroundColor =
+				"var(--blue)";
 		}
 	});
 	/* --------------------- number selection functionality --------------------- */
@@ -418,66 +431,111 @@ document.addEventListener("DOMContentLoaded", () => {
 	/*                                 game start                                 */
 	/* -------------------------------------------------------------------------- */
 	document.querySelector("#startbutton").addEventListener("click", () => {
-		game = new Game(allowedDigits, numberLength);
-		if (configValues.twoPlayer) {
-			for (const button of document.querySelectorAll(
-				"#customnumberselection > button.digitbutton"
-			)) {
-				if (!button.classList.contains("active")) {
-					button.classList.add("active");
+		if (gameinsession === false) {
+			game = new Game(allowedDigits, numberLength);
+			if (configValues.twoPlayer) {
+				for (const button of document.querySelectorAll(
+					"#customnumberselection > button.digitbutton"
+				)) {
+					if (!button.classList.contains("active")) {
+						button.classList.add("active");
+					}
 				}
+
+				number = customnumber.join("");
+				new Toast(
+					"info",
+					"Game started",
+					"All items in custom number selection now appear active for hiding purposes.",
+					2500
+				);
+			} else {
+				number = game.generateNumber();
 			}
 
-			number = customnumber.join("");
+			if (configValues.shownumpossiblecombinations) {
+				document.querySelector("#possiblecombinations").textContent =
+					"Possible Combinations: " + game.calculatePossibleCombinations();
+			} else {
+				document.querySelector("#possiblecombinations").textContent =
+					"Possible Combinations: N/A";
+			}
+
+			if (configValues.showCorrectPositions) {
+				// Create a heading in the guess table titled "Correct Possitions"
+				if (!document.querySelector("#correctpositionsheader")) {
+					const heading = document.createElement("th");
+					heading.textContent = "Correct Positions";
+					heading.id = "correctpositionsheader";
+					document
+						.querySelector("#previousguesses")
+						.children[0].children[0].append(heading);
+				}
+			} else if (document.querySelector("#correctpositionsheader")) {
+				// Remove the element if present
+				document.querySelector("#correctpositionsheader").remove();
+			}
+
+			// Disable options until game over
+			document.querySelector("#optionscontainer").style.pointerEvents = "none";
+			document.querySelector("#optionscontainer").style.cursor = "not-allowed";
 			new Toast(
 				"info",
 				"Game started",
-				"All items in custom number selection now appear active for hiding purposes.",
+				"Options are now disabled until game over",
 				2500
 			);
+			// Clear guess table
+			document.querySelector("#guessbody").innerHTML = "";
+			// Clear submission field
+			guessElement.value = "";
+			gameinsession = true;
+			guessElement.disabled = false;
+			guessElement.placeholder = "Enter your guess";
+			// Change start button to be red background and say end game
+			document.querySelector("#startbutton").textContent = "End Game";
+			document.querySelector("#startbutton").style.backgroundColor =
+				"var(--red) !important";
 		} else {
-			number = game.generateNumber();
-		}
+			// End game
+			// Restore visibility of custom number selection
+			// highlight each button in correspondance to the custom number array
+			for (const button of document.querySelectorAll(
+				"#customnumberselection > button.digitbutton"
+			)) {
+				if (
+					customnumber.includes(Number.parseInt(button.textContent)) &&
+					!button.classList.contains("active")
+				) {
+					button.classList.add("active");
+				} else {
+					button.classList.remove("active");
+				}
+			}
 
-		if (configValues.shownumpossiblecombinations) {
-			document.querySelector("#possiblecombinations").textContent =
-				"Possible Combinations: " + game.calculatePossibleCombinations();
-		} else {
+			new Toast(
+				"info",
+				"Game Over!",
+				"You have failed to correctly guess the number! The correct answer was: " +
+					" " +
+					number +
+					"!" +
+					" Better luck next time!",
+				5000
+			);
+			// Re enable options
+			document.querySelector("#optionscontainer").style.pointerEvents = "all";
+			document.querySelector("#optionscontainer").style.cursor = "unset";
+			guessElement.disabled = true;
+			guessElement.value = "";
+			gameinsession = false;
+			guessElement.placeholder = "No game in session";
 			document.querySelector("#possiblecombinations").textContent =
 				"Possible Combinations: N/A";
+			document.querySelector("#startbutton").textContent = "New Game";
+			document.querySelector("#startbutton").style.backgroundColor =
+				"var(--blue) !important";
 		}
-
-		if (configValues.showCorrectPositions) {
-			// Create a heading in the guess table titled "Correct Possitions"
-			if (!document.querySelector("#correctpositionsheader")) {
-				const heading = document.createElement("th");
-				heading.textContent = "Correct Positions";
-				heading.id = "correctpositionsheader";
-				document
-					.querySelector("#previousguesses")
-					.children[0].children[0].append(heading);
-			}
-		} else if (document.querySelector("#correctpositionsheader")) {
-			// Remove the element if present
-			document.querySelector("#correctpositionsheader").remove();
-		}
-
-		// Disable options until game over
-		document.querySelector("#optionscontainer").style.pointerEvents = "none";
-		document.querySelector("#optionscontainer").style.cursor = "not-allowed";
-		new Toast(
-			"info",
-			"Game started",
-			"Options are now disabled until game over",
-			2500
-		);
-		// Clear guess table
-		document.querySelector("#guessbody").innerHTML = "";
-		// Clear submission field
-		guessElement.value = "";
-		gameinsession = true;
-		guessElement.disabled = false;
-		guessElement.placeholder = "Enter your guess";
 	});
 	// Add TOOLTIPS!!!
 	new Tooltip(
