@@ -402,7 +402,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			gameinsession = false;
 			guessElement.placeholder = "No game in session";
 			document.querySelector("#possiblecombinations").textContent =
-				"Possible Combinations: ";
+				"Possible Combinations: N/A";
+			document.querySelector("#startbutton").textContent = "New Game";
+			document.querySelector("#startbutton").style.backgroundColor =
+				"var(--blue)";
 		}
 	});
 	/* --------------------- number selection functionality --------------------- */
@@ -431,66 +434,111 @@ document.addEventListener("DOMContentLoaded", () => {
 	/*                                 game start                                 */
 	/* -------------------------------------------------------------------------- */
 	document.querySelector("#startbutton").addEventListener("click", () => {
-		game = new Game(allowedDigits, numberLength);
-		if (configValues.twoPlayer) {
-			for (const button of document.querySelectorAll(
-				"#customnumberselection > button.digitbutton"
-			)) {
-				if (!button.classList.contains("active")) {
-					button.classList.add("active");
+		if (!gameinsession) {
+			game = new Game(allowedDigits, numberLength);
+			if (configValues.twoPlayer) {
+				for (const button of document.querySelectorAll(
+					"#customnumberselection > button.digitbutton"
+				)) {
+					if (!button.classList.contains("active")) {
+						button.classList.add("active");
+					}
 				}
+
+				number = customnumber.join("");
+				new Toast(
+					"info",
+					"Game started",
+					"All items in custom number selection now appear active for hiding purposes.",
+					2500
+				);
+			} else {
+				number = game.generateNumber();
 			}
 
-			number = customnumber.join("");
+			if (configValues.shownumpossiblecombinations) {
+				document.querySelector("#possiblecombinations").textContent =
+					"Possible Combinations: " + game.calculatePossibleCombinations();
+			} else {
+				document.querySelector("#possiblecombinations").textContent =
+					"Possible Combinations: N/A";
+			}
+
+			if (configValues.showCorrectPositions) {
+				// Create a heading in the guess table titled "Correct Possitions"
+				if (!document.querySelector("#correctpositionsheader")) {
+					const heading = document.createElement("th");
+					heading.textContent = "Correct Positions";
+					heading.id = "correctpositionsheader";
+					document
+						.querySelector("#previousguesses")
+						.children[0].children[0].append(heading);
+				}
+			} else if (document.querySelector("#correctpositionsheader")) {
+				// Remove the element if present
+				document.querySelector("#correctpositionsheader").remove();
+			}
+
+			// Disable options until game over
+			document.querySelector("#optionscontainer").style.pointerEvents = "none";
+			document.querySelector("#optionscontainer").style.cursor = "not-allowed";
 			new Toast(
 				"info",
 				"Game started",
-				"All items in custom number selection now appear active for hiding purposes.",
+				"Options are now disabled until game over",
 				2500
 			);
+			// Clear guess table
+			document.querySelector("#guessbody").innerHTML = "";
+			// Clear submission field
+			guessElement.value = "";
+			gameinsession = true;
+			guessElement.disabled = false;
+			guessElement.placeholder = "Enter your guess";
+			// Change start button to be red background and say end game
+			document.querySelector("#startbutton").textContent = "End Game";
+			document.querySelector("#startbutton").style.backgroundColor =
+				"var(--red)";
 		} else {
-			number = game.generateNumber();
-		}
-
-		if (configValues.shownumpossiblecombinations) {
-			document.querySelector("#possiblecombinations").textContent =
-				"Possible Combinations: " + game.calculatePossibleCombinations();
-		} else {
-			document.querySelector("#possiblecombinations").textContent =
-				"Possible Combinations: N/A";
-		}
-
-		if (configValues.showCorrectPositions) {
-			// Create a heading in the guess table titled "Correct Possitions"
-			if (!document.querySelector("#correctpositionsheader")) {
-				const heading = document.createElement("th");
-				heading.textContent = "Correct Positions";
-				heading.id = "correctpositionsheader";
-				document
-					.querySelector("#previousguesses")
-					.children[0].children[0].append(heading);
+			// End game
+			// Restore visibility of custom number selection
+			// highlight each button in correspondance to the custom number array
+			for (const button of document.querySelectorAll(
+				"#customnumberselection > button.digitbutton"
+			)) {
+				if (
+					customnumber.includes(Number.parseInt(button.textContent)) &&
+					!button.classList.contains("active")
+				) {
+					button.classList.add("active");
+				} else {
+					button.classList.remove("active");
+				}
 			}
-		} else if (document.querySelector("#correctpositionsheader")) {
-			// Remove the element if present
-			document.querySelector("#correctpositionsheader").remove();
-		}
 
-		// Disable options until game over
-		document.querySelector("#optionscontainer").style.pointerEvents = "none";
-		document.querySelector("#optionscontainer").style.cursor = "not-allowed";
-		new Toast(
-			"info",
-			"Game started",
-			"Options are now disabled until game over",
-			2500
-		);
-		// Clear guess table
-		document.querySelector("#guessbody").innerHTML = "";
-		// Clear submission field
-		guessElement.value = "";
-		gameinsession = true;
-		guessElement.disabled = false;
-		guessElement.placeholder = "Enter your guess";
+			new Toast(
+				"info",
+				"Game Over!",
+				"You have failed to correctly guess the number! The correct answer was: " +
+					" " +
+					number +
+					"!" +
+					" Better luck next time!",
+				5000
+			);
+			// Re enable options
+			document.querySelector("#optionscontainer").style.pointerEvents = "all";
+			document.querySelector("#optionscontainer").style.cursor = "unset";
+			guessElement.disabled = true;
+			guessElement.value = "";
+			gameinsession = false;
+			guessElement.placeholder = "No game in session";
+			document.querySelector("#possiblecombinations").textContent =
+				"Possible Combinations: ";
+			document.querySelector("#startbutton").textContent = "New Game";
+			document.querySelector("#startbutton").style.backgroundColor =
+				"var(--blue)";
+		}
 	});
 	// Add TOOLTIPS!!!
 	new Tooltip(
