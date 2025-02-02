@@ -21,7 +21,15 @@ let numberLength = 6;
 let number;
 const customnumber = [];
 let gameinsession = false;
+// Factorial calculation
+const f = [];
+function factorial(n) {
+	if (n === 0 || n === 1) return 1;
+	if (f[n] > 0) return f[n];
+	return (f[n] = factorial(n - 1) * n);
+}
 // Let page work offline
+
 if ("serviceWorker" in navigator) {
 	window.addEventListener("load", () => {
 		navigator.serviceWorker
@@ -66,7 +74,7 @@ class Game {
 					Number.parseInt(this.allowedDigits.length)
 			) {
 				possibleDigits.splice(index, 1);
-			} else if (number.length == Number.parseInt(this.numberLength)) {
+			} else if (number.length === Number.parseInt(this.numberLength)) {
 				document.querySelector("#allowrepeats").checked = true;
 				configValues.allowRepeats = true;
 				new Toast(
@@ -89,8 +97,16 @@ class Game {
 		// in other words, length of array squared = possible combinations for 2 digits
 		// following this pattern, the possible combinations for n digits is length of array to the power of n
 		// some rando on github is probably gonna see this and go man this guy is stupid he probably didn't pass middle school yet
+		return configValues.allowRepeats
+			? factorial(this.allowedDigits.length)
+			: this.allowedDigits.length ** this.numberLength;
 
-		return this.allowedDigits.length ** this.numberLength;
+		// account for non-repeating digits; which theoretically is just the factorial of the allowed digits
+		// the first digit can be anything so it's just allowedDigits
+		// second digit is that times allowedDigits - 1
+		// now one of two things will happen
+		// don't allow repeats means that the amount of possible digits must be greater than or equal to the number length
+		// so this must iterate until
 	}
 
 	checkNumber(guess) {
@@ -426,6 +442,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		if (configValues.shownumpossiblecombinations) {
 			document.querySelector("#possiblecombinations").textContent =
 				"Possible Combinations: " + game.calculatePossibleCombinations();
+		} else {
+			document.querySelector("#possiblecombinations").textContent =
+				"Possible Combinations: N/A";
 		}
 
 		if (configValues.showCorrectPositions) {
