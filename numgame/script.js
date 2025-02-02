@@ -97,16 +97,27 @@ class Game {
 		// in other words, length of array squared = possible combinations for 2 digits
 		// following this pattern, the possible combinations for n digits is length of array to the power of n
 		// some rando on github is probably gonna see this and go man this guy is stupid he probably didn't pass middle school yet
-		return configValues.allowRepeats
-			? factorial(this.allowedDigits.length)
-			: this.allowedDigits.length ** this.numberLength;
+		if (configValues.allowRepeats) {
+			return this.allowedDigits.length ** this.numberLength;
+		} else {
+			let a;
+			for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
+				a = Number.parseInt(this.allowedDigits.length) * Number.parseInt(this.allowedDigits.length) - i;
+				if (i === 0) return a;
+			}
+		}
+	}
 
 		// account for non-repeating digits; which theoretically is just the factorial of the allowed digits
 		// the first digit can be anything so it's just allowedDigits
 		// second digit is that times allowedDigits - 1
 		// now one of two things will happen
 		// don't allow repeats means that the amount of possible digits must be greater than or equal to the number length
-		// so this must iterate until
+		// so this must iterate until no more
+		// ex. 6 digits 6 possible
+		// 6*5*4*3*2*1
+		// ex 6 digits 9 possible
+		// 9*7*6*5*4*3
 	}
 
 	checkNumber(guess) {
