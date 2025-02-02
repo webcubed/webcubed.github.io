@@ -65,7 +65,7 @@ class Game {
 	generateNumber() {
 		let number = "";
 		const possibleDigits = this.allowedDigits.slice();
-		for (let i = 0; i < this.numberLength; i++) {
+		for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
 			const index = Math.floor(Math.random() * possibleDigits.length);
 			number += possibleDigits[index];
 			if (
@@ -100,13 +100,10 @@ class Game {
 		if (configValues.allowRepeats) {
 			return this.allowedDigits.length ** this.numberLength;
 		} else {
-			let a;
+			let a = 1;
 			for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
-				a =
-					Number.parseInt(this.allowedDigits.length) *
-						Number.parseInt(this.allowedDigits.length) -
-					i;
-				if (i === Number.parseInt(this.numberLength)) return a;
+				a *= this.allowedDigits.length - i;
+				if (i === Number.parseInt(this.numberLength) - 1) return a.toString();
 			}
 		}
 
@@ -434,7 +431,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	/*                                 game start                                 */
 	/* -------------------------------------------------------------------------- */
 	document.querySelector("#startbutton").addEventListener("click", () => {
-		if (!gameinsession) {
+		if (gameinsession === false) {
 			game = new Game(allowedDigits, numberLength);
 			if (configValues.twoPlayer) {
 				for (const button of document.querySelectorAll(
@@ -498,7 +495,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			// Change start button to be red background and say end game
 			document.querySelector("#startbutton").textContent = "End Game";
 			document.querySelector("#startbutton").style.backgroundColor =
-				"var(--red)";
+				"var(--red) !important";
 		} else {
 			// End game
 			// Restore visibility of custom number selection
@@ -534,10 +531,10 @@ document.addEventListener("DOMContentLoaded", () => {
 			gameinsession = false;
 			guessElement.placeholder = "No game in session";
 			document.querySelector("#possiblecombinations").textContent =
-				"Possible Combinations: ";
+				"Possible Combinations: N/A";
 			document.querySelector("#startbutton").textContent = "New Game";
 			document.querySelector("#startbutton").style.backgroundColor =
-				"var(--blue)";
+				"var(--blue) !important";
 		}
 	});
 	// Add TOOLTIPS!!!
