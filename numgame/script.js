@@ -102,11 +102,13 @@ class Game {
 		} else {
 			let a;
 			for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
-				a = Number.parseInt(this.allowedDigits.length) * Number.parseInt(this.allowedDigits.length) - i;
+				a =
+					Number.parseInt(this.allowedDigits.length) *
+						Number.parseInt(this.allowedDigits.length) -
+					i;
 				if (i === Number.parseInt(this.numberLength)) return a;
 			}
 		}
-	}
 
 		// account for non-repeating digits; which theoretically is just the factorial of the allowed digits
 		// the first digit can be anything so it's just allowedDigits
