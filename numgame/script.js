@@ -103,7 +103,7 @@ class Game {
 			let a;
 			for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
 				a = Number.parseInt(this.allowedDigits.length) * Number.parseInt(this.allowedDigits.length) - i;
-				if (i === 0) return a;
+				if (i === Number.parseInt(this.numberLength)) return a;
 			}
 		}
 	}
