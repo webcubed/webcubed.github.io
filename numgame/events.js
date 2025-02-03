@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		if (configValues.shownumpossiblecombinations) {
 			document.querySelector("#possiblecombinations").textContent =
-				"Possible Combinations: " + game.calculatePossibleCombinations();
+				"Possible Combinations: " + calculatePossibleCombinations();
 		} else {
 			document.querySelector("#possiblecombinations").textContent =
 				"Possible Combinations: N/A";

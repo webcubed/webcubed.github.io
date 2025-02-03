@@ -30,8 +30,7 @@ function factorial(n) {
 }
 
 function promptForUpdate() {
-	const updateAccepted = confirm("A new version of this site is available. Reload to update?");
-	return updateAccepted;
+	return confirm(		"A new version of this site is available. Reload to update?");
 }
 // Let page work offline
 /*
@@ -60,6 +59,25 @@ if ("serviceWorker" in navigator) {
 	});
 }
 */
+
+function calculatePossibleCombinations() {
+	if (gameinsession === false) {
+		if (configValues.allowRepeats) {
+			return allowedDigits.length ** Number.parseInt(configValues.numberLength);
+		}
+
+		if (!configValues.allowRepeats) {
+			return (
+				factorial(allowedDigits.length) /
+				factorial(
+					allowedDigits.length - Number.parseInt(configValues.numberLength)
+				)
+			);
+		}
+	} else {
+		game?.calculatePossibleCombinations();
+	}
+}
 
 class Game {
 	constructor(allowedDigits, numberLength) {
@@ -104,7 +122,7 @@ class Game {
 		// following this pattern, the possible combinations for n digits is length of array to the power of n
 		// some rando on github is probably gonna see this and go man this guy is stupid he probably didn't pass middle school yet
 		if (configValues.allowRepeats) {
-			return this.allowedDigits.length ** this.numberLength;
+			return this.allowedDigits.length ** Number.parseInt(this.numberLength);
 		}
 
 		if (!configValues.allowRepeats) {
