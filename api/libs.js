@@ -1,11 +1,11 @@
 /* ----------------------------- timeout system ----------------------------- */
 Timeout = function (callback, delay) {
-	var timerId,
-		start,
-		remaining = delay;
+	let timerId;
+	let start;
+	let remaining = delay;
 
 	this.pause = function () {
-		window.clearTimeout(timerId);
+		globalThis.clearTimeout(timerId);
 		timerId = null;
 		remaining -= Date.now() - start;
 	};
@@ -16,16 +16,18 @@ Timeout = function (callback, delay) {
 		}
 
 		start = Date.now();
-		timerId = window.setTimeout(callback, remaining);
+		timerId = globalThis.setTimeout(callback, remaining);
 	};
 
 	this.resume();
 };
+
 /* -------------------------------------------------------------------------- */
 /*                                Toasts System                               */
 /* -------------------------------------------------------------------------- */
 Toast = class {
 	static currentId = 0;
+
 	constructor(type, title, content, duration) {
 		this.id = Toast.currentId++;
 		this.type = type;
@@ -37,16 +39,16 @@ Toast = class {
 		this.toast.classList.add("toast");
 		this.toast.classList.add(type + "toast");
 		type == "automove" ? this.toast.classList.add("infotoast") : null;
-		// serialize title and content in case of xss
-		this.title = this.title.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		this.content = this.content.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		// implement code block system in the case where there is a string within ``
-		this.content = this.content.replace(
+		// Serialize title and content in case of xss
+		this.title = this.title.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		this.content = this.content.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+		// Implement code block system in the case where there is a string within ``
+		this.content = this.content.replaceAll(
 			/`(.+?)`/g,
 			`<span class="cblock">$1</span>`
 		);
-		// make newline if content includes \n and remove \n from string
-		this.content = this.content.split("\n").join("<br>").replace(/\\n/g, "");
+		// Make newline if content includes \n and remove \n from string
+		this.content = this.content.split("\n").join("<br>").replaceAll("\\n", "");
 		if (["warning", "error", "success", "info"].includes(type)) {
 			this.toast.innerHTML = `
             <div class="ttitle">
@@ -93,19 +95,20 @@ Toast = class {
             <div class="tprogressbar"></div>`;
 
 			this.aduration = this.durationinms / 1000;
-			let startTime = performance.now();
-			let intervalId = setInterval(() => {
+			const startTime = performance.now();
+			const intervalId = setInterval(() => {
 				this.countdownElement = document.getElementById(
 					`toastcountdown-${this.id}`
 				);
-				let elapsedTime = performance.now() - startTime;
-				let remainingTime = this.durationinms - elapsedTime;
-				let seconds = Math.floor(remainingTime / 1000);
-				let milliseconds = Math.floor((remainingTime % 1000) / 100); // Divide by 10 to get 1-digit ms, floor to remove decimals
-				let formattedMilliseconds = milliseconds.toString().padStart(1, "0"); // Pad with leading zeros
+				const elapsedTime = performance.now() - startTime;
+				const remainingTime = this.durationinms - elapsedTime;
+				const seconds = Math.floor(remainingTime / 1000);
+				const milliseconds = Math.floor((remainingTime % 1000) / 100); // Divide by 10 to get 1-digit ms, floor to remove decimals
+				const formattedMilliseconds = milliseconds.toString().padStart(1, "0"); // Pad with leading zeros
 				if (this.countdownElement) {
 					this.countdownElement.innerText = `${seconds}.${formattedMilliseconds}`; // Update the span with new time
 				}
+
 				if (remainingTime <= 0) {
 					clearInterval(intervalId);
 					setTimeout(
@@ -122,6 +125,7 @@ Toast = class {
 				clearInterval(intervalId); // Clear the interval when the toast is removed
 			}, this.durationinms);
 		}
+
 		const entrance = "slide-in";
 
 		if (entrance == "fade-in") {
@@ -131,7 +135,7 @@ Toast = class {
 			this.toast.style.right = "-230px";
 		}
 
-		document.getElementById("toastscontainer").appendChild(this.toast);
+		document.querySelector("#toastscontainer").append(this.toast);
 		setTimeout(() => {
 			if (entrance == "slide-in") {
 				this.toast.style.opacity = "0.7";
@@ -148,35 +152,37 @@ Toast = class {
 			this.type
 		);
 		if (triggerOnHover) {
-			this.toast.getElementsByClassName("tprogressbar")[0].style.animation =
+			this.toast.querySelectorAll(".tprogressbar")[0].style.animation =
 				"tickdown " + this.durationins;
 			this.timeout = new Timeout(() => {
 				this.removeToast();
 			}, this.durationinms);
 			this.toast.addEventListener("mouseenter", () => {
-				this.toast.getElementsByClassName(
-					"tprogressbar"
+				this.toast.querySelectorAll(
+					".tprogressbar"
 				)[0].style.animationPlayState = "paused";
 				this.timeout.pause();
 			});
 			this.toast.addEventListener("mouseleave", () => {
-				this.toast.getElementsByClassName(
-					"tprogressbar"
+				this.toast.querySelectorAll(
+					".tprogressbar"
 				)[0].style.animationPlayState = "running";
 				this.timeout.resume();
 			});
 		} else {
-			this.toast.getElementsByClassName("tprogressbar")[0].style.animation =
+			this.toast.querySelectorAll(".tprogressbar")[0].style.animation =
 				"tickdown " + this.durationins;
 		}
+
 		this.toast
-			.getElementsByClassName("tdismiss")[0]
+			.querySelectorAll(".tdismiss")[0]
 			.addEventListener("click", () => {
 				this.removeToast();
 			});
 	}
+
 	removeToast() {
-		this.toast.getElementsByClassName("tprogressbar")[0].style.display = "none";
+		this.toast.querySelectorAll(".tprogressbar")[0].style.display = "none";
 		const exit = "slide-out";
 
 		if (exit == "fade-out") {
@@ -200,7 +206,7 @@ Toast = class {
 		);
 	}
 };
-// tooltip system
+// Tooltip system
 Tooltip = class {
 	constructor(element, positioning, content) {
 		this.element = element;
@@ -214,10 +220,10 @@ Tooltip = class {
 	createTooltip() {
 		this.tooltipElement = document.createElement("div");
 		this.tooltipElement.classList.add("tooltip");
-		this.tooltipElement.setAttribute("data-position", this.positioning);
+		this.tooltipElement.dataset.position = this.positioning;
 		this.tooltipElement.setAttribute("og-position", this.positioning);
 		this.tooltipElement.textContent = this.content;
-		document.body.appendChild(this.tooltipElement);
+		document.body.append(this.tooltipElement);
 		this.updateTooltipPosition(null, "a");
 	}
 
@@ -230,54 +236,71 @@ Tooltip = class {
 				this.tooltipElement
 			).width;
 		}
+
 		if (mouseEvent) {
 			const { clientX, clientY } = mouseEvent;
 			switch (this.positioning) {
-				case "follow-top":
+				case "follow-top": {
 					this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth / 2}px`;
 					this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight - 20}px`; // 10px offset
 					break;
-				case "follow-bottom":
+				}
+
+				case "follow-bottom": {
 					this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth / 2}px`;
 					this.tooltipElement.style.top = `${clientY + 20}px`; // 5px offset
 					break;
-				case "follow-left":
+				}
+
+				case "follow-left": {
 					this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth - 20}px`; // 5px offset
 					this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight / 2}px`;
 					break;
-				case "follow-right":
+				}
+
+				case "follow-right": {
 					this.tooltipElement.style.left = `${clientX + 20}px`; // 5px offset
 					this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight / 2}px`;
 					break;
-				case "top":
+				}
+
+				case "top": {
 					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY - this.tooltipElement.offsetHeight}px`;
 					break;
-				case "bottom":
+				}
+
+				case "bottom": {
 					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
 					break;
-				case "left":
+				}
+
+				case "left": {
 					this.tooltipElement.style.left = `${coords.left + scrollX - this.tooltipElement.offsetWidth - 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
 					break;
-				case "right":
+				}
+
+				case "right": {
 					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width + 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
 					break;
+				}
 				// ... existing positioning cases ...
 			}
+
 			/* ------------------ start adapting tooltip functionality ------------------ */
 			// Get the viewport dimensions
 			const viewportWidth = window.innerWidth;
 			const viewportHeight = window.innerHeight;
 
 			// Calculate the position of the tooltip
-			const style = window.getComputedStyle(this.tooltipElement);
+			const style = globalThis.getComputedStyle(this.tooltipElement);
 			const tooltipLeft = this.tooltipElement.getBoundingClientRect().left;
-			const tooltipTop = parseInt(style.top.slice(0, -2));
-			const tooltipRight = parseInt(style.right.slice(0, -2));
-			const tooltipBottom = parseInt(style.bottom.slice(0, -2));
+			const tooltipTop = Number.parseInt(style.top.slice(0, -2));
+			const tooltipRight = Number.parseInt(style.right.slice(0, -2));
+			const tooltipBottom = Number.parseInt(style.bottom.slice(0, -2));
 
 			// Check if the tooltip hits the right wall
 			if (tooltipRight < 0) {
@@ -290,31 +313,35 @@ Tooltip = class {
 					);
 				}
 			}
+
 			// Check if the tooltip hits the left wall
-			if (tooltipLeft < 0) {
-				if (this.positioning.includes("left")) {
-					this.positioning = this.positioning.replace("left", "right");
-				}
+			if (tooltipLeft < 0 && this.positioning.includes("left")) {
+				this.positioning = this.positioning.replace("left", "right");
 			}
+
 			// Check if the tooltip hits the top wall
-			if (tooltipTop < 30) {
-				if (this.positioning.includes("top")) {
-					this.positioning = this.positioning.replace("top", "bottom");
-					this.updateTooltipPosition(mouseEvent);
-				}
+			if (tooltipTop < 30 && this.positioning.includes("top")) {
+				this.positioning = this.positioning.replace("top", "bottom");
+				this.updateTooltipPosition(mouseEvent);
 			}
+
 			// Check if the tooltip hits the bottom wall
-			if (tooltipBottom < viewportHeight) {
-				if (this.positioning.includes("bottom")) {
-					this.positioning = this.positioning.replace("bottom", "top");
-				}
+			if (
+				tooltipBottom < viewportHeight &&
+				this.positioning.includes("bottom")
+			) {
+				this.positioning = this.positioning.replace("bottom", "top");
 			}
+
 			const originalPositioning =
 				this.tooltipElement.getAttribute("og-position");
 			let revertToOriginal = false;
 
 			// Calculate the position based on the cursor or the binding element
-			let potentialLeft, potentialRight, potentialBottom, potentialTop;
+			let potentialLeft;
+			let potentialRight;
+			let potentialBottom;
+			let potentialTop;
 			if (originalPositioning.startsWith("follow-")) {
 				// Follow cursor logic
 				const cursorOffsetX = mouseEvent.clientX;
@@ -370,29 +397,36 @@ Tooltip = class {
 			// Revert to the original positioning if possible and update the data-position attribute
 			if (revertToOriginal) {
 				this.positioning = originalPositioning;
-				this.tooltipElement.setAttribute("data-position", originalPositioning);
+				this.tooltipElement.dataset.position = originalPositioning;
 			} else {
 				// Update the data-position attribute as the positioning changes
-				this.tooltipElement.setAttribute("data-position", this.positioning);
+				this.tooltipElement.dataset.position = this.positioning;
 			}
 		} else {
 			switch (this.positioning) {
-				case "top":
+				case "top": {
 					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY - this.tooltipElement.offsetHeight}px`;
 					break;
-				case "bottom":
+				}
+
+				case "bottom": {
 					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
 					break;
-				case "left":
+				}
+
+				case "left": {
 					this.tooltipElement.style.left = `${coords.left + scrollX - this.tooltipElement.offsetWidth - 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
 					break;
-				case "right":
+				}
+
+				case "right": {
 					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width + 10}px`;
 					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
 					break;
+				}
 			}
 		}
 	}

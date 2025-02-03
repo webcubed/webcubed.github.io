@@ -1,33 +1,33 @@
 document.addEventListener("DOMContentLoaded", function () {
 	/* -------------------------- slider functionality -------------------------- */
-	const sliderProps = {
+	const sliderProperties = {
 		fill: "var(--blue), var(--mauve)",
 		background: "var(--crust)",
 	};
-	document.querySelectorAll(".options-slider").forEach((slider) => {
+	for (const slider of document.querySelectorAll(".options-slider")) {
 		const title = slider.querySelector(".title");
 		const input = slider.querySelector("input");
-		if (title == null || input == null) return;
-		input.min = slider.getAttribute("data-min");
-		input.max = slider.getAttribute("data-max");
-		const value = parseInt(input.value);
-		const minValue = parseInt(input.min);
-		const maxValue = parseInt(input.max);
+		if (title == null || input == null) continue;
+		input.min = slider.dataset.min;
+		input.max = slider.dataset.max;
+		const value = Number.parseInt(input.value);
+		const minValue = Number.parseInt(input.min);
+		const maxValue = Number.parseInt(input.max);
 		const percent = ((value - minValue) / (maxValue - minValue)) * 100;
-		const bg = `linear-gradient(90deg, ${sliderProps.fill} ${percent}%, ${sliderProps.background} ${percent + 0.1}%)`;
+		const bg = `linear-gradient(90deg, ${sliderProperties.fill} ${percent}%, ${sliderProperties.background} ${percent + 0.1}%)`;
 		input.style.background = bg;
-		title.setAttribute("data-value", input.value);
-		// change position of slider on startup to config value
+		title.dataset.value = input.value;
+		// Change position of slider on startup to config value
 		input.addEventListener("input", () => {
-			const value = parseInt(input.value);
-			const minValue = parseInt(input.min);
-			const maxValue = parseInt(input.max);
+			const value = Number.parseInt(input.value);
+			const minValue = Number.parseInt(input.min);
+			const maxValue = Number.parseInt(input.max);
 			const percent = ((value - minValue) / (maxValue - minValue)) * 100;
-			const bg = `linear-gradient(90deg, ${sliderProps.fill} ${percent}%, ${sliderProps.background} ${percent + 0.1}%)`;
+			const bg = `linear-gradient(90deg, ${sliderProperties.fill} ${percent}%, ${sliderProperties.background} ${percent + 0.1}%)`;
 			input.style.background = bg;
-			title.setAttribute("data-value", input.value);
+			title.dataset.value = input.value;
 			input.setAttribute("value", input.value);
-			// your logic
+			// Your logic
 		});
-	});
+	}
 });

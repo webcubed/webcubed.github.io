@@ -99,24 +99,16 @@ class Game {
 		// some rando on github is probably gonna see this and go man this guy is stupid he probably didn't pass middle school yet
 		if (configValues.allowRepeats) {
 			return this.allowedDigits.length ** this.numberLength;
-		} else {
-			let a = 1;
-			for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
-				a *= this.allowedDigits.length - i;
-				if (i === Number.parseInt(this.numberLength) - 1) return a.toString();
-			}
 		}
 
-		// account for non-repeating digits; which theoretically is just the factorial of the allowed digits
-		// the first digit can be anything so it's just allowedDigits
-		// second digit is that times allowedDigits - 1
-		// now one of two things will happen
-		// don't allow repeats means that the amount of possible digits must be greater than or equal to the number length
-		// so this must iterate until no more
-		// ex. 6 digits 6 possible
-		// 6*5*4*3*2*1
-		// ex 6 digits 9 possible
-		// 9*7*6*5*4*3
+		if (!configValues.allowRepeats) {
+			return (
+				factorial(this.allowedDigits.length) /
+				factorial(
+					this.allowedDigits.length - Number.parseInt(this.numberLength)
+				)
+			);
+		}
 	}
 
 	checkNumber(guess) {
@@ -125,8 +117,8 @@ class Game {
 		// split guess into array
 		const guessArray = guess.split("");
 		// Split generated number into array
-		const generatedNumberArray = number.split(""); // To be changed
-		// compare arrays
+		const generatedNumberArray = number.split("");
+		// Compare arrays
 		let correctDigits = 0;
 		for (const [i, element] of guessArray.entries()) {
 			if (element === generatedNumberArray[i]) {

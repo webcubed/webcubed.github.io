@@ -7,7 +7,8 @@
 		"test": "xo",
 		"gensw": "workbox generateSW workbox-config.js",
 		"format": "prettier --write .",
-		"xo": "xo --prettier"
+		"xo": "xo --prettier",
+		"xo:fix": "xo --fix --prettier"
 	},
 	"keywords": [],
 	"author": "",

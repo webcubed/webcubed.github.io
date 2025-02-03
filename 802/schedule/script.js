@@ -324,7 +324,7 @@ const defaultColors = {
 };
 function getPeriod() {
 	// Get current day, ensure that it is monday through friday
-	const now = new Date(2024, 12, 20, 9, 30); // testing purposes
+	const now = new Date(2024, 12, 20, 9, 30); // Testing purposes
 	const day = now.getDay();
 	if (day === 0 || day === 6) {
 		return null;
@@ -367,18 +367,21 @@ function getPeriod() {
 			return period;
 		}
 	}
+
 	return null;
 }
+
 document.addEventListener("DOMContentLoaded", function () {
 	// Get current period
 	const period = getPeriod();
 	if (period === null) {
 		return;
 	}
+
 	/* ----------------------------- table creation ----------------------------- */
 	function createDefaultTable() {
 		const daysOfWeek = ["monday", "tuesday", "wednesday", "thursday", "friday"];
-		const table = document.getElementById("defaultschedule");
+		const table = document.querySelector("#defaultschedule");
 		const thead = document.createElement("thead");
 		const tbody = document.createElement("tbody");
 
@@ -387,10 +390,11 @@ document.addEventListener("DOMContentLoaded", function () {
 		for (const day of daysOfWeek) {
 			const th = document.createElement("th");
 			th.textContent = day.charAt(0).toUpperCase() + day.slice(1);
-			headerRow.appendChild(th);
+			headerRow.append(th);
 		}
-		thead.appendChild(headerRow);
-		table.appendChild(thead);
+
+		thead.append(headerRow);
+		table.append(thead);
 
 		// Find the maximum number of periods in any day
 		const maxPeriods = Math.max(
@@ -404,22 +408,25 @@ document.addEventListener("DOMContentLoaded", function () {
 				const td = document.createElement("td");
 				const period = schedule[day]?.[periodIndex];
 				td.textContent = period ? period.subject : "";
-				row.appendChild(td);
+				row.append(td);
 			}
-			tbody.appendChild(row);
+
+			tbody.append(row);
 		}
 
-		table.appendChild(tbody);
+		table.append(tbody);
 		return table;
 	}
+
 	/* ------------------------------ append tables ----------------------------- */
 	// append default table
-	document.body.appendChild(createDefaultTable());
+	document.body.append(createDefaultTable());
 	function createOptions() {
-		const table = document.getElementById("options");
+		const table = document.querySelector("#options");
 		const tbody = document.createElement("tbody");
 
-		table.appendChild(tbody);
+		table.append(tbody);
 	}
-	document.body.appendChild(createOptions());
+
+	document.body.append(createOptions());
 });
