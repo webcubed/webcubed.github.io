@@ -1,4 +1,3 @@
-// TODO: config system
 const allowedDigits = [1, 2, 3, 4, 5, 6];
 let configValues;
 const updateConfig = () => {
@@ -26,11 +25,33 @@ const f = [];
 function factorial(n) {
 	if (n === 0 || n === 1) return 1;
 	if (f[n] > 0) return f[n];
-	return (f[n] = factorial(n - 1) * n);
+	f[n] = factorial(n - 1) * n;
+	return f[n];
 }
 
+// eslint-disable-next-line no-unused-vars
 function promptForUpdate() {
-	return confirm("A new version of this site is available. Reload to update?");
+	const dialog = document.createElement("dialog");
+	dialog.innerHTML = `
+	<p>A new version of this site is available. Reload to update?</p>
+	<button id="confirm">Confirm</button>
+	<button id="cancel">Cancel</button>
+	`;
+	document.body.append(dialog);
+	dialog.showModal();
+
+	const confirmButton = dialog.querySelector("#confirm");
+	const cancelButton = dialog.querySelector("#cancel");
+
+	confirmButton.addEventListener("click", () => {
+		dialog.close();
+		return true;
+	});
+
+	cancelButton.addEventListener("click", () => {
+		dialog.close();
+		return false;
+	});
 }
 // Let page work offline
 /*
@@ -60,6 +81,7 @@ if ("serviceWorker" in navigator) {
 }
 */
 
+// eslint-disable-next-line no-unused-vars
 function calculatePossibleCombinations() {
 	if (gameinsession === false) {
 		if (configValues.allowRepeats) {
@@ -154,13 +176,6 @@ class Game {
 	}
 }
 document.addEventListener("DOMContentLoaded", () => {
-	document.querySelector("#version").textContent =
-		"Version: " +
-		(context.env.CF_PAGES && context.env.CF_PAGES_COMMIT_SHA
-			? `<a href="https://github.com/webcubed/webcubed.github.io/commit/${
-					context.env.CF_PAGES_COMMIT_SHA
-				}">${context.env.CF_PAGES_COMMIT_SHA.slice(0, 8)}</a>`
-			: "dev");
 	configValues = {
 		numberLength: document.querySelector("#maxdigits").value,
 		twoPlayer: document.querySelector("#twoplayermode").checked,
@@ -173,8 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			"#shownumpossiblecombinations"
 		).checked,
 	};
-	numberLength = configValues.numberLength ? configValues.numberLength : 6;
-
+	numberLength = configValues.numberLength || 6;
 	const guessElement = document.querySelector("#guess");
 	const submitElement = document.querySelector("#submit");
 	/* ---------------------- settings toggle functionality --------------------- */
@@ -192,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
 	for (const slider of document.querySelectorAll(".options-slider")) {
 		const title = slider.querySelector(".title");
 		const input = slider.querySelector("input");
-		if (title == null || input == null) {
+		if (title === null || input === null) {
 			continue;
 		}
 
@@ -382,9 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		// number = string
 		if (
 			correctDigits === Number.parseInt(game.numberLength) ||
-			guess === number ||
-			correctDigits == game.numberLength ||
-			guess == number
+			guess === number
 		) {
 			/* -------------------------------------------------------------------------- */
 			/*                                 game over!!                                */

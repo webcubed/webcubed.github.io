@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", function () {
 	for (const slider of document.querySelectorAll(".options-slider")) {
 		const title = slider.querySelector(".title");
 		const input = slider.querySelector("input");
-		if (title == null || input == null) continue;
+		if (title === null || input === null) continue;
 		input.min = slider.dataset.min;
 		input.max = slider.dataset.max;
 		const value = Number.parseInt(input.value);

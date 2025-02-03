@@ -290,7 +290,7 @@ const schedule = {
 		},
 	],
 };
-const options = {
+const _options = {
 	left: [
 		{
 			colored: false,
@@ -307,10 +307,10 @@ const options = {
 		},
 	],
 };
-const additionalTeachers = {
-	// TODO
+const _additionalTeachers = {
+	// Talent teachers to be done
 };
-const defaultColors = {
+const _defaultColors = {
 	Algebra: "#8aadf4",
 	Biology: "#a6da95",
 	ELA: "#ed8796",

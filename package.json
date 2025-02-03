@@ -34,7 +34,8 @@
 			"workbox-config.js",
 			"sw.js",
 			"workbox-*.js",
-			"**/*.old.js"
+			"**/*.old.js",
+			"libs.*"
 		]
 	}
 }

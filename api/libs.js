@@ -38,8 +38,7 @@ Toast = class {
 		this.toast = document.createElement("div");
 		this.toast.classList.add("toast");
 		this.toast.classList.add(type + "toast");
-		type == "automove" ? this.toast.classList.add("infotoast") : null;
-		// Serialize title and content in case of xss
+		if (type === "automove") this.toast.classList.add("infotoast"); // Serialize title and content in case of xss
 		this.title = this.title.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		this.content = this.content.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		// Implement code block system in the case where there is a string within ``
@@ -55,13 +54,13 @@ Toast = class {
                 <div class="ttitleseperator">
                 <div class="wc">
                 <i class="fa-regular fa-circle-${
-									type == "success"
+									type === "success"
 										? "check"
-										: type == "warning"
+										: type === "warning"
 											? "exclamation"
-											: type == "error"
+											: type === "error"
 												? "xmark"
-												: type == "info"
+												: type === "info"
 													? "info"
 													: "check"
 								} tinfoicon"></i></div>
@@ -74,7 +73,7 @@ Toast = class {
                 <span class="tcontenttext">${this.content}</span>
             </div>
             <div class="tprogressbar"></div>`;
-		} else if (type == "automove") {
+		} else if (type === "automove") {
 			const countdownRegex = /Automove triggering in <br>(\d+) ms/;
 			this.content = this.content.replace(countdownRegex, (match, p1) => {
 				return `Automove triggering in <br><span class="tcas" id="toastcountdown-${this.id}">${p1}</span> ms`;
@@ -97,8 +96,8 @@ Toast = class {
 			this.aduration = this.durationinms / 1000;
 			const startTime = performance.now();
 			const intervalId = setInterval(() => {
-				this.countdownElement = document.getElementById(
-					`toastcountdown-${this.id}`
+				this.countdownElement = document.querySelector(
+					`#toastcountdown-${this.id}`
 				);
 				const elapsedTime = performance.now() - startTime;
 				const remainingTime = this.durationinms - elapsedTime;
@@ -106,7 +105,7 @@ Toast = class {
 				const milliseconds = Math.floor((remainingTime % 1000) / 100); // Divide by 10 to get 1-digit ms, floor to remove decimals
 				const formattedMilliseconds = milliseconds.toString().padStart(1, "0"); // Pad with leading zeros
 				if (this.countdownElement) {
-					this.countdownElement.innerText = `${seconds}.${formattedMilliseconds}`; // Update the span with new time
+					this.countdownElement.textContent = `${seconds}.${formattedMilliseconds}`; // Update the span with new time
 				}
 
 				if (remainingTime <= 0) {
@@ -128,7 +127,7 @@ Toast = class {
 
 		const entrance = "slide-in";
 
-		if (entrance == "fade-in") {
+		if (entrance === "fade-in") {
 			this.toast.style.opacity = "0";
 			this.toast.style.right = "0px";
 		} else {
@@ -137,7 +136,7 @@ Toast = class {
 
 		document.querySelector("#toastscontainer").append(this.toast);
 		setTimeout(() => {
-			if (entrance == "slide-in") {
+			if (entrance === "slide-in") {
 				this.toast.style.opacity = "0.7";
 				this.toast.style.animation = `t${entrance.split("-in")[0]}in 280ms cubic-bezier(0.4, 0, 0.2, 1)`;
 			} else {
@@ -185,12 +184,12 @@ Toast = class {
 		this.toast.querySelectorAll(".tprogressbar")[0].style.display = "none";
 		const exit = "slide-out";
 
-		if (exit == "fade-out") {
+		if (exit === "fade-out") {
 			this.toast.style.opacity = "0.7";
 		}
 
 		setTimeout(() => {
-			if (exit == "slide-out") {
+			if (exit === "slide-out") {
 				this.toast.style.opacity = "0.7";
 				this.toast.style.animation = `t${exit.split("-out")[0]}out 280ms cubic-bezier(0.4, 0, 0.2, 1)`;
 			} else {
@@ -202,7 +201,7 @@ Toast = class {
 			() => {
 				this.toast.remove();
 			},
-			exit == "fade-out" ? 500 : 280
+			exit === "fade-out" ? 500 : 280
 		);
 	}
 };
@@ -287,7 +286,6 @@ Tooltip = class {
 					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
 					break;
 				}
-				// ... existing positioning cases ...
 			}
 
 			/* ------------------ start adapting tooltip functionality ------------------ */
@@ -432,16 +430,16 @@ Tooltip = class {
 	}
 
 	attachEvents() {
-		this.element.addEventListener("mouseenter", (e) => {
+		this.element.addEventListener("mouseenter", (event) => {
 			this.showTooltip();
 			if (this.positioning.startsWith("follow-")) {
-				this.updateTooltipPosition(e);
+				this.updateTooltipPosition(event);
 			}
 		});
 
-		this.element.addEventListener("mousemove", (e) => {
+		this.element.addEventListener("mousemove", (event) => {
 			if (this.positioning.startsWith("follow-")) {
-				this.updateTooltipPosition(e);
+				this.updateTooltipPosition(event);
 			}
 		});
 

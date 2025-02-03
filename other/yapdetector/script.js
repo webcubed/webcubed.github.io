@@ -8,7 +8,7 @@ function createCanvas(result) {
 }
 
 document.addEventListener("DOMContentLoaded", function () {
-	document.querySelector("#input").addEventListener("input", function (e) {
-		createCanvas(e.target.value);
+	document.querySelector("#input").addEventListener("input", function (event) {
+		createCanvas(event.target.value);
 	});
 });
