@@ -1,5 +1,4 @@
 // TODO: config system
-import("../config.js");
 const allowedDigits = [1, 2, 3, 4, 5, 6];
 let configValues;
 const updateConfig = () => {
@@ -157,10 +156,10 @@ class Game {
 document.addEventListener("DOMContentLoaded", () => {
 	document.querySelector("#version").textContent =
 		"Version: " +
-		(CF_PAGES && CF_PAGES_COMMIT_SHA
-			? `<a href="https://github.com/fmhy/edit/commit/${
-					CF_PAGES_COMMIT_SHA
-				}">${CF_PAGES_COMMIT_SHA.slice(0, 8)}</a>`
+		(context.env.CF_PAGES && context.env.CF_PAGES_COMMIT_SHA
+			? `<a href="https://github.com/webcubed/webcubed.github.io/commit/${
+					context.env.CF_PAGES_COMMIT_SHA
+				}">${context.env.CF_PAGES_COMMIT_SHA.slice(0, 8)}</a>`
 			: "dev");
 	configValues = {
 		numberLength: document.querySelector("#maxdigits").value,
