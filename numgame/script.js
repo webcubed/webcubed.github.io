@@ -31,9 +31,7 @@ function factorial(n) {
 
 function promptForUpdate() {
 	const updateAccepted = confirm("A new version of this site is available. Reload to update?");
-	if (updateAccepted) {
-		globalThis.location.reload();
-	}
+	return updateAccepted;
 }
 // Let page work offline
 /*
