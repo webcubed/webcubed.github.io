@@ -154,6 +154,13 @@ class Game {
 	}
 }
 document.addEventListener("DOMContentLoaded", () => {
+	document.querySelector("#version").textContent =
+		"Version: " +
+		(process.env.CF_PAGES && process.env.CF_PAGES_COMMIT_SHA
+			? `<a href="https://github.com/fmhy/edit/commit/${
+					process.env.CF_PAGES_COMMIT_SHA
+				}">${process.env.CF_PAGES_COMMIT_SHA.slice(0, 8)}</a>`
+			: "dev");
 	configValues = {
 		numberLength: document.querySelector("#maxdigits").value,
 		twoPlayer: document.querySelector("#twoplayermode").checked,
