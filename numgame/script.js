@@ -28,8 +28,15 @@ function factorial(n) {
 	if (f[n] > 0) return f[n];
 	return (f[n] = factorial(n - 1) * n);
 }
-// Let page work offline
 
+function promptForUpdate() {
+	const updateAccepted = confirm("A new version of this site is available. Reload to update?");
+	if (updateAccepted) {
+		globalThis.location.reload();
+	}
+}
+// Let page work offline
+/*
 if ("serviceWorker" in navigator) {
 	window.addEventListener("load", () => {
 		navigator.serviceWorker
@@ -54,6 +61,7 @@ if ("serviceWorker" in navigator) {
 			});
 	});
 }
+*/
 
 class Game {
 	constructor(allowedDigits, numberLength) {
