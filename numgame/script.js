@@ -30,7 +30,7 @@ function factorial(n) {
 }
 
 function promptForUpdate() {
-	return confirm(		"A new version of this site is available. Reload to update?");
+	return confirm("A new version of this site is available. Reload to update?");
 }
 // Let page work offline
 /*
