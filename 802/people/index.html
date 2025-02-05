@@ -8,7 +8,7 @@
 			rel="stylesheet"
 		/>
 		<script src="script.js"></script>
-		<link rel="stylesheet" href="../../style.css" />
+		<link rel="stylesheet" href="style.css" />
 		<!--api-->
 		<script src="../../api/libs.js"></script>
 		<link rel="stylesheet" href="../../api/libs.css" />
@@ -21,7 +21,7 @@
 			import { Workbox } from "https://storage.googleapis.com/workbox-cdn/releases/6.4.1/workbox-window.prod.mjs";
 
 			if ("serviceWorker" in navigator) {
-				const wb = new Workbox("../../sw.js");
+				const wb = new Workbox("../sw.js");
 				let registration;
 
 				const showSkipWaitingPrompt = async (event) => {
@@ -63,12 +63,20 @@
 		</script>
 	</head>
 	<body>
-		<h1>Class resources</h1>
-		<h2><a href="schedule">Schedule</a></h2>
-		<h2><a href="aio">AIOs</a></h2>
-		<h4>
-			^ Huge study sheets compiled into one document (hence its name) for our
-			regents classes
-		</h4>
+		<h1>Students</h1>
+		<!--have options and sort and show statistics & percentages n stuff-->
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>6th Grade Class</th>
+					<th>7th Grade Class</th>
+					<th>Gender</th>
+				</tr>
+			</thead>
+			<tbody>
+
+			</tbody>
+		</table>
 	</body>
 </html>
