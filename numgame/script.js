@@ -42,17 +42,19 @@ function promptForUpdate() {
 
 	const confirmButton = dialog.querySelector("#confirm");
 	const cancelButton = dialog.querySelector("#cancel");
+	return new Promise((resolve) => {
+		confirmButton.addEventListener("click", () => {
+			dialog.close();
+			resolve(true);
+		});
 
-	confirmButton.addEventListener("click", () => {
-		dialog.close();
-		return true;
-	});
-
-	cancelButton.addEventListener("click", () => {
-		dialog.close();
-		return false;
+		cancelButton.addEventListener("click", () => {
+			dialog.close();
+			resolve(false);
+		});
 	});
 }
+
 // Let page work offline
 /*
 if ("serviceWorker" in navigator) {
@@ -358,7 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		document.querySelector("#guessbody").append(row);
 		// Auto scroll to bottom if overflow
-		const table = document.querySelector("#guessbody");
+		const table = document.querySelector("#guesscontainer");
 
 		// Fallback for browsers without smooth scroll
 		const start = table.scrollTop;
@@ -379,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		function animateScroll() {
 			currentTime += increment;
 			const value = Math.easeInOutQuad(currentTime, start, change, duration);
-			document.querySelector("#guesscontainer").scrollTop = value;
+			table.scrollTop = value;
 			if (currentTime < duration) {
 				setTimeout(animateScroll, increment);
 			}
