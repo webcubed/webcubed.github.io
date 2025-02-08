@@ -379,7 +379,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		function animateScroll() {
 			currentTime += increment;
 			const value = Math.easeInOutQuad(currentTime, start, change, duration);
-			table.scrollTop = value;
+			document.querySelector("#guesscontainer").scrollTop = value;
 			if (currentTime < duration) {
 				setTimeout(animateScroll, increment);
 			}
@@ -439,6 +439,9 @@ document.addEventListener("DOMContentLoaded", () => {
 			document.querySelector("#startbutton").style.backgroundColor =
 				"var(--blue)";
 		}
+		// Clear submission input
+
+		guessElement.value = "";
 	});
 	/* --------------------- number selection functionality --------------------- */
 	for (const button of document.querySelectorAll(
