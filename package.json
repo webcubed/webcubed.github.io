@@ -14,11 +14,12 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
-		"prettier": "^3.4.2",
+		"prettier": "^3.5.3",
+		"webcubed.github.io": "file:",
 		"workbox-cli": "^7.3.0"
 	},
 	"devDependencies": {
-		"globals": "^15.14.0",
+		"globals": "16.0.0",
 		"xo": "^0.60.0"
 	},
 	"xo": {
