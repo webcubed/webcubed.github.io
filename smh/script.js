@@ -26,7 +26,7 @@ function promptForUpdate() {
 
 document.addEventListener("DOMContentLoaded", function () {
 	document.querySelector("#idinput").value =
-		"903f331e-0ac7-463b-9b68-83eb24964acd"; // Update here
+		"1fc79e20-1483-4528-854d-cbb776111132"; // Update here (find "refId" in parent of fetch)
 	document.querySelector("#submit").addEventListener("click", () => {
 		window.open(
 			"https://www.hmhco.com/ui/#/assignments/review/" +
