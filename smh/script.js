@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-function promptForUpdate() {
+async function promptForUpdate() {
 	const dialog = document.createElement("dialog");
 	dialog.innerHTML = `
 	<p>A new version of this site is available. Reload to update?</p>
