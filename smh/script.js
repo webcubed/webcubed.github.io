@@ -26,7 +26,7 @@ function promptForUpdate() {
 
 document.addEventListener("DOMContentLoaded", function () {
 	document.querySelector("#idinput").value =
-		"bb26a098-ea05-4930-84aa-9fc9062e0dd5"; // Update here
+		"903f331e-0ac7-463b-9b68-83eb24964acd"; // Update here
 	document.querySelector("#submit").addEventListener("click", () => {
 		window.open(
 			"https://www.hmhco.com/ui/#/assignments/review/" +
