@@ -11,7 +11,7 @@ async function promptForUpdate() {
 
 	const confirmButton = dialog.querySelector("#confirm");
 	const cancelButton = dialog.querySelector("#cancel");
-	return new Promise((resolve) => {
+	const result = new Promise((resolve) => {
 		confirmButton.addEventListener("click", () => {
 			dialog.close();
 			resolve(true);
@@ -22,6 +22,7 @@ async function promptForUpdate() {
 			resolve(false);
 		});
 	});
+	return result;
 }
 
 document.addEventListener("DOMContentLoaded", function () {
