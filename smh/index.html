@@ -45,7 +45,8 @@
 					// Implementing this is app-specific; some examples are:
 					// https://open-ui.org/components/alert.research or
 					// https://open-ui.org/components/toast.research
-					const updateAccepted = await promptForUpdate();
+					// const updateAccepted = await promptForUpdate();
+					const updateAccepted = true;
 
 					if (updateAccepted) {
 						wb.messageSkipWaiting();
@@ -57,13 +58,14 @@
 				wb.addEventListener("waiting", (event) => {
 					showSkipWaitingPrompt(event);
 				});
+				/*
 				wb.addEventListener("installed", (event) => {
 					if (event.isUpdate) {
 						if (confirm(`New content is available!. Click OK to refresh`)) {
 							window.location.reload();
 						}
 					}
-				});
+				});*/
 				wb.register();
 			}
 		</script>
