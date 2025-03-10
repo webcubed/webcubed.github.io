@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-function promptForUpdate() {
+async function promptForUpdate() {
 	const dialog = document.createElement("dialog");
 	dialog.innerHTML = `
 	<p>A new version of this site is available. Reload to update?</p>
@@ -11,16 +11,18 @@ function promptForUpdate() {
 
 	const confirmButton = dialog.querySelector("#confirm");
 	const cancelButton = dialog.querySelector("#cancel");
+	const result = new Promise((resolve) => {
+		confirmButton.addEventListener("click", () => {
+			dialog.close();
+			resolve(true);
+		});
 
-	confirmButton.addEventListener("click", () => {
-		dialog.close();
-		return true;
+		cancelButton.addEventListener("click", () => {
+			dialog.close();
+			resolve(false);
+		});
 	});
-
-	cancelButton.addEventListener("click", () => {
-		dialog.close();
-		return false;
-	});
+	return result;
 }
 
 /* ----------------------------- timeout system ----------------------------- */
