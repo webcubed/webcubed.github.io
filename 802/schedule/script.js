@@ -322,6 +322,8 @@ const _defaultColors = {
 	PE: "#f5a97f",
 	Lunch: "#ee99a0",
 };
+
+/*
 // Testing purposes
 const _oldDate = Date;
 const fakeDate = new Date("March 26, 2025 11:13:00");
@@ -330,7 +332,7 @@ const fakeDate = new Date("March 26, 2025 11:13:00");
 Date = function () {
 	return fakeDate;
 };
-
+*/
 function getPeriod() {
 	// Get current day, ensure that it is monday through friday
 	// const now = new Date(2024, 12, 20, 9, 30); // Testing purposes
@@ -424,7 +426,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						((currentTimeInMinutes - startTimeInMinutes) /
 							(endTimeInMinutes - startTimeInMinutes)) *
 						100;
-					th.style.background = `linear-gradient(to right, var(--blue), ${percentage}%, transparent ${percentage - 0.1}%)`;
+					th.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
 				}, 1000);
 			}
 
@@ -462,7 +464,7 @@ document.addEventListener("DOMContentLoaded", function () {
 						((currentTimeInMinutes - startTimeInMinutes) /
 							(endTimeInMinutes - startTimeInMinutes)) *
 						100;
-					td.style.background = `linear-gradient(to right, var(--blue), ${percentage}%, transparent ${percentage - 0.1}%)`;
+					td.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
 				}
 
 				row.append(td);
