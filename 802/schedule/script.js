@@ -322,9 +322,19 @@ const _defaultColors = {
 	PE: "#f5a97f",
 	Lunch: "#ee99a0",
 };
+// Testing purposes
+const _oldDate = Date;
+const fakeDate = new Date("March 26, 2025 11:13:00");
+
+// Overriding date function
+Date = function () {
+	return fakeDate;
+};
+
 function getPeriod() {
 	// Get current day, ensure that it is monday through friday
-	const now = new Date(2024, 12, 20, 9, 30); // Testing purposes
+	// const now = new Date(2024, 12, 20, 9, 30); // Testing purposes
+	const now = new Date();
 	const day = now.getDay();
 	if (day === 0 || day === 6) {
 		return null;
@@ -390,6 +400,34 @@ document.addEventListener("DOMContentLoaded", function () {
 		for (const day of daysOfWeek) {
 			const th = document.createElement("th");
 			th.textContent = day.charAt(0).toUpperCase() + day.slice(1);
+			// If day has already passed, set background color to blue
+			const dayIndex = daysOfWeek.indexOf(day);
+			if (dayIndex < (new Date().getDay() + 6) % 7) {
+				th.style.background = "var(--blue)";
+			}
+			// Create a gradient in the header that represeents how much of the day has past. (for current day)
+
+			if (
+				![0, 6].includes(new Date().getDay()) &&
+				day === daysOfWeek[(new Date().getDay() + 6) % 7]
+			) {
+				// Get percentage of how much has past for the school day
+				// repeat this logic every second
+				setInterval(() => {
+					const now = new Date();
+					const hour = now.getHours();
+					const minute = now.getMinutes();
+					const currentTimeInMinutes = hour * 60 + minute;
+					const startTimeInMinutes = 8 * 60 + 10;
+					const endTimeInMinutes = 14 * 60 + 30;
+					const percentage =
+						((currentTimeInMinutes - startTimeInMinutes) /
+							(endTimeInMinutes - startTimeInMinutes)) *
+						100;
+					th.style.background = `linear-gradient(to right, var(--blue), ${percentage}%, transparent ${percentage - 0.1}%)`;
+				}, 1000);
+			}
+
 			headerRow.append(th);
 		}
 
@@ -408,10 +446,28 @@ document.addEventListener("DOMContentLoaded", function () {
 				const td = document.createElement("td");
 				const period = schedule[day]?.[periodIndex];
 				td.textContent = period ? period.subject : "";
-				row.append(td);
-			}
+				// Create gradient to represent time passed in period
+				if (getPeriod() === period) {
+					// Repeat
+					const now = new Date();
+					const hour = now.getHours();
+					const minute = now.getMinutes();
+					const currentTimeInMinutes = hour * 60 + minute;
+					const [start, end] = period.timeRange.split("-");
+					const [startHour, startMinute] = start.split(":").map(Number);
+					const [endHour, endMinute] = end.split(":").map(Number);
+					const startTimeInMinutes = startHour * 60 + startMinute;
+					const endTimeInMinutes = endHour * 60 + endMinute;
+					const percentage =
+						((currentTimeInMinutes - startTimeInMinutes) /
+							(endTimeInMinutes - startTimeInMinutes)) *
+						100;
+					td.style.background = `linear-gradient(to right, var(--blue), ${percentage}%, transparent ${percentage - 0.1}%)`;
+				}
 
-			tbody.append(row);
+				row.append(td);
+				tbody.append(row);
+			}
 		}
 
 		table.append(tbody);
@@ -421,12 +477,12 @@ document.addEventListener("DOMContentLoaded", function () {
 	/* ------------------------------ append tables ----------------------------- */
 	// append default table
 	document.body.append(createDefaultTable());
-	function createOptions() {
+	function _createOptions() {
 		const table = document.querySelector("#options");
 		const tbody = document.createElement("tbody");
 
 		table.append(tbody);
 	}
 
-	document.body.append(createOptions());
+	// document.body.append(createOptions());
 });

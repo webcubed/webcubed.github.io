@@ -6,4 +6,8 @@
 	cursor: pointer;
 	background-color: var(--crust);
 }
+.now {
+	background-color: var(--blue);
+	color: var(--mantle);
+}
 /* ------------------------------ options table ----------------------------- */
