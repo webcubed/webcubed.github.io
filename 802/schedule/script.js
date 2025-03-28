@@ -392,62 +392,77 @@ const daysOfSchoolWeek = [
 ];
 
 function updateDayGradients() {
-	const schoolToday = [(new Date().getDay() + 6) % 7];
+	const schoolToday = (new Date().getDay() + 6) % 7;
 	for (const day of daysOfSchoolWeek) {
 		const th = document.querySelector(`#defaultschedule th[data-day="${day}"]`);
 		const dayIndex = daysOfSchoolWeek.indexOf(day);
 		if (dayIndex < schoolToday) {
 			th.style.background = "var(--blue)";
-		}
-
-		if (
-			![0, 6].includes(new Date().getDay()) &&
-			day === daysOfSchoolWeek[schoolToday]
-		) {
-			// Get percentage of how much has past for the school day
+		} else if (dayIndex === schoolToday) {
 			const now = new Date();
 			const hour = now.getHours();
 			const minute = now.getMinutes();
 			const currentTimeInMinutes = hour * 60 + minute;
 			const startTimeInMinutes = 8 * 60 + 10;
 			const endTimeInMinutes = 14 * 60 + 30;
-			const percentage =
-				((currentTimeInMinutes - startTimeInMinutes) /
-					(endTimeInMinutes - startTimeInMinutes)) *
-				100;
-			th.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
+
+			if (currentTimeInMinutes > endTimeInMinutes) {
+				th.style.background = "var(--blue)";
+			} else {
+				const percentage =
+					((currentTimeInMinutes - startTimeInMinutes) /
+						(endTimeInMinutes - startTimeInMinutes)) *
+					100;
+				th.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
+			}
+		} else {
+			th.style.background = "";
 		}
 	}
 }
 
 function updatePeriodGradients() {
-	const schoolToday = [(new Date().getDay() + 6) % 7];
+	const schoolToday = (new Date().getDay() + 6) % 7;
 	for (const day of daysOfSchoolWeek) {
 		for (const period of schedule[day]) {
 			const td = document.querySelector(
 				`#defaultschedule td[data-period="${day}-${schedule[day].indexOf(period) + 1}"]`
 			);
-			if (getPeriod() !== null && period.timeRange < getPeriod().timeRange) {
-				td.style.background = "var(--blue)";
+			if (day !== daysOfSchoolWeek[schoolToday]) {
+				td.style.background = "";
+				continue;
 			}
 
-			if (day === daysOfSchoolWeek[schoolToday]) {
-				// Get percentage of how much has past for the period
-				const now = new Date();
-				const hour = now.getHours();
-				const minute = now.getMinutes();
-				const currentTimeInMinutes = hour * 60 + minute;
-				const [start, end] = period.timeRange.split("-");
-				const [startHour, startMinute] = start.split(":").map(Number);
-				const [endHour, endMinute] = end.split(":").map(Number);
-				const startTimeInMinutes = startHour * 60 + startMinute;
-				const endTimeInMinutes = endHour * 60 + endMinute;
-				const percentage =
-					((currentTimeInMinutes - startTimeInMinutes) /
-						(endTimeInMinutes - startTimeInMinutes)) *
-					100;
-				td.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
+			const now = new Date();
+			const hour = now.getHours();
+			const minute = now.getMinutes();
+			const currentTimeInMinutes = hour * 60 + minute;
+			const [start, end] = period.timeRange.split("-");
+			const [startHour, startMinute] = start.split(":").map(Number);
+			const [endHour, endMinute] = end.split(":").map(Number);
+			const startTimeInMinutes = startHour * 60 + startMinute;
+			const endTimeInMinutes = endHour * 60 + endMinute;
+
+			if (currentTimeInMinutes < startTimeInMinutes) {
+				// If period hasn't started yet, show solid color and stop updating its gradient
+				td.style.background = "";
+				td.dataset.periodOver = true;
+				continue;
 			}
+
+			if (currentTimeInMinutes > endTimeInMinutes) {
+				// If period has already ended, show solid color and stop updating its gradient
+				td.style.background = "var(--blue)";
+				td.dataset.periodOver = true;
+				continue;
+			}
+
+			// Get percentage of how much has past for the period
+			const percentage =
+				((currentTimeInMinutes - startTimeInMinutes) /
+					(endTimeInMinutes - startTimeInMinutes)) *
+				100;
+			td.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
 		}
 	}
 }
@@ -509,3 +524,5 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// document.body.append(createOptions());
 });
+
+
