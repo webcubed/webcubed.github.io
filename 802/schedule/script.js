@@ -336,9 +336,14 @@ const days = {
 		doubles: [{ subject: "Biology", periods: [1, 6] }],
 		tags: ["Talent", "Double"],
 		specialNotes: [TalentNote],
-		note: "This our day with a biology double period.",
+		note: "This our day with a biology double period, on period 1 and 6. This was our first day of school, so the first two periods are Bio -> History. After lunch you can abbreviate it to ESPLEAT (Ela -> SPanish -> Living Enviornment -> Algebra -> Talent)",
 	},
-	friday: {},
+	friday: {
+		doubles: [{ subject: "Math", periods: [4, 5] }],
+		tags: ["Talent", "Double"],
+		specialNotes: [TalentNote],
+		note: "We have a consecutive double Math period today after lunch. Those with Fong in MTSS stay in the same room for the two periods. Talent is 7th period, preceded by History and followed by Spanish.",
+	},
 };
 const _options = {
 	left: [
@@ -572,14 +577,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Get current period
 	/* ----------------------------- table creation ----------------------------- */
 	function createDefaultTable() {
-		const daysOfWeek = ["monday", "tuesday", "wednesday", "thursday", "friday"];
 		const table = document.querySelector("#defaultschedule");
 		const thead = document.createElement("thead");
 		const tbody = document.createElement("tbody");
 
 		// Create table header
 		const headerRow = document.createElement("tr");
-		for (const day of daysOfWeek) {
+		for (const day of daysOfSchoolWeek) {
 			const th = document.createElement("th");
 			th.textContent = day.charAt(0).toUpperCase() + day.slice(1);
 			th.dataset.day = day;
@@ -591,13 +595,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		// Find the maximum number of periods in any day
 		const maxPeriods = Math.max(
-			...daysOfWeek.map((day) => schedule[day]?.length || 0)
+			...daysOfSchoolWeek.map((day) => schedule[day]?.length || 0)
 		);
 
 		// Create table body
 		for (let periodIndex = 0; periodIndex < maxPeriods; periodIndex++) {
 			const row = document.createElement("tr");
-			for (const day of daysOfWeek) {
+			for (const day of daysOfSchoolWeek) {
 				const td = document.createElement("td");
 				const period = schedule[day]?.[periodIndex];
 				td.textContent = period ? period.subject : "";
@@ -622,11 +626,59 @@ document.addEventListener("DOMContentLoaded", function () {
 	const defaultTable = document.querySelector("#defaultschedule");
 	const infoContainer = document.querySelector("#infocontainer");
 
+	function createDayInfo(dayInfo) {
+		const parentDiv = document.createElement("div");
+		const doublesDiv = document.createElement("div");
+		doublesDiv.display = "flex";
+		for (const item of dayInfo.doubles) {
+			// For each double period
+			// create an h2 respecting the subject
+			const subjectElement = document.createElement("h2");
+			subjectElement.textContent = item.subject;
+			// Create a container to contain the info? It's literally just the periods
+			const container = document.createElement("div");
+			container.style.display = "flex";
+			const periodsElement = document.createElement("p");
+			periodsElement.textContent = `Periods: ${item.periods.join(", ")}`;
+			container.append(periodsElement);
+			doublesDiv.append(subjectElement);
+			doublesDiv.append(container);
+		}
+
+		const noteContainer = document.createElement("div");
+		const noteElement = document.createElement("p");
+		noteElement.textContent = dayInfo.note;
+		noteContainer.append(noteElement);
+		const specialNotesContainer = document.createElement("div");
+		for (const note of dayInfo.specialNotes) {
+			const specialNoteElement = document.createElement("p");
+			specialNoteElement.textContent = note;
+			specialNotesContainer.append(specialNoteElement);
+		}
+
+		parentDiv.append(doublesDiv);
+		parentDiv.append(noteContainer);
+		parentDiv.append(specialNotesContainer);
+		return parentDiv;
+	}
+
 	// Register day listeners first (draw from thead > tr)
-	for (const td of defaultTable.querySelector("thead > tr").children) {
-		td.addEventListener("click", (event) => {
-			// map the period object to the event target based on its data period attribute
-			// gotta make a day info first
+	for (const th of defaultTable.querySelector("thead > tr").children) {
+		const schoolToday = (getNYTime().getDay() + 6) % 7;
+
+		// Map the period object to the event target based on its data period attribute
+		// get current day and get the respective object from days variable
+		if (th.dataset.day !== daysOfSchoolWeek[schoolToday]) {
+			return;
+		}
+
+		const dayInfo = days[th.dataset.day];
+
+		infoContainer.innerHTML = "";
+		infoContainer.append(createDayInfo(dayInfo));
+		th.addEventListener("click", () => {
+			infoContainer.innerHTML = "";
+			infoContainer.append(createDayInfo(dayInfo));
 		});
 	}
 
