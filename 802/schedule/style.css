@@ -8,3 +8,16 @@
 }
 /* ------------------------------ options table ----------------------------- */
 /* ------------------------------ info elements ----------------------------- */
+#infocontainer {
+	max-width: 75%;
+	background-color: var(--base);
+	margin: 10px auto auto auto;
+	border-radius: 0.5rem;
+}
+#infocontainer > div {
+	display: flex;
+	justify-content: left;
+}
+#infocontainer > div > div > h1 {
+	min-width: 14rem;
+}

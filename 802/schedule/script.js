@@ -618,7 +618,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	/* ------------------------------ append tables ----------------------------- */
 	// Append default table
-	document.body.append(createDefaultTable());
+	document.querySelector("#plain").append(createDefaultTable());
 	setInterval(updateDayGradients, 1000);
 	setInterval(updatePeriodGradients, 1000);
 
@@ -631,18 +631,12 @@ document.addEventListener("DOMContentLoaded", function () {
 		const doublesDiv = document.createElement("div");
 		doublesDiv.display = "flex";
 		for (const item of dayInfo.doubles) {
-			// For each double period
-			// create an h2 respecting the subject
-			const subjectElement = document.createElement("h2");
-			subjectElement.textContent = item.subject;
-			// Create a container to contain the info? It's literally just the periods
-			const container = document.createElement("div");
-			container.style.display = "flex";
-			const periodsElement = document.createElement("p");
-			periodsElement.textContent = `Periods: ${item.periods.join(", ")}`;
-			container.append(periodsElement);
-			doublesDiv.append(subjectElement);
-			doublesDiv.append(container);
+			doublesDiv.innerHTML = `
+			<h1>Double periods</h1>
+			<h2>${item.subject}</h2>
+			<h3>Periods: ${item.periods.join(", ")}</h3>
+			`;
+			doublesDiv.id = "doublesContainer";
 		}
 
 		const noteContainer = document.createElement("div");
@@ -652,6 +646,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		const specialNotesContainer = document.createElement("div");
 		for (const note of dayInfo.specialNotes) {
 			const specialNoteElement = document.createElement("p");
+			specialNoteElement.id = "specialNote";
 			specialNoteElement.textContent = note;
 			specialNotesContainer.append(specialNoteElement);
 		}
@@ -663,9 +658,10 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	// Register day listeners first (draw from thead > tr)
-	for (const th of defaultTable.querySelector("thead > tr").children) {
+	for (const th of defaultTable.querySelector("thead > tr").childNodes) {
+		const dayInfo = days[th.dataset.day];
+
 		th.addEventListener("click", () => {
-			const dayInfo = days[th.dataset.day];
 			infoContainer.innerHTML = "";
 			infoContainer.append(createDayInfo(dayInfo));
 		});
@@ -674,10 +670,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		// Map the period object to the event target based on its data period attribute
 		// get current day and get the respective object from days variable
 		if (th.dataset.day !== daysOfSchoolWeek[schoolToday]) {
-			return;
+			continue;
 		}
-
-		const dayInfo = days[th.dataset.day];
 
 		infoContainer.innerHTML = "";
 		infoContainer.append(createDayInfo(dayInfo));
