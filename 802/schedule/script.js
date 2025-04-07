@@ -664,6 +664,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// Register day listeners first (draw from thead > tr)
 	for (const th of defaultTable.querySelector("thead > tr").children) {
+		th.addEventListener("click", () => {
+			const dayInfo = days[th.dataset.day];
+			infoContainer.innerHTML = "";
+			infoContainer.append(createDayInfo(dayInfo));
+		});
 		const schoolToday = (getNYTime().getDay() + 6) % 7;
 
 		// Map the period object to the event target based on its data period attribute
@@ -676,10 +681,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		infoContainer.innerHTML = "";
 		infoContainer.append(createDayInfo(dayInfo));
-		th.addEventListener("click", () => {
-			infoContainer.innerHTML = "";
-			infoContainer.append(createDayInfo(dayInfo));
-		});
 	}
 
 	function _createOptions() {
