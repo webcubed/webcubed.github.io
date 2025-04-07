@@ -290,6 +290,55 @@ const schedule = {
 		},
 	],
 };
+const PENote =
+	"On our PE days, Mondays and Tuesdays, we always have Biology right after lunch, Algebra last, and History NEXT TO PE (either before or after). ";
+const TalentNote = "We have Talent on Tuesdays, Thursdays, and Fridays. Tuesdays 5th period right before PE, Thursdays last period, and Fridays second to last period, preceded by History and followed by Spanish. (Band students can easily memorize this because they stay in one side of the building for the last three periods.)";
+const days = {
+	monday: {
+		doubles: [
+			{
+				subject: "History",
+				periods: [2, 6],
+			},
+		],
+		tags: ["PE", "Double"],
+		specialNotes: [PENote],
+		note: "On Mondays, we have PE 7th, followed by Algebra and preceded by History. We have one double period, History on periods 2 and 6.",
+	},
+	tuesday: {
+		doubles: [
+			{
+				subject: "Math", // NOT ALGEBRA or NONCORE, MATH MEANS BOTH
+				periods: [1, 8],
+			},
+		],
+		tags: ["PE", "Talent", "No Spanish", "Non-Core", "Non-Core Math", "Double"],
+		specialNotes: [PENote, TalentNote],
+		note: "On Tuesdays, we have PE 6th, followed by History and preceded by Talent. We have a technical double for Math, with Non-Core Math being first and Algebra being last. This is the only day in the school week without Spanish",
+	},
+	wednesday: {
+		doubles: [
+			{
+				subject: "Algebra",
+				periods: [1, 5],
+			},
+			{
+				subject: "English", // Not ELA, both ELA & Noncore Ela
+				periods: [2, 4],
+			},
+		],
+		tags: ["Non-Core", "Non-Core ELA", "Double"],
+		specialNotes: [],
+		note: "This is our only day with Non-Core ELA, situated right after lunch. Our first five periods are as follows: Algebra -> ELA -> Lunch -> Non-Core ELA -> Algebra. This makes it easy to remember, as the two periods after lunch are just the first two periods inversed. We have a genuine Algebra double on this day as well.",
+	},
+	thursday: {
+		doubles: [{ subject: "Biology", periods: [1, 6] }],
+		tags: ["Talent", "Double"],
+		specialNotes: [TalentNote],
+		note: "This our day with a biology double period.",
+	},
+	friday: {},
+};
 const _options = {
 	left: [
 		{
@@ -429,6 +478,9 @@ function updateDayGradients() {
 			// ^ which means not redundant
 			if (currentTimeInMinutes > endTimeInMinutes) {
 				th.style.background = "var(--blue)";
+			} else if (currentTimeInMinutes < startTimeInMinutes) {
+				// Don't bother if school hasn't started yet
+				th.style.background = "";
 			}
 			// Otherwise, calculate the gradient percentage
 			else {
@@ -548,10 +600,23 @@ document.addEventListener("DOMContentLoaded", function () {
 	}
 
 	/* ------------------------------ append tables ----------------------------- */
-	// append default table
+	// Append default table
 	document.body.append(createDefaultTable());
 	setInterval(updateDayGradients, 1000);
 	setInterval(updatePeriodGradients, 1000);
+
+	// Register click listeners for updating info element
+	const defaultTable = document.querySelector("#defaultschedule");
+	const infoContainer = document.querySelector("#infocontainer");
+
+	// Register day listeners first (draw from thead > tr)
+	for (const td of defaultTable.querySelector("thead > tr").children) {
+		td.addEventListener("click", (event) => {
+			// map the period object to the event target based on its data period attribute
+			// gotta make a day info first
+		});
+	}
+
 	function _createOptions() {
 		const table = document.querySelector("#options");
 		const tbody = document.createElement("tbody");
