@@ -292,7 +292,8 @@ const schedule = {
 };
 const PENote =
 	"On our PE days, Mondays and Tuesdays, we always have Biology right after lunch, Algebra last, and History NEXT TO PE (either before or after). ";
-const TalentNote = "We have Talent on Tuesdays, Thursdays, and Fridays. Tuesdays 5th period right before PE, Thursdays last period, and Fridays second to last period, preceded by History and followed by Spanish. (Band students can easily memorize this because they stay in one side of the building for the last three periods.)";
+const TalentNote =
+	"We have Talent on Tuesdays, Thursdays, and Fridays. Tuesdays 5th period right before PE, Thursdays last period, and Fridays second to last period, preceded by History and followed by Spanish. (Band students can easily memorize this because they stay in one side of the building for the last three periods.)";
 const days = {
 	monday: {
 		doubles: [
@@ -382,10 +383,22 @@ Date = function () {
 	return fakeDate;
 };
 */
+
+function getNYTime() {
+	const dateString = new Date().toLocaleString("en-US", {
+		timeZone: "America/New_York",
+	});
+	return {
+		getDay: () => new Date(dateString).getDay(),
+		getHours: () => new Date(dateString).getHours(),
+		getMinutes: () => new Date(dateString).getMinutes(),
+	};
+}
+
 function _getPeriod() {
 	// Get current day, ensure that it is monday through friday
 	// const now = new Date(2024, 12, 20, 9, 30); // Testing purposes
-	const now = new Date();
+	const now = getNYTime();
 	const day = now.getDay();
 	if (day === 0 || day === 6) {
 		return null;
@@ -445,7 +458,7 @@ const daysOfSchoolWeek = [
  */
 function updateDayGradients() {
 	// Get the index of the current day in the school week
-	const schoolToday = (new Date().getDay() + 6) % 7;
+	const schoolToday = (getNYTime().getDay() + 6) % 7;
 
 	// Loop through each day of the school week
 	for (const day of daysOfSchoolWeek) {
@@ -462,7 +475,7 @@ function updateDayGradients() {
 		// If the current day is today, calculate the gradient percentage
 		else if (dayIndex === schoolToday) {
 			// Get the current time
-			const now = new Date();
+			const now = getNYTime();
 			const hour = now.getHours();
 			const minute = now.getMinutes();
 
@@ -503,7 +516,7 @@ function updateDayGradients() {
 // Current problem: Gradients aren't accurate, percentage may be accurate but not represented as so.
 function updatePeriodGradients() {
 	// Get the day of the week
-	const schoolToday = (new Date().getDay() + 6) % 7;
+	const schoolToday = (getNYTime().getDay() + 6) % 7;
 
 	// Loop through each day of the school week
 	for (const day of daysOfSchoolWeek) {
@@ -522,7 +535,7 @@ function updatePeriodGradients() {
 			);
 
 			// Get the time in minutes for the current time
-			const now = new Date();
+			const now = getNYTime();
 			const hour = now.getHours();
 			const minute = now.getMinutes();
 			const currentTimeInMinutes = hour * 60 + minute;
