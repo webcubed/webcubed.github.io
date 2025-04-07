@@ -333,7 +333,7 @@ Date = function () {
 	return fakeDate;
 };
 */
-function getPeriod() {
+function _getPeriod() {
 	// Get current day, ensure that it is monday through friday
 	// const now = new Date(2024, 12, 20, 9, 30); // Testing purposes
 	const now = new Date();
@@ -391,78 +391,114 @@ const daysOfSchoolWeek = [
 	"friday",
 ];
 
+/**
+ * Updates the gradient for each day of the school week in the default schedule based on the current time
+ */
 function updateDayGradients() {
+	// Get the index of the current day in the school week
 	const schoolToday = (new Date().getDay() + 6) % 7;
+
+	// Loop through each day of the school week
 	for (const day of daysOfSchoolWeek) {
+		// Get the table header element for the current day being looped through
 		const th = document.querySelector(`#defaultschedule th[data-day="${day}"]`);
+
+		// Get the index of the current day in the array of strings containing school day names.
 		const dayIndex = daysOfSchoolWeek.indexOf(day);
+
+		// If the current day is in the past, set the background to blue
 		if (dayIndex < schoolToday) {
 			th.style.background = "var(--blue)";
-		} else if (dayIndex === schoolToday) {
+		}
+		// If the current day is today, calculate the gradient percentage
+		else if (dayIndex === schoolToday) {
+			// Get the current time
 			const now = new Date();
 			const hour = now.getHours();
 			const minute = now.getMinutes();
-			const currentTimeInMinutes = hour * 60 + minute;
-			const startTimeInMinutes = 8 * 60 + 10;
-			const endTimeInMinutes = 14 * 60 + 30;
 
+			// Calculate the current time in minutes
+			const currentTimeInMinutes = hour * 60 + minute;
+
+			// Define the start and end times for the gradient
+			const startTimeInMinutes = 8 * 60 + 10; // 8:10
+			const endTimeInMinutes = 14 * 60 + 30; // 14:30
+
+			// If the current time is after the end time, set the background to blue
+			// This is being done because it will attempt to run the gradient AFTER SCHOOL
+			// ^ which means not redundant
 			if (currentTimeInMinutes > endTimeInMinutes) {
 				th.style.background = "var(--blue)";
-			} else {
+			}
+			// Otherwise, calculate the gradient percentage
+			else {
+				// Calculate the percentage of the day that has passed
 				const percentage =
 					((currentTimeInMinutes - startTimeInMinutes) /
 						(endTimeInMinutes - startTimeInMinutes)) *
 					100;
-				th.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
+
+				// Set the background to a linear gradient with the percentage
+				th.style.background = `linear-gradient(to right, var(--blue), transparent ${percentage}%)`;
 			}
-		} else {
-			th.style.background = "";
 		}
 	}
 }
 
+/**
+ * Updates the gradient for each period in the default schedule based on the current time
+ */
+// Current problem: Gradients aren't accurate, percentage may be accurate but not represented as so.
 function updatePeriodGradients() {
+	// Get the day of the week
 	const schoolToday = (new Date().getDay() + 6) % 7;
+
+	// Loop through each day of the school week
 	for (const day of daysOfSchoolWeek) {
+		// The variable day returns a string of a day in the school week
+		// Loop through each period for the current day
 		for (const period of schedule[day]) {
-			const td = document.querySelector(
-				`#defaultschedule td[data-period="${day}-${schedule[day].indexOf(period) + 1}"]`
-			);
+			// The variable period returns an object with details about the period.
+			// Continue only of today is the current day
 			if (day !== daysOfSchoolWeek[schoolToday]) {
-				td.style.background = "";
 				continue;
 			}
 
+			// Getting the element corresponding to the current period being looped through.
+			const td = document.querySelector(
+				`#defaultschedule td[data-period="${day}-${schedule[day].indexOf(period) + 1}"]`
+			);
+
+			// Get the time in minutes for the current time
 			const now = new Date();
 			const hour = now.getHours();
 			const minute = now.getMinutes();
 			const currentTimeInMinutes = hour * 60 + minute;
+
+			// Get the start and end time in minutes for the current period
 			const [start, end] = period.timeRange.split("-");
 			const [startHour, startMinute] = start.split(":").map(Number);
 			const [endHour, endMinute] = end.split(":").map(Number);
 			const startTimeInMinutes = startHour * 60 + startMinute;
 			const endTimeInMinutes = endHour * 60 + endMinute;
 
-			if (currentTimeInMinutes < startTimeInMinutes) {
-				// If period hasn't started yet, show solid color and stop updating its gradient
-				td.style.background = "";
-				td.dataset.periodOver = true;
-				continue;
-			}
-
+			// If the current time is after the end of the period, show solid color and stop updating its gradient
 			if (currentTimeInMinutes > endTimeInMinutes) {
 				// If period has already ended, show solid color and stop updating its gradient
 				td.style.background = "var(--blue)";
 				td.dataset.periodOver = true;
 				continue;
+			} else if (
+				currentTimeInMinutes >= startTimeInMinutes &&
+				currentTimeInMinutes <= endTimeInMinutes
+			) {
+				// If the current time is between the start and end time of the period, show gradient
+				const percentage =
+					((currentTimeInMinutes - startTimeInMinutes) /
+						(endTimeInMinutes - startTimeInMinutes)) *
+					100;
+				td.style.background = `linear-gradient(to right, var(--blue), transparent ${percentage}%)`;
 			}
-
-			// Get percentage of how much has past for the period
-			const percentage =
-				((currentTimeInMinutes - startTimeInMinutes) /
-					(endTimeInMinutes - startTimeInMinutes)) *
-				100;
-			td.style.background = `linear-gradient(to right, var(--blue), transparent, ${percentage}%, transparent ${percentage - 0.1}%)`;
 		}
 	}
 }
@@ -502,8 +538,9 @@ document.addEventListener("DOMContentLoaded", function () {
 				td.textContent = period ? period.subject : "";
 				td.dataset.period = `${day}-${periodIndex + 1}`;
 				row.append(td);
-				tbody.append(row);
 			}
+
+			tbody.append(row);
 		}
 
 		table.append(tbody);
@@ -524,5 +561,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	// document.body.append(createOptions());
 });
-
-
