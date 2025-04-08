@@ -606,6 +606,7 @@ document.addEventListener("DOMContentLoaded", function () {
 				const period = schedule[day]?.[periodIndex];
 				td.textContent = period ? period.subject : "";
 				td.dataset.period = `${day}-${periodIndex + 1}`;
+				td.dataset.subject = period ? period.subject : "";
 				row.append(td);
 			}
 
@@ -628,32 +629,51 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	function createDayInfo(dayInfo) {
 		const parentDiv = document.createElement("div");
+		parentDiv.id = "dayInfo";
+		const dayName = Object.keys(days)[Object.values(days).indexOf(dayInfo)];
+		parentDiv.innerHTML = `
+		<div style="flex-grow: 1; display: flex; align-items: center;">
+			<h1>${dayName.charAt(0).toUpperCase() + dayName.slice(1)}</h1>
+		</div>`;
 		const doublesDiv = document.createElement("div");
-		doublesDiv.display = "flex";
+		doublesDiv.id = "doublesContainer";
+		doublesDiv.style.display = "grid";
+		doublesDiv.style.gridTemplateColumns = "1fr 1fr";
+		doublesDiv.style.gridTemplateRows = "1fr 1fr";
+		doublesDiv.innerHTML = `<h1 style="grid-column: 1/3;">Double Periods</h1>`;
 		for (const item of dayInfo.doubles) {
-			doublesDiv.innerHTML = `
-			<h1>Double periods</h1>
+			const itemDiv = document.createElement("div");
+			itemDiv.innerHTML = `
 			<h2>${item.subject}</h2>
 			<h3>Periods: ${item.periods.join(", ")}</h3>
 			`;
-			doublesDiv.id = "doublesContainer";
-		}
-
-		const noteContainer = document.createElement("div");
-		const noteElement = document.createElement("p");
-		noteElement.textContent = dayInfo.note;
-		noteContainer.append(noteElement);
-		const specialNotesContainer = document.createElement("div");
-		for (const note of dayInfo.specialNotes) {
-			const specialNoteElement = document.createElement("p");
-			specialNoteElement.id = "specialNote";
-			specialNoteElement.textContent = note;
-			specialNotesContainer.append(specialNoteElement);
+			if (dayInfo.doubles.length === 1) itemDiv.style.gridColumn = "1/3";
+			doublesDiv.append(itemDiv);
 		}
 
 		parentDiv.append(doublesDiv);
+
+		const noteContainer = document.createElement("div");
+		noteContainer.innerHTML = `<h1>Notes</h1>`;
+		const noteElement = document.createElement("p");
+		noteElement.textContent = dayInfo.note;
+		noteContainer.append(noteElement);
+		if (dayInfo.specialNotes.length > 0) {
+			const specialNotesContainer = document.createElement("div");
+
+			specialNotesContainer.innerHTML = `<h1>Special Notes</h1>`;
+
+			for (const note of dayInfo.specialNotes) {
+				const specialNoteElement = document.createElement("p");
+				specialNoteElement.id = "specialNote";
+				specialNoteElement.textContent = note;
+				specialNotesContainer.append(specialNoteElement);
+			}
+
+			parentDiv.append(specialNotesContainer);
+		}
+
 		parentDiv.append(noteContainer);
-		parentDiv.append(specialNotesContainer);
 		return parentDiv;
 	}
 
@@ -684,5 +704,5 @@ document.addEventListener("DOMContentLoaded", function () {
 		table.append(tbody);
 	}
 
-	// document.body.append(createOptions());
+	// Document.body.append(createOptions());
 });
