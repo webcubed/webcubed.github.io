@@ -693,12 +693,13 @@ document.addEventListener("DOMContentLoaded", function () {
 	// Register day listeners first (draw from thead > tr)
 	for (const th of defaultTable.querySelector("thead > tr").childNodes) {
 		const dayInfo = days[th.dataset.day];
+		const schoolToday = (getNYTime().getDay() + 6) % 7;
 
 		const interval = setInterval(() => {
 			document.querySelector("#dayInfoContainer").innerHTML = "";
 			document
 				.querySelector("#dayInfoContainer")
-				.append(createDayInfo(dayInfo));
+				.append(createDayInfo(days[schoolToday - 1]));
 		});
 
 		th.addEventListener("click", () => {
@@ -706,7 +707,6 @@ document.addEventListener("DOMContentLoaded", function () {
 			infoContainer.innerHTML = "";
 			infoContainer.append(createDayInfo(dayInfo));
 		});
-		const schoolToday = (getNYTime().getDay() + 6) % 7;
 
 		// Map the period object to the event target based on its data period attribute
 		// get current day and get the respective object from days variable
