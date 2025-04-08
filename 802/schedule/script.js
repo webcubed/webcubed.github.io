@@ -706,7 +706,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			clearInterval(interval);
 			document.querySelector("#dayInfoContainer").innerHTML = "";
 			document
-				.querySelector("#dayInfocontainer")
+				.querySelector("#dayInfoContainer")
 				.append(createDayInfo(dayInfo));
 		});
 
