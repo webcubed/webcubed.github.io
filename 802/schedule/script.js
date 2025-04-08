@@ -704,10 +704,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		th.addEventListener("click", () => {
 			clearInterval(interval);
-			infoContainer.infoContainer.querySelector(
-				"#periodInfoContainer"
-			).innerHTML = "";
-			infoContainer.infoContainer
+			infoContainer.querySelector("#periodInfoContainer").innerHTML = "";
+			infoContainer
 				.querySelector("#periodInfoContainer")
 				.append(createDayInfo(dayInfo));
 		});
