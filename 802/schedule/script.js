@@ -695,8 +695,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		const dayInfo = days[th.dataset.day];
 
 		const interval = setInterval(() => {
-			infoContainer.querySelector("#dayInfoContainer").innerHTML = "";
-			infoContainer
+			defaultTable.querySelector("#dayInfoContainer").innerHTML = "";
+			defaultTable
 				.querySelector("#dayInfoContainer")
 				.append(createDayInfo(dayInfo));
 		});
