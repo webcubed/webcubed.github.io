@@ -517,7 +517,7 @@ function updateDayGradients() {
 					100;
 
 				// Set the background to a linear gradient with the percentage
-				th.style.background = `linear-gradient(to right, var(--blue), transparent ${percentage}%)`;
+				th.style.background = `linear-gradient(to right, var(--blue) ${percentage}%, transparent)`;
 			}
 		}
 	}
@@ -575,7 +575,7 @@ function updatePeriodGradients() {
 					((currentTimeInMinutes - startTimeInMinutes) /
 						(endTimeInMinutes - startTimeInMinutes)) *
 					100;
-				td.style.background = `linear-gradient(to right, var(--blue), transparent ${percentage}%)`;
+				td.style.background = `linear-gradient(to right, var(--blue) ${percentage}%, transparent)`;
 			}
 		}
 	}
