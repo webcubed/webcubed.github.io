@@ -9,14 +9,22 @@
 /* ------------------------------ options table ----------------------------- */
 /* ------------------------------ info elements ----------------------------- */
 #infocontainer {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
 	max-width: 75%;
-	background-color: var(--base);
 	margin: 10px auto auto auto;
 	border-radius: 0.5rem;
 }
-#dayInfo {
+#dayInfoContainer,
+#periodInfoContainer {
+	background-color: var(--base);
+	border-radius: 0.5rem;
+}
+
+#dayInfo, #periodInfo {
 	display: flex;
-	justify-content: left;
+	justify-content: start;
 	gap: 5px;
 	padding: 0px 10px 0px 10px;
 }

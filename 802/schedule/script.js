@@ -389,6 +389,10 @@ Date = function () {
 };
 */
 
+/**
+ * Returns an object with functions to get the current day, hours, and minutes in New York time.
+ * @returns {{getDay: function, getHours: function, getMinutes: function}}
+ */
 function getNYTime() {
 	const dateString = new Date().toLocaleString("en-US", {
 		timeZone: "America/New_York",
@@ -400,7 +404,11 @@ function getNYTime() {
 	};
 }
 
-function _getPeriod() {
+/**
+ * Gets the current period given the current time and day.
+ * @returns The object for the current period if it is a valid period, otherwise null.
+ */
+function getPeriod() {
 	// Get current day, ensure that it is monday through friday
 	// const now = new Date(2024, 12, 20, 9, 30); // Testing purposes
 	const now = getNYTime();
@@ -627,6 +635,11 @@ document.addEventListener("DOMContentLoaded", function () {
 	const defaultTable = document.querySelector("#defaultschedule");
 	const infoContainer = document.querySelector("#infocontainer");
 
+	/**
+	 * Creates a DOM element that displays the day name, double periods, special notes (if any), and regular notes for a given day of school.
+	 * @param {Object} dayInfo - The day of school information containing the day's name, double periods, special notes (if any), and regular notes.
+	 * @returns {Element} The DOM element that displays the information.
+	 */
 	function createDayInfo(dayInfo) {
 		const parentDiv = document.createElement("div");
 		parentDiv.id = "dayInfo";
@@ -681,7 +694,15 @@ document.addEventListener("DOMContentLoaded", function () {
 	for (const th of defaultTable.querySelector("thead > tr").childNodes) {
 		const dayInfo = days[th.dataset.day];
 
+		const interval = setInterval(() => {
+			infoContainer.querySelector("#dayInfoContainer").innerHTML = "";
+			infoContainer
+				.querySelector("#dayInfoContainer")
+				.append(createDayInfo(dayInfo));
+		});
+
 		th.addEventListener("click", () => {
+			clearInterval(interval);
 			infoContainer.innerHTML = "";
 			infoContainer.append(createDayInfo(dayInfo));
 		});
@@ -692,9 +713,72 @@ document.addEventListener("DOMContentLoaded", function () {
 		if (th.dataset.day !== daysOfSchoolWeek[schoolToday]) {
 			continue;
 		}
+	}
 
-		infoContainer.innerHTML = "";
-		infoContainer.append(createDayInfo(dayInfo));
+	/**
+	 * Creates a DOM element that displays information about a given period of school.
+	 * @param {Object} periodInfo - The period of school information containing the period number, subject, teacher, room, and time range.
+	 * @returns {Element} The DOM element that displays the information.
+	 */
+	function createPeriodInfo(periodInfo) {
+		const parentDiv = document.createElement("div");
+		parentDiv.id = "periodInfo";
+		parentDiv.style.display = "flex";
+		const periodName = periodInfo.period;
+		parentDiv.innerHTML = `
+		<div style="display: flex; align-items: center;">
+			<h1>Period ${periodName} of ${
+				Object.keys(schedule)[
+					(() => {
+						for (const [index, item] of Object.values(schedule).entries()) {
+							if (item.includes(periodInfo) === true) {
+								return index;
+							}
+						}
+
+						return null;
+					})()
+				]
+			}</h1>
+		</div>`;
+		const noteContainer = document.createElement("div");
+		noteContainer.innerHTML = `<h1>Notes</h1>`;
+		const noteElement = document.createElement("p");
+		noteElement.innerHTML = `
+		<h2>${periodInfo.subject}</h2>
+		<h3>Teacher: ${periodInfo.teacher}</h3>
+		<h3>Room: ${periodInfo.room}</h3>
+		<h3>Time range (24 hr): ${periodInfo.timeRange}</h3>
+		`;
+		noteContainer.append(noteElement);
+		parentDiv.append(noteContainer);
+		return parentDiv;
+	}
+
+	for (const tr of defaultTable.querySelectorAll("tbody > tr")) {
+		for (const td of tr.childNodes) {
+			const periodInfo =
+				schedule[td.dataset.period.split("-")[0]][
+					td.dataset.period.split("-")[1] - 1
+				];
+			// If possible, open the period info for the current period
+			const interval = setInterval(() => {
+				if (getPeriod()) {
+					infoContainer.querySelector("#periodInfoContainer").innerHTML = "";
+					infoContainer
+						.querySelector("#periodInfoContainer")
+						.append(createPeriodInfo(getPeriod()));
+				}
+			}, 1000);
+
+			td.addEventListener("click", () => {
+				clearInterval(interval);
+				infoContainer.querySelector("#periodInfoContainer").innerHTML = "";
+				infoContainer
+					.querySelector("#periodInfoContainer")
+					.append(createPeriodInfo(periodInfo));
+			});
+		}
 	}
 
 	function _createOptions() {
