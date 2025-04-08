@@ -367,17 +367,17 @@ const _options = {
 const _additionalTeachers = {
 	// Talent teachers to be done
 };
-const _defaultColors = {
-	Algebra: "#8aadf4",
-	Biology: "#a6da95",
-	ELA: "#ed8796",
-	History: "#eed49f",
-	"Non-Core ELA": "",
-	"Non-Core Math": "",
-	Spanish: "#c6a0f6",
-	Talent: "",
-	PE: "#f5a97f",
-	Lunch: "#ee99a0",
+const defaultColors = {
+	Algebra: "var(--red)",
+	Biology: "var(--green)",
+	ELA: "var(--blue)",
+	History: "var(--yellow)",
+	"Non-Core ELA": "var(--blue)",
+	"Non-Core Math": "var(--red)",
+	Spanish: "var(--mauve)",
+	Talent: "var(--text)",
+	PE: "var(--peach)",
+	Lunch: "var(--maroon)",
 };
 
 /*
@@ -565,7 +565,7 @@ function updatePeriodGradients() {
 			// If the current time is after the end of the period, show solid color and stop updating its gradient
 			if (currentTimeInMinutes > endTimeInMinutes) {
 				// If period has already ended, show solid color and stop updating its gradient
-				td.style.background = "var(--blue)";
+				td.style.background = `${defaultColors[td.dataset.subject]}`;
 				td.dataset.periodOver = true;
 				continue;
 			} else if (
@@ -577,7 +577,7 @@ function updatePeriodGradients() {
 					((currentTimeInMinutes - startTimeInMinutes) /
 						(endTimeInMinutes - startTimeInMinutes)) *
 					100;
-				td.style.background = `linear-gradient(to right, var(--blue) ${percentage}%, transparent)`;
+				td.style.background = `linear-gradient(to right, ${defaultColors[td.dataset.subject]} ${percentage}%, color-mix(in srgb, ${defaultColors[td.dataset.subject]}, transparent 50%))`;
 			}
 		}
 	}
