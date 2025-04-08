@@ -699,7 +699,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			document.querySelector("#dayInfoContainer").innerHTML = "";
 			document
 				.querySelector("#dayInfoContainer")
-				.append(createDayInfo(days[schoolToday - 1]));
+				.append(createDayInfo(days[daysOfSchoolWeek[schoolToday]]));
 		});
 
 		th.addEventListener("click", () => {
