@@ -704,8 +704,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
 		th.addEventListener("click", () => {
 			clearInterval(interval);
-			infoContainer.innerHTML = "";
-			infoContainer.append(createDayInfo(dayInfo));
+			infoContainer.infoContainer.querySelector(
+				"#periodInfoContainer"
+			).innerHTML = "";
+			infoContainer.infoContainer
+				.querySelector("#periodInfoContainer")
+				.append(createDayInfo(dayInfo));
 		});
 
 		// Map the period object to the event target based on its data period attribute
