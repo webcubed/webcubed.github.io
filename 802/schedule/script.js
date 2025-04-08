@@ -700,7 +700,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			document
 				.querySelector("#dayInfoContainer")
 				.append(createDayInfo(days[daysOfSchoolWeek[schoolToday]]));
-		});
+		}, 1000);
 
 		th.addEventListener("click", () => {
 			clearInterval(interval);
