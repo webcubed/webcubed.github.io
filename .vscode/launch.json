@@ -1,0 +1,25 @@
+{
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Launch index.html",
+			"type": "firefox",
+			"request": "attach",
+			"tabFilter": "http://127.0.0.1/*",
+			"reloadOnChange": {
+				"watch": [
+					"${workspaceFolder}/**/*.js",
+					"${workspaceFolder}/**/*.html",
+					"${workspaceFolder}/**/*.css"
+				],
+				"ignore": ["${workspaceFolder}/node_modules/**"]
+			},
+			"pathMappings": [
+				{
+					"url": "https://webcubed.is-a.dev/802/schedule/script.js",
+					"path": "http://127.0.0.1/802/schedule/script.js"
+				}
+			]
+		}
+	]
+}

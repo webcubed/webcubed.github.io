@@ -486,6 +486,7 @@ function updateDayGradients() {
 		// If the current day is in the past, set the background to blue
 		if (dayIndex < schoolToday) {
 			th.style.background = "var(--blue)";
+			th.style.color = "var(--mantle)";
 		}
 		// If the current day is today, calculate the gradient percentage
 		else if (dayIndex === schoolToday) {
@@ -506,6 +507,7 @@ function updateDayGradients() {
 			// ^ which means not redundant
 			if (currentTimeInMinutes > endTimeInMinutes) {
 				th.style.background = "var(--blue)";
+				th.style.color = "var(--mantle)";
 			} else if (currentTimeInMinutes < startTimeInMinutes) {
 				// Don't bother if school hasn't started yet
 				th.style.background = "";
@@ -520,6 +522,7 @@ function updateDayGradients() {
 
 				// Set the background to a linear gradient with the percentage
 				th.style.background = `linear-gradient(to right, var(--blue) ${percentage}%, transparent)`;
+				th.style.color = "var(--mantle)";
 			}
 		}
 	}
@@ -566,6 +569,7 @@ function updatePeriodGradients() {
 			if (currentTimeInMinutes > endTimeInMinutes) {
 				// If period has already ended, show solid color and stop updating its gradient
 				td.style.background = `${defaultColors[td.dataset.subject]}`;
+				td.style.color = "var(--mantle)";
 				td.dataset.periodOver = true;
 				continue;
 			} else if (
@@ -578,6 +582,10 @@ function updatePeriodGradients() {
 						(endTimeInMinutes - startTimeInMinutes)) *
 					100;
 				td.style.background = `linear-gradient(to right, ${defaultColors[td.dataset.subject]} ${percentage}%, color-mix(in srgb, ${defaultColors[td.dataset.subject]}, transparent 50%))`;
+				td.style.color = "var(--mantle)";
+				// Create glow effect
+				td.style.boxShadow = `0 0 10px ${defaultColors[td.dataset.subject]}`;
+				td.dataset.periodOver = false;
 			}
 		}
 	}
@@ -629,7 +637,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
 	/* ------------------------------ append tables ----------------------------- */
 	// Append default table
-	document.querySelector("#plain").append(createDefaultTable());
+	document
+		.querySelector("#defaultschedulecontainer")
+		.append(createDefaultTable());
 	setInterval(updateDayGradients, 1000);
 	setInterval(updatePeriodGradients, 1000);
 
@@ -647,40 +657,68 @@ document.addEventListener("DOMContentLoaded", function () {
 		parentDiv.id = "dayInfo";
 		const dayName = Object.keys(days)[Object.values(days).indexOf(dayInfo)];
 		parentDiv.innerHTML = `
-		<div style="flex-grow: 1; display: flex; align-items: center;">
+		<div style="display: flex; align-items: center; justify-content: center;">
 			<h1>${dayName.charAt(0).toUpperCase() + dayName.slice(1)}</h1>
 		</div>`;
 		const doublesDiv = document.createElement("div");
 		doublesDiv.id = "doublesContainer";
 		doublesDiv.style.display = "grid";
 		doublesDiv.style.gridTemplateColumns = "1fr 1fr";
-		doublesDiv.style.gridTemplateRows = "1fr 1fr";
-		doublesDiv.innerHTML = `<h1 style="grid-column: 1/3;">Double Periods</h1>`;
+		doublesDiv.style.gridTemplateRows = ".5fr 1fr";
+		doublesDiv.style.gap = "10px 10px";
+		doublesDiv.style.alignContent = "center";
+		doublesDiv.innerHTML = `<h2 style="grid-column: 1/3;">Double Periods</h2>`;
 		for (const item of dayInfo.doubles) {
 			const itemDiv = document.createElement("div");
+			itemDiv.classList.add("doubleItem");
 			itemDiv.innerHTML = `
 			<h2>${item.subject}</h2>
 			<h3>Periods: ${item.periods.join(", ")}</h3>
 			`;
 			if (dayInfo.doubles.length === 1) itemDiv.style.gridColumn = "1/3";
 			doublesDiv.append(itemDiv);
+			itemDiv.addEventListener("click", () => {
+				// Highlight affected periods
+				for (const period of item.periods) {
+					const td = document.querySelector(
+						`#defaultschedule td[data-period="${dayName}-${period}"]`
+					);
+					if (td.classList.contains("highlighted")) {
+						// Remove highlight
+						itemDiv.style.filter = "";
+						itemDiv.classList.remove("highlighted");
+
+						td.style.filter = "";
+						td.classList.remove("highlighted");
+					} else {
+						// Apply glow effect
+						itemDiv.style.filter = "drop-shadow(0 0 10px var(--teal))";
+						itemDiv.classList.add("highlighted");
+
+						td.style.filter = "drop-shadow(0 0 10px var(--teal))";
+						td.classList.add("highlighted");
+					}
+				}
+			});
 		}
 
 		parentDiv.append(doublesDiv);
 
 		const noteContainer = document.createElement("div");
-		noteContainer.innerHTML = `<h1>Notes</h1>`;
+		noteContainer.innerHTML = `<h2>Notes</h2>`;
 		const noteElement = document.createElement("p");
+		noteElement.classList.add("note");
 		noteElement.textContent = dayInfo.note;
 		noteContainer.append(noteElement);
 		if (dayInfo.specialNotes.length > 0) {
 			const specialNotesContainer = document.createElement("div");
-
-			specialNotesContainer.innerHTML = `<h1>Special Notes</h1>`;
+			specialNotesContainer.style.display = "grid";
+			specialNotesContainer.style.gap = "10px 10px";
+			specialNotesContainer.innerHTML = `<h2>Special Notes</h2>`;
 
 			for (const note of dayInfo.specialNotes) {
 				const specialNoteElement = document.createElement("p");
-				specialNoteElement.id = "specialNote";
+				specialNoteElement.classList.add("specialNote");
 				specialNoteElement.textContent = note;
 				specialNotesContainer.append(specialNoteElement);
 			}
@@ -691,6 +729,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		parentDiv.append(noteContainer);
 		return parentDiv;
 	}
+
 	const schoolToday = (getNYTime().getDay() + 6) % 7;
 
 	dayInterval = setInterval(() => {
@@ -725,22 +764,23 @@ document.addEventListener("DOMContentLoaded", function () {
 	function createPeriodInfo(periodInfo) {
 		const parentDiv = document.createElement("div");
 		parentDiv.id = "periodInfo";
-		parentDiv.style.display = "flex";
 		const periodName = periodInfo.period;
+		const dayName =
+			Object.keys(schedule)[
+				(() => {
+					for (const [index, item] of Object.values(schedule).entries()) {
+						if (item.includes(periodInfo) === true) {
+							return index;
+						}
+					}
+
+					return null;
+				})()
+			];
 		parentDiv.innerHTML = `
 		<div style="display: flex; align-items: center;">
 			<h1>Period ${periodName} of ${
-				Object.keys(schedule)[
-					(() => {
-						for (const [index, item] of Object.values(schedule).entries()) {
-							if (item.includes(periodInfo) === true) {
-								return index;
-							}
-						}
-
-						return null;
-					})()
-				]
+				dayName.charAt(0).toUpperCase() + dayName.slice(1)
 			}</h1>
 		</div>`;
 		const noteContainer = document.createElement("div");
