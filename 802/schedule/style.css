@@ -37,3 +37,34 @@
 		min-width: 7rem;
 	}
 }
+/* ------------------------------ period colors ----------------------------- */
+#defaultschedule > tbody > tr > td[data-subject="Biology"] {
+	background-color: color-mix(in srgb, var(--green), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="Algebra"] {
+	background-color: color-mix(in srgb, var(--red), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="Non-Core Math"] {
+	background-color: color-mix(in srgb, var(--red), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="ELA"] {
+	background-color: color-mix(in srgb, var(--blue), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="Non-Core ELA"] {
+	background-color: color-mix(in srgb, var(--blue), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="PE"] {
+	background-color: color-mix(in srgb, var(--peach), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="Lunch"] {
+	background-color: color-mix(in srgb, var(--maroon), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="History"] {
+	background-color: color-mix(in srgb, var(--yellow), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="Spanish"] {
+	background-color: color-mix(in srgb, var(--mauve), transparent 50%);
+}
+#defaultschedule > tbody > tr > td[data-subject="Talent"] {
+	background-color: color-mix(in srgb, var(--text), transparent 50%);
+}

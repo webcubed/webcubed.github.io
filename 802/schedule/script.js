@@ -345,6 +345,8 @@ const days = {
 		note: "We have a consecutive double Math period today after lunch. Those with Fong in MTSS stay in the same room for the two periods. Talent is 7th period, preceded by History and followed by Spanish.",
 	},
 };
+let dayInterval;
+let periodInterval;
 const _options = {
 	left: [
 		{
@@ -689,21 +691,19 @@ document.addEventListener("DOMContentLoaded", function () {
 		parentDiv.append(noteContainer);
 		return parentDiv;
 	}
+	const schoolToday = (getNYTime().getDay() + 6) % 7;
 
+	dayInterval = setInterval(() => {
+		document.querySelector("#dayInfoContainer").innerHTML = "";
+		document
+			.querySelector("#dayInfoContainer")
+			.append(createDayInfo(days[daysOfSchoolWeek[schoolToday]]));
+	}, 1000);
 	// Register day listeners first (draw from thead > tr)
 	for (const th of defaultTable.querySelector("thead > tr").childNodes) {
 		const dayInfo = days[th.dataset.day];
-		const schoolToday = (getNYTime().getDay() + 6) % 7;
-
-		const interval = setInterval(() => {
-			document.querySelector("#dayInfoContainer").innerHTML = "";
-			document
-				.querySelector("#dayInfoContainer")
-				.append(createDayInfo(days[daysOfSchoolWeek[schoolToday]]));
-		}, 1000);
-
 		th.addEventListener("click", () => {
-			clearInterval(interval);
+			clearInterval(dayInterval);
 			document.querySelector("#dayInfoContainer").innerHTML = "";
 			document
 				.querySelector("#dayInfoContainer")
@@ -751,11 +751,30 @@ document.addEventListener("DOMContentLoaded", function () {
 		<h3>Teacher: ${periodInfo.teacher}</h3>
 		<h3>Room: ${periodInfo.room}</h3>
 		<h3>Time range (24 hr): ${periodInfo.timeRange}</h3>
+		<h3>Period duration: ${(function () {
+			const [start, end] = periodInfo.timeRange.split("-");
+			const startTime = start.split(":");
+			const endTime = end.split(":");
+			const startMinutes =
+				Number.parseInt(startTime[0]) * 60 + Number.parseInt(startTime[1]);
+			const endMinutes =
+				Number.parseInt(endTime[0]) * 60 + Number.parseInt(endTime[1]);
+			return endMinutes - startMinutes;
+		})()}</h3>
 		`;
 		noteContainer.append(noteElement);
 		parentDiv.append(noteContainer);
 		return parentDiv;
 	}
+
+	periodInterval = setInterval(() => {
+		if (getPeriod()) {
+			infoContainer.querySelector("#periodInfoContainer").innerHTML = "";
+			infoContainer
+				.querySelector("#periodInfoContainer")
+				.append(createPeriodInfo(getPeriod()));
+		}
+	}, 1000);
 
 	for (const tr of defaultTable.querySelectorAll("tbody > tr")) {
 		for (const td of tr.childNodes) {
@@ -764,17 +783,8 @@ document.addEventListener("DOMContentLoaded", function () {
 					td.dataset.period.split("-")[1] - 1
 				];
 			// If possible, open the period info for the current period
-			const interval = setInterval(() => {
-				if (getPeriod()) {
-					infoContainer.querySelector("#periodInfoContainer").innerHTML = "";
-					infoContainer
-						.querySelector("#periodInfoContainer")
-						.append(createPeriodInfo(getPeriod()));
-				}
-			}, 1000);
-
 			td.addEventListener("click", () => {
-				clearInterval(interval);
+				clearInterval(periodInterval);
 				document.querySelector("#periodInfoContainer").innerHTML = "";
 				document
 					.querySelector("#periodInfoContainer")
