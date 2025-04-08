@@ -695,8 +695,8 @@ document.addEventListener("DOMContentLoaded", function () {
 		const dayInfo = days[th.dataset.day];
 
 		const interval = setInterval(() => {
-			defaultTable.querySelector("#dayInfoContainer").innerHTML = "";
-			defaultTable
+			document.querySelector("#dayInfoContainer").innerHTML = "";
+			document
 				.querySelector("#dayInfoContainer")
 				.append(createDayInfo(dayInfo));
 		});
@@ -773,8 +773,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
 			td.addEventListener("click", () => {
 				clearInterval(interval);
-				infoContainer.querySelector("#periodInfoContainer").innerHTML = "";
-				infoContainer
+				document.querySelector("#periodInfoContainer").innerHTML = "";
+				document
 					.querySelector("#periodInfoContainer")
 					.append(createPeriodInfo(periodInfo));
 			});
