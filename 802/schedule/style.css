@@ -68,6 +68,8 @@
 #defaultschedule > tbody > tr > td[data-subject="Talent"] {
 	background-color: color-mix(in srgb, var(--text), transparent 50%);
 }
-#defaultschedule > tbody >tr > td[data-subject="Talent"], #defaultschedule > tbody >tr > td[data-subject="Biology"] {
+#defaultschedule > tbody > tr > td[data-subject="Talent"],
+#defaultschedule > tbody > tr > td[data-subject="Biology"],
+#defaultschedule > tbody > tr > td[data-subject="History"] {
 	color: var(--mantle);
 }
