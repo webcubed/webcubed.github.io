@@ -377,7 +377,7 @@ const defaultColors = {
 	Spanish: "var(--mauve)",
 	Talent: "var(--text)",
 	PE: "var(--peach)",
-	Lunch: "var(--maroon)",
+	Lunch: "var(--rosewater)",
 };
 
 /*
