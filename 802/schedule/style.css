@@ -6,11 +6,16 @@
 	cursor: pointer;
 	background-color: var(--crust);
 }
+#defaultschedulecontainer {
+	display: flex;
+	flex-direction: row;
+}
 /* ------------------------------ options table ----------------------------- */
 /* ------------------------------ info elements ----------------------------- */
 #infocontainer {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
+	flex-wrap: wrap;
 	gap: 10px;
 	max-width: 75%;
 	margin: 10px auto auto auto;
@@ -20,16 +25,44 @@
 #periodInfoContainer {
 	background-color: var(--base);
 	border-radius: 0.5rem;
+	max-width: 37.5%;
 }
-
-#dayInfo, #periodInfo {
-	display: flex;
-	justify-content: start;
+#periodInfoContainer {
+	display: grid;
+	justify-content: center;
+	justify-items: center;
 	gap: 5px;
-	padding: 0px 10px 0px 10px;
+	padding: 10px;
+	height: auto;
+	width: 18.75%;
+}
+#dayInfo,
+#periodInfo {
+	display: grid;
+	justify-content: start;
+	justify-items: center;
+	gap: 5px;
+	padding: 10px;
 }
 #dayInfo > div:has(h1) {
 	min-width: 14rem;
+}
+
+.note,
+.specialNote,
+.doubleItem {
+	background-color: var(--surface0);
+	margin: auto;
+	padding: 5px;
+	border-radius: 0.5rem;
+}
+.doubleItem {
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+.doubleItem:hover {
+	background-color: var(--surface1);
+	transition: background-color 0.2s;
 }
 /*make mobile friendly*/
 @media only screen and (max-width: 600px) {
@@ -67,9 +100,4 @@
 }
 #defaultschedule > tbody > tr > td[data-subject="Talent"] {
 	background-color: color-mix(in srgb, var(--text), transparent 50%);
-}
-#defaultschedule > tbody > tr > td[data-subject="Talent"],
-#defaultschedule > tbody > tr > td[data-subject="Biology"],
-#defaultschedule > tbody > tr > td[data-subject="History"] {
-	color: var(--mantle);
 }
