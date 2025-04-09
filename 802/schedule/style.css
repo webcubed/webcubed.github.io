@@ -59,6 +59,7 @@
 .doubleItem {
 	cursor: pointer;
 	transition: background-color 0.2s;
+	user-select: none;
 }
 .doubleItem:hover {
 	background-color: var(--surface1);
