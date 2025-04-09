@@ -57,7 +57,7 @@
 	background-color: color-mix(in srgb, var(--peach), transparent 50%);
 }
 #defaultschedule > tbody > tr > td[data-subject="Lunch"] {
-	background-color: color-mix(in srgb, var(--maroon), transparent 50%);
+	background-color: color-mix(in srgb, var(--rosewater), transparent 50%);
 }
 #defaultschedule > tbody > tr > td[data-subject="History"] {
 	background-color: color-mix(in srgb, var(--yellow), transparent 50%);
