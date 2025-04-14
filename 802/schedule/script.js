@@ -377,7 +377,7 @@ const defaultColors = {
 	Spanish: "var(--mauve)",
 	Talent: "var(--text)",
 	PE: "var(--peach)",
-	Lunch: "var(--maroon)",
+	Lunch: "var(--rosewater)",
 };
 
 /*
@@ -677,7 +677,10 @@ document.addEventListener("DOMContentLoaded", function () {
 			`;
 			if (dayInfo.doubles.length === 1) itemDiv.style.gridColumn = "1/3";
 			doublesDiv.append(itemDiv);
+			itemDiv.addEventListener("mouseover", () => clearInterval(dayInterval));
 			itemDiv.addEventListener("click", () => {
+				// Clear day interval
+				clearInterval(dayInterval);
 				// Highlight affected periods
 				for (const period of item.periods) {
 					const td = document.querySelector(
