@@ -12,8 +12,6 @@ document.addEventListener("DOMContentLoaded", () => {
 					body: email,
 					headers: {
 						"Content-Type": "text/plain",
-						"Access-Control-Allow-Origin": "https://recline-backend.vercel.com",
-						"Access-Credentials-Allow-Credentials": "true",
 					},
 				}
 			).then((response) => response.json());
@@ -29,8 +27,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			body: code,
 			headers: {
 				"Content-Type": "text/plain",
-				"Access-Control-Allow-Origin": "https://recline-backend.vercel.com",
-				"Access-Credentials-Allow-Credentials": "true",
 			},
 		}).then((response) => response.text());
 		if (response === "authorized :>") {
