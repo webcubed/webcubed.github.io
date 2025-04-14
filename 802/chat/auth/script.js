@@ -3,13 +3,15 @@ document.addEventListener("DOMContentLoaded", () => {
 		.querySelector("#submitbutton")
 		.addEventListener("click", async () => {
 			const email = document.querySelector("#emailinput").value;
+			const name = document.querySelector("#nameinput").value;
+			localStorage.setItem("email", email);
 			document.querySelector("#codedisplay").textContent = email;
 			document.querySelector("#checkbutton").disabled = false;
 			const codeRequest = await fetch(
 				`https://recline-backend.vercel.app/genCode`,
 				{
 					method: "POST",
-					body: email,
+					body: { account: email, name },
 					headers: {
 						"Content-Type": "text/plain",
 					},
@@ -24,7 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		const code = localStorage.getItem("code");
 		const response = await fetch(`https://recline-backend.vercel.app/check`, {
 			method: "POST",
-			body: code,
+			body: { account: localStorage.getItem("email"), code },
 			headers: {
 				"Content-Type": "text/plain",
 			},
