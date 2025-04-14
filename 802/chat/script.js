@@ -8,12 +8,12 @@ function sendMessage() {
 	messageElement.className = "message myMessage";
 	messageElement.innerHTML = message;
 	document.querySelector("#messages").append(messageElement);
-	fetch("https://recline-backend.vercel.com/sendMessage", {
+	fetch("https://recline-backend.vercel.app/sendMessage", {
 		method: "POST",
 		body: message,
 		headers: {
 			"Content-Type": "text/plain",
-			"Access-Control-Allow-Origin": "https://recline-backend.vercel.com",
+			"Access-Control-Allow-Origin": "https://recline-backend.vercel.app",
 			"Access-Credentials-Allow-Credentials": "true",
 		},
 	})

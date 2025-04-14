@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			document.querySelector("#codedisplay").textContent = email;
 			document.querySelector("#checkbutton").disabled = false;
 			const codeRequest = await fetch(
-				`https://recline-backend.vercel.com/genCode`,
+				`https://recline-backend.vercel.app/genCode`,
 				{
 					method: "POST",
 					body: email,
@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	document.querySelector("#checkbutton").addEventListener("click", async () => {
 		const code = localStorage.getItem("code");
-		const response = await fetch(`https://recline-backend.vercel.com/check`, {
+		const response = await fetch(`https://recline-backend.vercel.app/check`, {
 			method: "POST",
 			body: code,
 			headers: {
