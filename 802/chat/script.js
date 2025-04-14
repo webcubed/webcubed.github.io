@@ -1,3 +1,7 @@
+if (!localStorage.getItem("code")) {
+	globalThis.location.href = `${globalThis.location.origin}/chat/auth`;
+}
+
 function sendMessage() {
 	const message = document.querySelector("#messageinput").value;
 	const messageElement = document.createElement("div");
