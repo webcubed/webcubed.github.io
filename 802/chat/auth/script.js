@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			const email = document.querySelector("#emailinput").value;
 			const name = document.querySelector("#nameinput").value;
 			localStorage.setItem("email", email);
-			document.querySelector("#codedisplay").textContent = email;
 			document.querySelector("#checkbutton").disabled = false;
 			const codeRequest = await fetch(
 				`https://recline-backend.vercel.app/genCode`,
