@@ -11,8 +11,9 @@ document.addEventListener("DOMContentLoaded", () => {
 				`https://recline-backend.vercel.app/genCode`,
 				{
 					method: "POST",
-					body: { account: email, name },
+					body: JSON.stringify({ account: email, name }),
 					headers: {
+						Accept: "application/json",
 						"Content-Type": "application/json",
 					},
 				}
@@ -26,8 +27,9 @@ document.addEventListener("DOMContentLoaded", () => {
 		const code = localStorage.getItem("code");
 		const response = await fetch(`https://recline-backend.vercel.app/check`, {
 			method: "POST",
-			body: { account: localStorage.getItem("email"), code },
+			body: JSON.stringify({ account: localStorage.getItem("email"), code }),
 			headers: {
+				Accept: "application/json",
 				"Content-Type": "application/json",
 			},
 		}).then((response) => response.text());
