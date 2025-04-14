@@ -28,7 +28,6 @@ document.addEventListener("DOMContentLoaded", () => {
 			method: "POST",
 			body: JSON.stringify({ account: localStorage.getItem("email"), code }),
 			headers: {
-				Accept: "application/json",
 				"Content-Type": "application/json",
 			},
 		}).then((response) => response.text());
