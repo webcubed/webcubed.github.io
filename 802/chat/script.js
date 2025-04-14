@@ -1,5 +1,5 @@
 if (!localStorage.getItem("code")) {
-	globalThis.location.href = `${globalThis.location.origin}/chat/auth`;
+	globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 }
 
 function sendMessage() {
@@ -13,8 +13,6 @@ function sendMessage() {
 		body: message,
 		headers: {
 			"Content-Type": "text/plain",
-			"Access-Control-Allow-Origin": "https://recline-backend.vercel.app",
-			"Access-Credentials-Allow-Credentials": "true",
 		},
 	})
 		.then((response) => response.json())

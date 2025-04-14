@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
 			},
 		}).then((response) => response.text());
 		if (response === "authorized :>") {
-			globalThis.location.href = `${globalThis.location.origin}/chat`;
+			globalThis.location.href = `${globalThis.location.origin}/802/chat`;
 		}
 	});
 });
