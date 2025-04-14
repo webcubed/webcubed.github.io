@@ -10,6 +10,11 @@ document.addEventListener("DOMContentLoaded", () => {
 				{
 					method: "POST",
 					body: email,
+					headers: {
+						"Content-Type": "text/plain",
+						"Access-Control-Allow-Origin": "https://recline-backend.vercel.com",
+						"Access-Credentials-Allow-Credentials": "true",
+					},
 				}
 			).then((response) => response.json());
 			const code = codeRequest.code;
@@ -22,6 +27,11 @@ document.addEventListener("DOMContentLoaded", () => {
 		const response = await fetch(`https://recline-backend.vercel.com/check`, {
 			method: "POST",
 			body: code,
+			headers: {
+				"Content-Type": "text/plain",
+				"Access-Control-Allow-Origin": "https://recline-backend.vercel.com",
+				"Access-Credentials-Allow-Credentials": "true",
+			},
 		}).then((response) => response.text());
 		if (response === "authorized :>") {
 			globalThis.location.href = `${globalThis.location.origin}/chat`;

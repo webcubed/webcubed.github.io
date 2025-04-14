@@ -11,6 +11,11 @@ function sendMessage() {
 	fetch("https://recline-backend.vercel.com/sendMessage", {
 		method: "POST",
 		body: message,
+		headers: {
+			"Content-Type": "text/plain",
+			"Access-Control-Allow-Origin": "https://recline-backend.vercel.com",
+			"Access-Credentials-Allow-Credentials": "true",
+		},
 	})
 		.then((response) => response.json())
 		.then((data) => {
