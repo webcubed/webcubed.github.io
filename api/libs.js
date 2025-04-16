@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 async function promptForUpdate() {
 	const dialog = document.createElement("dialog");
-	dialog.innerHTML = `
+	dialog.innerHTML = /* html */ `
 	<p>A new version of this site is available. Reload to update?</p>
 	<button id="confirm">Confirm</button>
 	<button id="cancel">Cancel</button>
@@ -76,7 +76,7 @@ Toast = class {
 		// Make newline if content includes \n and remove \n from string
 		this.content = this.content.split("\n").join("<br>").replaceAll("\\n", "");
 		if (["warning", "error", "success", "info"].includes(type)) {
-			this.toast.innerHTML = `
+			this.toast.innerHTML = /* html */ `
             <div class="ttitle">
                 <div class="ttitleseperator">
                 <div class="wc">
@@ -105,7 +105,7 @@ Toast = class {
 			this.content = this.content.replace(countdownRegex, (match, p1) => {
 				return `Automove triggering in <br><span class="tcas" id="toastcountdown-${this.id}">${p1}</span> ms`;
 			});
-			this.toast.innerHTML = `
+			this.toast.innerHTML = /* html */ `
             <div class="ttitle">
                 <div class="ttitleseperator">
                 <div class="wc">

@@ -667,7 +667,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		doublesDiv.style.gridTemplateRows = ".5fr 1fr";
 		doublesDiv.style.gap = "10px 10px";
 		doublesDiv.style.alignContent = "center";
-		doublesDiv.innerHTML = `<h2 style="grid-column: 1/3;">Double Periods</h2>`;
+		doublesDiv.innerHTML = /* html */ `<h2 style="grid-column: 1/3;">Double Periods</h2>`;
 		for (const item of dayInfo.doubles) {
 			const itemDiv = document.createElement("div");
 			itemDiv.classList.add("doubleItem");
@@ -708,7 +708,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		parentDiv.append(doublesDiv);
 
 		const noteContainer = document.createElement("div");
-		noteContainer.innerHTML = `<h2>Notes</h2>`;
+		noteContainer.innerHTML = /* html */ `<h2>Notes</h2>`;
 		const noteElement = document.createElement("p");
 		noteElement.classList.add("note");
 		noteElement.textContent = dayInfo.note;
@@ -717,7 +717,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			const specialNotesContainer = document.createElement("div");
 			specialNotesContainer.style.display = "grid";
 			specialNotesContainer.style.gap = "10px 10px";
-			specialNotesContainer.innerHTML = `<h2>Special Notes</h2>`;
+			specialNotesContainer.innerHTML = /* html */ `<h2>Special Notes</h2>`;
 
 			for (const note of dayInfo.specialNotes) {
 				const specialNoteElement = document.createElement("p");
@@ -787,7 +787,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			}</h1>
 		</div>`;
 		const noteContainer = document.createElement("div");
-		noteContainer.innerHTML = `<h1>Notes</h1>`;
+		noteContainer.innerHTML = /* html */ `<h1>Notes</h1>`;
 		const noteElement = document.createElement("p");
 		noteElement.innerHTML = `
 		<h2>${periodInfo.subject}</h2>
