@@ -1,3 +1,5 @@
+const apiBaseUrl = "https://recline-backend.vercel.app";
+
 document.addEventListener("DOMContentLoaded", () => {
 	document
 		.querySelector("#submitbutton")
@@ -6,17 +8,14 @@ document.addEventListener("DOMContentLoaded", () => {
 			const name = document.querySelector("#nameinput").value;
 			localStorage.setItem("email", email);
 			document.querySelector("#checkbutton").disabled = false;
-			const codeRequest = await fetch(
-				`https://recline-backend.vercel.app/genCode`,
-				{
-					method: "POST",
-					body: JSON.stringify({ account: email, name }),
-					headers: {
-						Accept: "application/json",
-						"Content-Type": "application/json",
-					},
-				}
-			).then((response) => response.json());
+			const codeRequest = await fetch(`${apiBaseUrl}/genCode`, {
+				method: "POST",
+				body: JSON.stringify({ account: email, name }),
+				headers: {
+					Accept: "application/json",
+					"Content-Type": "application/json",
+				},
+			}).then((response) => response.json());
 			const code = codeRequest.code;
 			document.querySelector("#codedisplay").textContent = code;
 			// Store code into localstorage
@@ -24,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		});
 	document.querySelector("#checkbutton").addEventListener("click", async () => {
 		const code = localStorage.getItem("code");
-		const response = await fetch(`https://recline-backend.vercel.app/check`, {
+		const response = await fetch(`${apiBaseUrl}/check`, {
 			method: "POST",
 			body: JSON.stringify({ account: localStorage.getItem("email"), code }),
 			headers: {
