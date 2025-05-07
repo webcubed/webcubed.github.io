@@ -15,11 +15,12 @@
     - If we were to use this method: things to consider:
       - Have the table go into more specific tables?
       - The more complex pages that *aren't* markdown will need to have styles and scripts inline or somet
-
+      - Use fetch to get the pages
   - Or they can be their own pages/sites
     - Benefits:
       - Can be easily shared, specific url for the lowest common denominator
       - Can be more interactive i guess?
       - Less of a mess in the main page
+      - I guess easier? for ex: index cards will be in json, then parsed & rendered.
     - If we were to use this method: things to consider:
       - Have the go -> button for those that have independent pages
