@@ -5,8 +5,8 @@ const urlsToCache = [
 	"style.css",
 	"../style.css",
 	"events.js",
-	"../api/libs.js",
-	"../api/libs.css",
+	"../deps/libs.js",
+	"../deps/libs.css",
 ];
 
 // Install the service worker and open the cache and add files mentioned in array to cache

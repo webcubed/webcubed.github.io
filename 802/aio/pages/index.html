@@ -7,18 +7,27 @@
 			href="https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&display=swap"
 			rel="stylesheet"
 		/>
+		<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 		<script src="script.js"></script>
-		<link rel="stylesheet" href="../style.css" />
+		<link rel="stylesheet" href="style.css" />
 		<!--api-->
-		<script src="../../deps/libs.js"></script>
-		<link rel="stylesheet" href="../../deps/libs.css" />
+		<script src="../../../deps/libs.js"></script>
+		<link rel="stylesheet" href="../../../deps/libs.css" />
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width" />
 		<!--offline support!!-->
-		<script type="module" src="../../deps/workbox.js"></script>
+		<script type="module" src="../../../deps/workbox.js"></script>
 	</head>
 	<body>
-		<input id="input" />
-		<canvas id="result"></canvas>
+		<table id="selectiontable">
+			<thead>
+				<tr>
+					<th>subject</th>
+					<th>name</th>
+					<th>description</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
 	</body>
 </html>
