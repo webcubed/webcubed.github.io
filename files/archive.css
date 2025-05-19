@@ -57,6 +57,7 @@
 
 [style="-webkit-line-clamp: 6;"] {
 	-webkit-line-clamp: 10000000 !important;
+	line-clamp: 10000000 !important;
 }
 
 /*discord loading page*/
