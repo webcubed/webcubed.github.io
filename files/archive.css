@@ -1378,6 +1378,7 @@ form.form__468a6 {
 
 [class*="descriptionClamp"] {
 	-webkit-line-clamp: 9999999;
+	line-clamp: 9999999;
 }
 
 [class*="viewFullBio"] {

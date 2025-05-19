@@ -39,3 +39,12 @@
 [class^="layers_"] > [class^="layer_"][class*="animating_"] {
 	will-change: unset !important;
 }
+/* --------------------- loading screen transparent/blur -------------------- */
+.container_a2f514.fixClipping_efbae7 {
+	background: 0 0;
+	backdrop-filter: blur(5px);
+}
+/* ------------------------------- fix mosiac ------------------------------- */
+[class^="imageWrapper_"] img[class^="lazyImg"] {
+	object-fit: contain !important;
+}
