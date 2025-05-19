@@ -36,9 +36,10 @@
 }
 
 /*fixes closing delay*/
-[class^="layers_"] > [class^="layer_"][class*="animating_"] {
+/*[class^="layers_"] > [class^="layer_"][class*="animating_"] {
 	will-change: unset !important;
 }
+*/
 /* --------------------- loading screen transparent/blur -------------------- */
 .container_a2f514.fixClipping_efbae7 {
 	background: 0 0;
