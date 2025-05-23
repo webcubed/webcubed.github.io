@@ -46,25 +46,27 @@ function sendMessage() {
 		});
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-	if (localStorage.getItem("code") && localStorage.getItem("email")) {
-		fetch(`${apiBaseUrl}/checkSession`, {
-			method: "POST",
-			body: JSON.stringify({
-				account: localStorage.getItem("email"),
-				code: localStorage.getItem("code"),
-			}),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then((response) => response.text())
-			.then((data) => {
-				if (data !== "authorized :>") {
-					globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
-				}
+document.addEventListener("DOMContentLoaded", async () => {
+	try {
+		if (localStorage.getItem("code") && localStorage.getItem("email")) {
+			const response = await fetch(`${apiBaseUrl}/checkSession`, {
+				method: "POST",
+				body: JSON.stringify({
+					account: localStorage.getItem("email"),
+					code: localStorage.getItem("code"),
+				}),
+				headers: {
+					"Content-Type": "application/json",
+				},
 			});
-	} else {
+			const data = await response.text();
+			if (data !== "authorized :>") {
+				globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
+			}
+		} else {
+			globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
+		}
+	} catch {
 		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 	}
 
