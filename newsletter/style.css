@@ -1,9 +1,45 @@
 body,html {
 	font-family: "lexend", sans-serif;
 }
+hr {
+	width: 50%;
+	margin: 1px auto 1px auto !important;
+}
+span.title {
+	margin: 5px auto 5px auto;
+}
 .page {
 	height: 100%;
-	aspect-ratio: 16/9;
+	border-bottom: 1px solid var(--text);
+	margin: auto;
+	aspect-ratio: 9/16;
 	display: flex;
 	flex-direction: column;
+	align-items: start;
+}
+#content {
+	width: 100%;
+	height: calc(100% - 34px);
+	position: relative;
+	top: 34px;
+}
+#calendar {
+
+}
+.box {
+	background-color: var(--mantle);
+	border-radius: .5rem;
+	padding: 5px;
+	width: calc(50% - 10px);
+	aspect-ratio: 1;
+}
+td {
+	width: 14.28%;
+	height: 14.28%;
+	text-align: center;
+}
+td.day::before {
+	content: attr(data-day);
+	font-size: 0.8em;
+	color: var(--subtext0);
 }
