@@ -1,28 +1,4 @@
 const apiBaseUrl = "https://recline-backend.vercel.app";
-function checkSession() {
-	if (localStorage.getItem("code") && localStorage.getItem("email")) {
-		fetch(`${apiBaseUrl}/checkSession`, {
-			method: "POST",
-			body: JSON.stringify({
-				account: localStorage.getItem("email"),
-				code: localStorage.getItem("code"),
-			}),
-			headers: {
-				"Content-Type": "application/json",
-			},
-		})
-			.then((response) => response.text())
-			.then((data) => {
-				if (data !== "authorized :>") {
-					globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
-				}
-			});
-	} else {
-		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
-	}
-}
-
-checkSession();
 function fetchmessages() {
 	fetch(`${apiBaseUrl}/fetchMessages`, {
 		method: "POST",
@@ -70,7 +46,28 @@ function sendMessage() {
 		});
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", async () => {
+	if (localStorage.getItem("code") && localStorage.getItem("email")) {
+		fetch(`${apiBaseUrl}/checkSession`, {
+			method: "POST",
+			body: JSON.stringify({
+				account: localStorage.getItem("email"),
+				code: localStorage.getItem("code"),
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		})
+			.then((response) => response.text())
+			.then((data) => {
+				if (data !== "authorized :>") {
+					globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
+				}
+			});
+	} else {
+		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
+	}
+
 	fetchmessages();
 	document.querySelector("#messageinput").focus();
 	document.querySelector("#submit").addEventListener("click", sendMessage);
