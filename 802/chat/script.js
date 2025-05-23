@@ -1,7 +1,7 @@
 const apiBaseUrl = "https://recline-backend.vercel.app";
-async function checkSession() {
+function checkSession() {
 	if (localStorage.getItem("code") && localStorage.getItem("email")) {
-		const response = await fetch(`${apiBaseUrl}/checkSession`, {
+		fetch(`${apiBaseUrl}/checkSession`, {
 			method: "POST",
 			body: JSON.stringify({
 				account: localStorage.getItem("email"),
@@ -10,17 +10,19 @@ async function checkSession() {
 			headers: {
 				"Content-Type": "application/json",
 			},
-		});
-		const data = await response.text();
-		if (data !== "authorized :>") {
-			globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
-		}
+		})
+			.then((response) => response.text())
+			.then((data) => {
+				if (data !== "authorized :>") {
+					globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
+				}
+			});
 	} else {
 		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 	}
 }
 
-await checkSession();
+checkSession();
 function fetchmessages() {
 	fetch(`${apiBaseUrl}/fetchMessages`, {
 		method: "POST",
