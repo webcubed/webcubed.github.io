@@ -21,6 +21,31 @@ async function checkSession() {
 }
 
 await checkSession();
+function fetchmessages() {
+	fetch(`${apiBaseUrl}/fetchMessages`, {
+		method: "POST",
+		body: JSON.stringify({
+			account: localStorage.getItem("email"),
+			code: localStorage.getItem("code"),
+		}),
+		headers: {
+			"Content-Type": "application/json",
+		},
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			const messages = data.messages;
+			const messagesContainer = document.querySelector("#messages");
+			messagesContainer.innerHTML = "";
+			for (const message of messages) {
+				const messageElement = document.createElement("div");
+				messageElement.className = "message";
+				messageElement.innerHTML = message;
+				messagesContainer.append(messageElement);
+			}
+		});
+}
+
 function sendMessage() {
 	const message = document.querySelector("#messageinput").value;
 	const messageElement = document.createElement("div");
@@ -42,3 +67,14 @@ function sendMessage() {
 			document.querySelector("#messages").append(responseElement);
 		});
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+	fetchmessages();
+	document.querySelector("#messageinput").focus();
+	document.querySelector("#submit").addEventListener("click", sendMessage);
+});
+document.querySelector("#messageinput").addEventListener("keydown", (event) => {
+	if (event.key === "Enter") {
+		sendMessage();
+	}
+});
