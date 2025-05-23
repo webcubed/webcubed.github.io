@@ -46,7 +46,7 @@ function sendMessage() {
 		});
 }
 
-document.addEventListener("load", () => {
+document.addEventListener("DOMContentLoaded", () => {
 	if (localStorage.getItem("code") && localStorage.getItem("email")) {
 		fetch(`${apiBaseUrl}/checkSession`, {
 			method: "POST",
