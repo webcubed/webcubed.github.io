@@ -34,12 +34,16 @@ span.title {
 	aspect-ratio: 1;
 }
 td {
-	width: 14.28%;
-	height: 14.28%;
+	height: 4rem;
+	min-width: 8rem;
+	position: relative;
 	text-align: center;
 }
 td.day::before {
 	content: attr(data-day);
 	font-size: 0.8em;
 	color: var(--subtext0);
+	position: absolute;
+	top: 2px;
+	left: 2px;
 }
