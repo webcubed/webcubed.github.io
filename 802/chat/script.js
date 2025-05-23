@@ -71,9 +71,11 @@ document.addEventListener("load", () => {
 	fetchmessages();
 	document.querySelector("#messageinput").focus();
 	document.querySelector("#submit").addEventListener("click", sendMessage);
-});
-document.querySelector("#messageinput").addEventListener("keydown", (event) => {
-	if (event.key === "Enter") {
-		sendMessage();
-	}
+	document
+		.querySelector("#messageinput")
+		.addEventListener("keydown", (event) => {
+			if (event.key === "Enter") {
+				sendMessage();
+			}
+		});
 });
