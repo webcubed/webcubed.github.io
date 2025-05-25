@@ -1,4 +1,4 @@
-const apiBaseUrl = "https://recline-backend.vercel.app";
+const apiBaseUrl = "https://recline-backend.onrender.com";
 function fetchmessages() {
 	fetch(`${apiBaseUrl}/fetchMessages`, {
 		method: "POST",
