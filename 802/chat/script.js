@@ -21,11 +21,11 @@ function fetchmessages(LMID = null) {
 			const messagesContainer = document.querySelector("#messages");
 			messagesContainer.innerHTML = "";
 			for (const message of messages) {
-				const content = message[1].cleanContent;
+				const content = message.cleanContent;
 				const messageElement = document.createElement("div");
 				messageElement.className = "message";
 				messageElement.innerHTML = `
-				<b>${message[0]}</b><p>${content}</p>
+				<b>${message.author}: </b><p>${content}</p>
 				`;
 				messagesContainer.append(messageElement);
 			}
