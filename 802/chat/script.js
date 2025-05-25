@@ -1,10 +1,13 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
-function fetchmessages() {
+let continueId;
+function fetchmessages(LMID = null) {
+	// LMID = last message id = continueId
 	fetch(`${apiBaseUrl}/fetchMessages`, {
 		method: "POST",
 		body: JSON.stringify({
 			account: localStorage.getItem("email"),
 			code: localStorage.getItem("code"),
+			continueId: LMID ?? null,
 		}),
 		headers: {
 			"Content-Type": "application/json",
@@ -12,19 +15,18 @@ function fetchmessages() {
 	})
 		.then((response) => response.json())
 		.then((data) => {
-			// We will recieve a json containing our continueId and messages as an array.
-			// In the messages array, each item will be another array.
-			// In this 2nd array, the first item will be the message Id,
-			// And the second item will be the message information
-			// Including the timestamp, which we will use to sort these messages in order and
-			// Potentially append a date to the message
+			// Scratch that let's do parsing serverside
+			continueId = data.continueId;
 			const messages = data.messages;
 			const messagesContainer = document.querySelector("#messages");
 			messagesContainer.innerHTML = "";
 			for (const message of messages) {
+				const content = message[1].cleanContent;
 				const messageElement = document.createElement("div");
 				messageElement.className = "message";
-				messageElement.innerHTML = message;
+				messageElement.innerHTML = `
+				<b>${message[0]}</b><p>${content}</p>
+				`;
 				messagesContainer.append(messageElement);
 			}
 		});
