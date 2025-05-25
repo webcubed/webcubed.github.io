@@ -12,6 +12,12 @@ function fetchmessages() {
 	})
 		.then((response) => response.json())
 		.then((data) => {
+			// We will recieve a json containing our continueId and messages as an array.
+			// In the messages array, each item will be another array.
+			// In this 2nd array, the first item will be the message Id,
+			// And the second item will be the message information
+			// Including the timestamp, which we will use to sort these messages in order and
+			// Potentially append a date to the message
 			const messages = data.messages;
 			const messagesContainer = document.querySelector("#messages");
 			messagesContainer.innerHTML = "";
