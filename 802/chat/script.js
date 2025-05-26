@@ -46,7 +46,7 @@ function sendMessage() {
 			message,
 		},
 		headers: {
-			"Content-Type": "text/plain",
+			"Content-Type": "application/json",
 		},
 	})
 		.then((response) => response.json())
