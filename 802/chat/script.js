@@ -59,6 +59,26 @@ function sendMessage() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+	const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}/ws`);
+	socket.addEventListener("open", () => {
+		socket.send(
+			JSON.stringify({
+				account: localStorage.getItem("email"),
+				code: localStorage.getItem("code"),
+			})
+		);
+	});
+	socket.addEventListener("message", (event) => {
+		const message = JSON.parse(event.data);
+		// Data will most likely contain a message object
+		const content = message.cleanContent;
+		const messageElement = document.createElement("div");
+		messageElement.className = "message";
+		messageElement.innerHTML = `
+	<b>${message.author}: </b><p>${content}</p>
+	`;
+		messagesContainer.append(messageElement);
+	});
 	try {
 		if (localStorage.getItem("code") && localStorage.getItem("email")) {
 			const response = await fetch(`${apiBaseUrl}/checkSession`, {
