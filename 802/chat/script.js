@@ -40,11 +40,11 @@ function sendMessage() {
 	document.querySelector("#messages").append(messageElement);
 	fetch(`${apiBaseUrl}/sendMessage`, {
 		method: "POST",
-		body: {
+		body: JSON.stringify({
 			account: localStorage.getItem("email"),
 			code: localStorage.getItem("code"),
 			message,
-		},
+		}),
 		headers: {
 			"Content-Type": "application/json",
 		},
