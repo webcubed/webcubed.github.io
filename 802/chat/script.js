@@ -59,7 +59,7 @@ function sendMessage() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
+	const socket = new WebSocket(`${apiBaseUrl.replace("https", "ws")}`);
 	socket.addEventListener("open", () => {
 		socket.send(
 			JSON.stringify({
