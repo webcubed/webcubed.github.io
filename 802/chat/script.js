@@ -30,7 +30,8 @@ function fetchmessages(LMID = null) {
 			continueId = data.continueId;
 			const messages = data.messages;
 			const messagesContainer = document.querySelector("#messages");
-			messagesContainer.innerHTML = "";
+			// Reverse the array if LMID is specified
+			if (LMID) messages.reverse();
 			for (const message of messages) {
 				const content = message.cleanContent;
 				const messageElement = document.createElement("div");
@@ -70,7 +71,12 @@ function fetchmessages(LMID = null) {
 		}
 	</span>
 				`;
-				messagesContainer.append(messageElement);
+				if (LMID === null) {
+					messagesContainer.append(messageElement);
+				} else {
+					messagesContainer.prepend(messageElement);
+				}
+
 				scrollToBottom();
 			}
 		});
