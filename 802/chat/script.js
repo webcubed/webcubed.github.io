@@ -1,5 +1,9 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
+const mappings = (async () => {
+	const response = await fetch("https://recline-backend.vercel.app/mappings");
+	return response.json();
+})();
 function fetchmessages(LMID = null) {
 	// LMID = last message id = continueId
 	fetch(`${apiBaseUrl}/fetchMessages`, {
@@ -63,9 +67,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 		// Data will most likely contain a message object
 		const content = message.cleanContent;
 		const messageElement = document.createElement("div");
-		messageElement.className = "message";
+		mappings.then((mappings) => {
+			const authorMapping = mappings.find(
+				(mapping) => mapping.account === localStorage.getItem("email")
+			);
+			messageElement.className =
+				authorMapping.name === message.author
+					? "message self"
+					: "message other";
+		});
 		messageElement.innerHTML = `
-	<b>${message.author}: </b><p>${content}</p>
+	<b class="messageAuthor">${message.author}: </b><p class="messageContent">${content}</p>
 	`;
 		messagesContainer.append(messageElement);
 	});

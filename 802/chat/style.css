@@ -1,0 +1,34 @@
+#inputcontainer {
+	position: fixed;
+	bottom: 5px;
+	left: 50%;
+	transform: translateX(-50%);
+}
+#messages {
+	background: var(--mantle);
+	border-radius: 0.5rem;
+	padding: 10px;
+	width: 90%;
+	height: 60%;
+	overflow: auto;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+	gap: 5px;
+	justify-content: flex-end;
+}
+.message {
+	height:auto;
+	max-width: 90%;
+	padding: 10px;
+	color: var(--text);
+	background-color: var(--base);
+}
+.message.self {
+	background-color: var(--crust);
+	border-radius: 0.5rem 0.5rem 0.5rem 0;
+}
+.message.other {
+	background-color: var(--base);
+	border-radius: 0.5rem 0.5rem 0 0.5rem;
+}
