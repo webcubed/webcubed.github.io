@@ -73,11 +73,10 @@ function fetchmessages(LMID = null) {
 				`;
 				if (LMID === null) {
 					messagesContainer.append(messageElement);
+					scrollToBottom();
 				} else {
 					messagesContainer.prepend(messageElement);
 				}
-
-				scrollToBottom();
 			}
 		});
 }
