@@ -39,6 +39,8 @@ body, html {
 .message.self {
 	background-color: var(--crust);
 	border-radius: 0.5rem 0.5rem 0 0.5rem;
+	position: relative;
+	right: 0;
 }
 .message.other {
 	background-color: var(--base);
