@@ -33,7 +33,7 @@ function fetchmessages(LMID = null) {
 			// Reverse the array if LMID is specified
 			if (LMID) messages.reverse();
 			for (const message of messages) {
-				const content = message.cleanContent;
+				const content = DOMPurify.sanitize(message.cleanContent);
 				const messageElement = document.createElement("div");
 				mappings.then((mappings) => {
 					const authorMapping = mappings.find(
@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	socket.addEventListener("message", (event) => {
 		const message = JSON.parse(event.data);
 		// Data will most likely contain a message object
-		const content = message.cleanContent;
+		const content = DOMPurify.sanitize(message.cleanContent);
 		const messageElement = document.createElement("div");
 		mappings.then((mappings) => {
 			const authorMapping = mappings.find(
