@@ -1,3 +1,6 @@
+html {
+	overflow: hidden;
+}
 #inputcontainer {
 	position: fixed;
 	display: flex;
@@ -31,15 +34,12 @@
 	height: 60%;
 	width: 90%;
 	margin: auto;
-	display: grid;
-	grid-template-columns: 1fr 1fr;
-	gap: 5px;
-	justify-content: space-between;
 }
 .message {
 	height: auto;
-	max-width: 90%;
+	max-width: 55%;
 	padding: 10px;
+	margin: 5px;
 	color: var(--text);
 	background-color: var(--base);
 }
@@ -52,6 +52,7 @@
 .message.other {
 	background-color: var(--base);
 	border-radius: 0.5rem 0.5rem 0.5rem 0;
+	grid-column: 1 / 2;
 }
 .messageTimestamp {
 	font-size: 0.8rem;
