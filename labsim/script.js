@@ -44,6 +44,5 @@ document.addEventListener("DOMContentLoaded", () => {
 		const mainPlayerCard = mainPlayerAlleles.pop();
 		const randomPlayerCard = randomPlayerAlleles.pop();
 		const combination = [mainPlayerCard, randomPlayerCard];
-		
 	}
 });

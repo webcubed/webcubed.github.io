@@ -40,18 +40,26 @@ function fetchmessages(LMID = null) {
 				<b class="messageAuthor">${message.author}: </b><p class="messageContent">${content}</p>
 	<span class="messageTimestamp">
 		${
-			message.timestamp.slice(0, 10) === new Date().toISOString().slice(0, 10)
-				? new Date(message.timestamp).toLocaleString(undefined, {
-						weekday: "short",
-						hour: "2-digit",
-						minute: "2-digit",
-					})
-				: new Date(message.timestamp).toLocaleString(undefined, {
-						month: "short",
-						day: "numeric",
-						hour: "2-digit",
-						minute: "2-digit",
-					})
+			new Date(Number.parseInt(message.timestamp, 10))
+				.toISOString()
+				.slice(0, 10) === new Date().toISOString().slice(0, 10)
+				? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+						undefined,
+						{
+							weekday: "short",
+							hour: "2-digit",
+							minute: "2-digit",
+						}
+					)
+				: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+						undefined,
+						{
+							month: "short",
+							day: "numeric",
+							hour: "2-digit",
+							minute: "2-digit",
+						}
+					)
 		}
 	</span>
 				`;
@@ -104,18 +112,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 	<b class="messageAuthor">${message.author}: </b><p class="messageContent">${content}</p>
 	<span class="messageTimestamp">
 		${
-			message.timestamp.slice(0, 10) === new Date().toISOString().slice(0, 10)
-				? new Date(message.timestamp).toLocaleString(undefined, {
-						weekday: "short",
-						hour: "2-digit",
-						minute: "2-digit",
-					})
-				: new Date(message.timestamp).toLocaleString(undefined, {
-						month: "short",
-						day: "numeric",
-						hour: "2-digit",
-						minute: "2-digit",
-					})
+			new Date(Number.parseInt(message.timestamp, 10))
+				.toISOString()
+				.slice(0, 10) === new Date().toISOString().slice(0, 10)
+				? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+						undefined,
+						{
+							weekday: "short",
+							hour: "2-digit",
+							minute: "2-digit",
+						}
+					)
+				: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+						undefined,
+						{
+							month: "short",
+							day: "numeric",
+							hour: "2-digit",
+							minute: "2-digit",
+						}
+					)
 		}
 	</span>
 	`;
