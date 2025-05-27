@@ -161,6 +161,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 
 	fetchmessages();
+	// Scroll to bottom of document
+	document.scrollTo({
+		top: document.scrollHeight,
+	});
 	document.querySelector("#messageinput").focus();
 	document.querySelector("#submit").addEventListener("click", sendMessage);
 	document

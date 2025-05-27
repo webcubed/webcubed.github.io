@@ -19,9 +19,6 @@ body, html {
 	border-radius: 0.5rem;
 	padding: 10px;
 	width: 90%;
-	height: 60%;
-	overflow-y: scroll;
-	position: relative;
 	margin: auto;
 	display: flex;
 	flex-direction: column;
