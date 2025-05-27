@@ -29,9 +29,9 @@
 	overflow-y: scroll;
 	overflow-x: hidden;
 	bottom: 100px;
+	top: 0;
 	margin: auto;
-	display: flex;
-	flex-direction: column;
+	display: grid;
 	gap: 5px;
 	justify-content: flex-end;
 }
