@@ -11,16 +11,23 @@
 #messageinput {
 	flex-grow: 1;
 }
+#messageswrapper {
+	position: absolute;
+	left: 0;
+	top: 0;
+	bottom: 0;
+	height: 60%;
+	width: 90%;
+}
 #messages {
 	background: var(--mantle);
 	border-radius: 0.5rem;
 	padding: 10px;
-	width: 90%;
 	position: fixed;
 	left: 50%;
 	transform: translateX(-50%);
-	height: 60%;
-	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
 	bottom: 100px;
 	margin: auto;
 	display: flex;
