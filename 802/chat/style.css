@@ -37,3 +37,8 @@
 	background-color: var(--base);
 	border-radius: 0.5rem 0.5rem 0 0.5rem;
 }
+.messageTimestamp {
+	font-size: 0.8rem;
+	color: var(--subtext0);
+	margin-bottom: 5px;
+}

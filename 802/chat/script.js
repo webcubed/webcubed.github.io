@@ -37,7 +37,23 @@ function fetchmessages(LMID = null) {
 							: "message other";
 				});
 				messageElement.innerHTML = `
-				<b>${message.author}: </b><p>${content}</p>
+				<b class="messageAuthor">${message.author}: </b><p class="messageContent">${content}</p>
+	<span class="messageTimestamp">
+		${
+			message.timestamp.slice(0, 10) === new Date().toISOString().slice(0, 10)
+				? new Date(message.timestamp).toLocaleString(undefined, {
+						weekday: "short",
+						hour: "2-digit",
+						minute: "2-digit",
+					})
+				: new Date(message.timestamp).toLocaleString(undefined, {
+						month: "short",
+						day: "numeric",
+						hour: "2-digit",
+						minute: "2-digit",
+					})
+		}
+	</span>
 				`;
 				messagesContainer.append(messageElement);
 			}
@@ -86,6 +102,22 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 		messageElement.innerHTML = `
 	<b class="messageAuthor">${message.author}: </b><p class="messageContent">${content}</p>
+	<span class="messageTimestamp">
+		${
+			message.timestamp.slice(0, 10) === new Date().toISOString().slice(0, 10)
+				? new Date(message.timestamp).toLocaleString(undefined, {
+						weekday: "short",
+						hour: "2-digit",
+						minute: "2-digit",
+					})
+				: new Date(message.timestamp).toLocaleString(undefined, {
+						month: "short",
+						day: "numeric",
+						hour: "2-digit",
+						minute: "2-digit",
+					})
+		}
+	</span>
 	`;
 		messagesContainer.append(messageElement);
 	});
