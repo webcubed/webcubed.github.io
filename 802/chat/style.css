@@ -19,7 +19,10 @@ body, html {
 	border-radius: 0.5rem;
 	padding: 10px;
 	width: 90%;
-	bottom: 75px;
+	bottom: 100px;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
 	margin: auto;
 	display: flex;
 	flex-direction: column;
