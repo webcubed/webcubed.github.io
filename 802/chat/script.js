@@ -34,10 +34,6 @@ function fetchmessages(LMID = null) {
 
 function sendMessage() {
 	const message = document.querySelector("#messageinput").value;
-	const messageElement = document.createElement("div");
-	messageElement.className = "message myMessage";
-	messageElement.textContent = message;
-	document.querySelector("#messages").append(messageElement);
 	fetch(`${apiBaseUrl}/sendMessage`, {
 		method: "POST",
 		body: JSON.stringify({
@@ -48,14 +44,7 @@ function sendMessage() {
 		headers: {
 			"Content-Type": "application/json",
 		},
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			const responseElement = document.createElement("div");
-			responseElement.className = "message";
-			responseElement.innerHTML = data.response;
-			document.querySelector("#messages").append(responseElement);
-		});
+	});
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
