@@ -64,6 +64,7 @@ function fetchmessages(LMID = null) {
 	</span>
 				`;
 				messagesContainer.append(messageElement);
+				window.scrollTo(0, document.body.scrollHeight);
 			}
 		});
 }
@@ -81,6 +82,8 @@ function sendMessage() {
 			"Content-Type": "application/json",
 		},
 	});
+	// Clear input field
+	document.querySelector("#messageinput").value = "";
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
@@ -136,6 +139,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	</span>
 	`;
 		messagesContainer.append(messageElement);
+		window.scrollTo(0, document.body.scrollHeight);
 	});
 	try {
 		if (localStorage.getItem("code") && localStorage.getItem("email")) {
