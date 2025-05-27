@@ -27,7 +27,15 @@ function fetchmessages(LMID = null) {
 			for (const message of messages) {
 				const content = message.cleanContent;
 				const messageElement = document.createElement("div");
-				messageElement.className = "message";
+				mappings.then((mappings) => {
+					const authorMapping = mappings.find(
+						(mapping) => mapping.account === localStorage.getItem("email")
+					);
+					messageElement.className =
+						authorMapping.name === message.author
+							? "message self"
+							: "message other";
+				});
 				messageElement.innerHTML = `
 				<b>${message.author}: </b><p>${content}</p>
 				`;

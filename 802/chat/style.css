@@ -1,16 +1,21 @@
 #inputcontainer {
 	position: fixed;
-	bottom: 5px;
+	display: flex;
+	gap: 10px;
+	width: 90%;
+	bottom: 15px;
+	justify-content: space-between;
 	left: 50%;
 	transform: translateX(-50%);
 }
+
 #messages {
 	background: var(--mantle);
 	border-radius: 0.5rem;
 	padding: 10px;
 	width: 90%;
 	height: 60%;
-	overflow: auto;
+	overflow: scroll;
 	margin: auto;
 	display: flex;
 	flex-direction: column;
@@ -18,7 +23,7 @@
 	justify-content: flex-end;
 }
 .message {
-	height:auto;
+	height: auto;
 	max-width: 90%;
 	padding: 10px;
 	color: var(--text);
