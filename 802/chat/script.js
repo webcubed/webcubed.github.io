@@ -4,6 +4,13 @@ const mappings = (async () => {
 	const response = await fetch("https://recline-backend.vercel.app/mappings");
 	return response.json();
 })();
+
+function scrollToBottom() {
+	document.querySelector("#messages").scrollTo({
+		top: document.querySelector("#messages").scrollHeight,
+	});
+}
+
 function fetchmessages(LMID = null) {
 	// LMID = last message id = continueId
 	fetch(`${apiBaseUrl}/fetchMessages`, {
@@ -64,7 +71,7 @@ function fetchmessages(LMID = null) {
 	</span>
 				`;
 				messagesContainer.append(messageElement);
-				window.scrollTo(0, document.body.scrollHeight);
+				scrollToBottom();
 			}
 		});
 }
@@ -139,7 +146,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	</span>
 	`;
 		messagesContainer.append(messageElement);
-		window.scrollTo(0, document.body.scrollHeight);
+		scrollToBottom();
 	});
 	try {
 		if (localStorage.getItem("code") && localStorage.getItem("email")) {
@@ -165,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 
 	fetchmessages();
-	window.scrollTo(0, document.body.scrollHeight);
+	scrollToBottom();
 	document.querySelector("#messageinput").focus();
 	document.querySelector("#submit").addEventListener("click", sendMessage);
 	document

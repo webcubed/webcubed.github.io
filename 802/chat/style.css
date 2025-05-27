@@ -46,13 +46,11 @@ html {
 .message.self {
 	background-color: var(--crust);
 	border-radius: 0.5rem 0.5rem 0 0.5rem;
-	margin-left: 10%;
-	grid-column: 2 / 3;
+	margin-left: 55%;
 }
 .message.other {
 	background-color: var(--base);
 	border-radius: 0.5rem 0.5rem 0.5rem 0;
-	grid-column: 1 / 2;
 }
 .messageTimestamp {
 	font-size: 0.8rem;
