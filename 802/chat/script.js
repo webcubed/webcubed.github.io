@@ -59,7 +59,8 @@ function sendMessage() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	const socket = new WebSocket(`${apiBaseUrl.replace("https", "ws")}`);
+	const messagesContainer = document.querySelector("#messages");
+	const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
 	socket.addEventListener("open", () => {
 		socket.send(
 			JSON.stringify({
