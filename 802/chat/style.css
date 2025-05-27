@@ -1,3 +1,6 @@
+body, html {
+	height: 100%;
+}
 #inputcontainer {
 	position: fixed;
 	display: flex;
