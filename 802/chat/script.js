@@ -183,11 +183,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			}
 		});
 	document.querySelector("#messages").addEventListener("scroll", () => {
-		if (
-			document.querySelector("#messages").scrollTop ===
-			document.querySelector("#messages").scrollHeight -
-				document.querySelector("#messages").clientHeight
-		) {
+		if (document.querySelector("#messages").scrollTop === 0) {
 			fetchmessages(continueId);
 		}
 	});
