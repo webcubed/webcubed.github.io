@@ -1,7 +1,7 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
 const mappings = (async () => {
-	const response = await fetch("https://recline-backend.vercel.app/mappings", {
+	const response = await fetch(`${apiBaseUrl}/mappings}`, {
 		method: "GET",
 		headers: {
 			Accept: "application/json",
@@ -25,6 +25,7 @@ function createMessageElement(message) {
 			authorMapping.name === message.author ? "message self" : "message other";
 	});
 	const messageElement = document.createElement("div");
+	messageElement.id = message.id;
 	messageElement.classList.add("message");
 	messageElement.innerHTML = `
 		<div class="messageHeader">
@@ -53,6 +54,13 @@ function createMessageElement(message) {
 							)
 				}
 			</span>
+			${
+				messageElement.classList.contains("self")
+					? '<button class="messageDelete" onclick="deleteMessage(\'' +
+						message.id +
+						"')\">delete</button>"
+					: ""
+			}
 		</div>
 		<p class="messageContent">${content}</p>
 	`;
@@ -109,6 +117,30 @@ function sendMessage() {
 	document.querySelector("#messageinput").value = "";
 }
 
+function deleteMessage(id) {
+	if (
+		!document
+			.querySelector(`#${id} > .messageDelete`)
+			.classList.contains("confirming")
+	) {
+		document
+			.querySelector(`#${id} > .messageDelete`)
+			.classList.add("confirming");
+		document.querySelector(`#${id} > .messageDelete`).textContent = "you sure?";
+		return;
+	}
+
+	fetch(`${apiBaseUrl}/deleteMessage`, {
+		method: "POST",
+		body: JSON.stringify({ id }),
+		headers: {
+			account: localStorage.getItem("email"),
+			code: localStorage.getItem("code"),
+			"Content-Type": "application/json",
+		},
+	});
+}
+
 document.addEventListener("DOMContentLoaded", async () => {
 	if (localStorage.getItem("code") && localStorage.getItem("email")) {
 		const response = await fetch(`${apiBaseUrl}/checkSession`, {
@@ -128,10 +160,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	const messagesContainer = document.querySelector("#messages");
 	socket.addEventListener("message", (event) => {
-		const message = JSON.parse(event.data);
-		const messageElement = createMessageElement(message);
-		messagesContainer.append(messageElement);
-		scrollToBottom();
+		const data = JSON.parse(event.data);
+		if (data.type === "message") {
+			const message = data.data;
+			const messageElement = createMessageElement(message);
+			messagesContainer.append(messageElement);
+			scrollToBottom();
+		} else if (data.type === "delete") {
+			// Physically remove element from dom
+			document.querySelector(`#${data.data}`).remove();
+		}
 	});
 	fetchmessages();
 	scrollToBottom();

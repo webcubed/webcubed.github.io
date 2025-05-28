@@ -64,3 +64,12 @@ html {
 	color: var(--subtext0);
 	margin-bottom: 5px;
 }
+.messageDelete {
+	background-color: var(--red);
+	transition: background-color 0.2s;
+}
+.messageDelete:hover {
+	background-color: var(--maroon);
+	transition: background-color 0.2s;
+	color: var(--crust);
+}
