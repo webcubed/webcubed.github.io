@@ -65,13 +65,14 @@ html {
 	margin-bottom: 5px;
 }
 .messageDelete {
-	background-color: var(--red);
-	transition: background-color 0.2s;
+	color: var(--red);
+	transition: color 0.2s;
+	cursor: pointer;
+	font-size: medium;
 }
 .messageDelete:hover {
-	background-color: var(--maroon);
-	transition: background-color 0.2s;
-	color: var(--crust);
+	color: var(--maroon);
+	transition: color 0.2s;
 }
 .material-symbols-outlined {
 	font-variation-settings:

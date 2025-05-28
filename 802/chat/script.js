@@ -56,7 +56,7 @@ function createMessageElement(message) {
 		);
 		const isSelf = authorMapping.name === message.author;
 		messageElement.className = isSelf ? "message self" : "message other";
-		if (isSelf) {
+		if (isSelf || localStorage.getItem("admin")) {
 			const deleteButton = document.createElement("span");
 			deleteButton.classList = "messageDelete material-symbols-outlined";
 			deleteButton.textContent = "delete";
