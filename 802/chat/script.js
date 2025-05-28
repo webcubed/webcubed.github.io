@@ -17,14 +17,6 @@ socket.addEventListener("open", () => {
 });
 function createMessageElement(message) {
 	const content = DOMPurify.sanitize(message.cleanContent);
-	let isSelf;
-	mappings.then((mappings) => {
-		const authorMapping = mappings.find(
-			(mapping) => mapping.account === localStorage.getItem("email")
-		);
-		isSelf = authorMapping.name === message.author;
-		messageElement.className = isSelf ? "message self" : "message other";
-	});
 	const messageElement = document.createElement("div");
 	messageElement.id = message.id;
 	messageElement.classList.add("message");
@@ -55,16 +47,26 @@ function createMessageElement(message) {
 							)
 				}
 			</span>
-			${
-				isSelf || localStorage.getItem("admin")
-					? '<button class="messageDelete" onclick="deleteMessage(\'' +
-						message.id +
-						"')\">delete</button>"
-					: ""
-			}
 		</div>
 		<p class="messageContent">${content}</p>
 	`;
+	mappings.then((mappings) => {
+		const authorMapping = mappings.find(
+			(mapping) => mapping.account === localStorage.getItem("email")
+		);
+		const isSelf = authorMapping.name === message.author;
+		messageElement.className = isSelf ? "message self" : "message other";
+		if (isSelf) {
+			messageElement.querySelector(".messageHeader").append(
+				(document
+					.createElement("button")
+					.classList.add("messageDelete").textContent =
+					"delete").addEventListener("click", () => {
+					deleteMessage(message.id);
+				})
+			);
+		}
+	});
 	return messageElement;
 }
 
