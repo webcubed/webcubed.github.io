@@ -57,8 +57,8 @@ function createMessageElement(message) {
 		const isSelf = authorMapping.name === message.author;
 		messageElement.className = isSelf ? "message self" : "message other";
 		if (isSelf) {
-			const deleteButton = document.createElement("button");
-			deleteButton.classList.add("messageDelete");
+			const deleteButton = document.createElement("span");
+			deleteButton.classList.add("messageDelete material-symbols-outlined");
 			deleteButton.textContent = "delete";
 			deleteButton.addEventListener("click", () => {
 				deleteMessage(message.id);
@@ -123,13 +123,14 @@ function sendMessage() {
 function deleteMessage(id) {
 	if (
 		!document
-			.querySelector(`#${id} > .messageDelete`)
+			.querySelector(`#message-${id} > .messageDelete`)
 			.classList.contains("confirming")
 	) {
 		document
-			.querySelector(`#${id} > .messageDelete`)
+			.querySelector(`#message-${id} > .messageDelete`)
 			.classList.add("confirming");
-		document.querySelector(`#${id} > .messageDelete`).textContent = "you sure?";
+		document.querySelector(`#message-${id} > .messageDelete`).textContent =
+			"you sure?";
 		return;
 	}
 
