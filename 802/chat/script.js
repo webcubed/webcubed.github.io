@@ -45,31 +45,32 @@ function fetchmessages(LMID = null) {
 							: "message other";
 				});
 				messageElement.innerHTML = `
-				<b class="messageAuthor">${message.author}: </b><p class="messageContent">${content}</p>
-	<span class="messageTimestamp">
-		${
-			new Date(Number.parseInt(message.timestamp, 10))
-				.toISOString()
-				.slice(0, 10) === new Date().toISOString().slice(0, 10)
-				? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-						undefined,
-						{
-							weekday: "short",
-							hour: "2-digit",
-							minute: "2-digit",
-						}
-					)
-				: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-						undefined,
-						{
-							month: "short",
-							day: "numeric",
-							hour: "2-digit",
-							minute: "2-digit",
-						}
-					)
-		}
-	</span>
+				<b class="messageAuthor">${message.author}: </b>
+				<p class="messageContent">${content}</p>
+				<span class="messageTimestamp">
+				${
+					new Date(Number.parseInt(message.timestamp, 10))
+						.toISOString()
+						.slice(0, 10) === new Date().toISOString().slice(0, 10)
+						? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+								undefined,
+								{
+									weekday: "short",
+									hour: "2-digit",
+									minute: "2-digit",
+								}
+							)
+						: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+								undefined,
+								{
+									month: "short",
+									day: "numeric",
+									hour: "2-digit",
+									minute: "2-digit",
+								}
+							)
+				}
+				</span>
 				`;
 				if (LMID === null) {
 					messagesContainer.append(messageElement);
@@ -99,60 +100,6 @@ function sendMessage() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	const messagesContainer = document.querySelector("#messages");
-	const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
-	socket.addEventListener("open", () => {
-		socket.send(
-			JSON.stringify({
-				account: localStorage.getItem("email"),
-				code: localStorage.getItem("code"),
-			})
-		);
-	});
-	socket.addEventListener("message", (event) => {
-		const message = JSON.parse(event.data);
-		// Data will most likely contain a message object
-		const content = DOMPurify.sanitize(message.cleanContent);
-		const messageElement = document.createElement("div");
-		mappings.then((mappings) => {
-			const authorMapping = mappings.find(
-				(mapping) => mapping.account === localStorage.getItem("email")
-			);
-			messageElement.className =
-				authorMapping.name === message.author
-					? "message self"
-					: "message other";
-		});
-		messageElement.innerHTML = `
-	<b class="messageAuthor">${message.author}: </b><p class="messageContent">${content}</p>
-	<span class="messageTimestamp">
-		${
-			new Date(Number.parseInt(message.timestamp, 10))
-				.toISOString()
-				.slice(0, 10) === new Date().toISOString().slice(0, 10)
-				? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-						undefined,
-						{
-							weekday: "short",
-							hour: "2-digit",
-							minute: "2-digit",
-						}
-					)
-				: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-						undefined,
-						{
-							month: "short",
-							day: "numeric",
-							hour: "2-digit",
-							minute: "2-digit",
-						}
-					)
-		}
-	</span>
-	`;
-		messagesContainer.append(messageElement);
-		scrollToBottom();
-	});
 	try {
 		if (localStorage.getItem("code") && localStorage.getItem("email")) {
 			const response = await fetch(`${apiBaseUrl}/checkSession`, {
@@ -176,6 +123,56 @@ document.addEventListener("DOMContentLoaded", async () => {
 		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 	}
 
+	const messagesContainer = document.querySelector("#messages");
+	const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
+	socket.addEventListener("open", () => {
+		socket.send(`${localStorage.getItem("email")} is connected`);
+	});
+	socket.addEventListener("message", (event) => {
+		const message = JSON.parse(event.data);
+		// Data will most likely contain a message object
+		const content = DOMPurify.sanitize(message.cleanContent);
+		const messageElement = document.createElement("div");
+		mappings.then((mappings) => {
+			const authorMapping = mappings.find(
+				(mapping) => mapping.account === localStorage.getItem("email")
+			);
+			messageElement.className =
+				authorMapping.name === message.author
+					? "message self"
+					: "message other";
+		});
+		messageElement.innerHTML = `
+			<b class="messageAuthor">${message.author}: </b>
+			<p class="messageContent">${content}</p>
+			<span class="messageTimestamp">
+		${
+			new Date(Number.parseInt(message.timestamp, 10))
+				.toISOString()
+				.slice(0, 10) === new Date().toISOString().slice(0, 10)
+				? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+						undefined,
+						{
+							weekday: "short",
+							hour: "2-digit",
+							minute: "2-digit",
+						}
+					)
+				: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+						undefined,
+						{
+							month: "short",
+							day: "numeric",
+							hour: "2-digit",
+							minute: "2-digit",
+						}
+					)
+		}
+			</span>
+		`;
+		messagesContainer.append(messageElement);
+		scrollToBottom();
+	});
 	fetchmessages();
 	scrollToBottom();
 	document.querySelector("#messageinput").focus();
