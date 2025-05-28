@@ -58,7 +58,7 @@ function createMessageElement(message) {
 		messageElement.className = isSelf ? "message self" : "message other";
 		if (isSelf) {
 			const deleteButton = document.createElement("span");
-			deleteButton.classList.add("messageDelete material-symbols-outlined");
+			deleteButton.classList = "messageDelete material-symbols-outlined";
 			deleteButton.textContent = "delete";
 			deleteButton.addEventListener("click", () => {
 				deleteMessage(message.id);
