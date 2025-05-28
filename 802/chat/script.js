@@ -123,14 +123,15 @@ function sendMessage() {
 function deleteMessage(id) {
 	if (
 		!document
-			.querySelector(`#message-${id} > .messageDelete`)
+			.querySelector(`#message-${id} > .messageHeader > .messageDelete`)
 			.classList.contains("confirming")
 	) {
 		document
-			.querySelector(`#message-${id} > .messageDelete`)
+			.querySelector(`#message-${id} > .messageHeader > .messageDelete`)
 			.classList.add("confirming");
-		document.querySelector(`#message-${id} > .messageDelete`).textContent =
-			"you sure?";
+		document.querySelector(
+			`#message-${id} > .messageHeader > .messageDelete`
+		).innerHTML = "you sure?";
 		return;
 	}
 
