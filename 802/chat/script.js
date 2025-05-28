@@ -18,7 +18,7 @@ socket.addEventListener("open", () => {
 function createMessageElement(message) {
 	const content = DOMPurify.sanitize(message.cleanContent);
 	const messageElement = document.createElement("div");
-	messageElement.id = message.id;
+	messageElement.id = `message-${message.id}`;
 	messageElement.classList.add("message");
 	messageElement.innerHTML = `
 		<div class="messageHeader">
