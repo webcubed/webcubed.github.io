@@ -1,7 +1,14 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
 const mappings = (async () => {
-	const response = await fetch("https://recline-backend.vercel.app/mappings");
+	const response = await fetch("https://recline-backend.vercel.app/mappings", {
+		method: "GET",
+		headers: {
+			Accept: "application/json",
+			account: localStorage.getItem("email"),
+			code: localStorage.getItem("code"),
+		},
+	});
 	return response.json();
 })();
 const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
