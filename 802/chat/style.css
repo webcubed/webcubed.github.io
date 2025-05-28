@@ -42,6 +42,7 @@ html {
 	margin: 5px;
 	color: var(--text);
 	background-color: var(--base);
+	overflow-wrap: normal;
 }
 .message.self {
 	background-color: var(--crust);
