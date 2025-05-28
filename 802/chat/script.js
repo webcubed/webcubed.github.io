@@ -56,7 +56,7 @@ function createMessageElement(message) {
 				}
 			</span>
 			${
-				isSelf || localStorage.getItem("admin") === true
+				isSelf || localStorage.getItem("admin")
 					? '<button class="messageDelete" onclick="deleteMessage(\'' +
 						message.id +
 						"')\">delete</button>"
