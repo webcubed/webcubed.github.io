@@ -74,7 +74,7 @@ function scrollToBottom() {
 	});
 }
 
-function fetchmessages(LMID = null) {
+function fetchMessages(LMID = null) {
 	// LMID = last message id = continueId
 	fetch(`${apiBaseUrl}/fetchMessages${LMID ? `?continueId=${LMID}` : ""}`, {
 		method: "GET",
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			document.querySelector(`#${data.data}`).remove();
 		}
 	});
-	fetchmessages();
+	fetchMessages();
 	scrollToBottom();
 	document.querySelector("#messageinput").focus();
 	document.querySelector("#submit").addEventListener("click", sendMessage);
@@ -185,7 +185,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 	document.querySelector("#messages").addEventListener("scroll", () => {
 		if (document.querySelector("#messages").scrollTop === 0) {
-			fetchmessages(continueId);
+			fetchMessages(continueId);
 		}
 	});
 });
