@@ -1,4 +1,4 @@
-const apiBaseUrl = "https://recline-backend.vercel.app";
+const apiBaseUrl = "https://recline-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
 	document
