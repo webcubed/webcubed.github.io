@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		}
 	});
 	document.querySelector("#title").addEventListener("click", () => {
-		localstorage.setItem("email", document.querySelector("#emailinput").value);
-		localstorage.setItem("code", document.querySelector("#nameinput").value);
+		localStorage.setItem("email", document.querySelector("#emailinput").value);
+		localStorage.setItem("code", document.querySelector("#nameinput").value);
 	});
 });
