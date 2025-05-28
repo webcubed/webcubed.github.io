@@ -13,7 +13,6 @@ document.addEventListener("DOMContentLoaded", () => {
 				headers: {
 					Accept: "application/json",
 					account: email,
-					"Content-Type": "application/json",
 					name,
 				},
 			}).then((response) => response.json());

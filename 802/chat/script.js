@@ -65,7 +65,6 @@ function fetchmessages(LMID = null) {
 		headers: {
 			account: localStorage.getItem("email"),
 			code: localStorage.getItem("code"),
-			"Content-Type": "application/json",
 		},
 	})
 		.then((response) => response.json())
@@ -110,7 +109,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 			headers: {
 				account: localStorage.getItem("email"),
 				code: localStorage.getItem("code"),
-				"Content-Type": "application/json",
 			},
 		});
 		const data = await response.text();
