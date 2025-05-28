@@ -1,7 +1,7 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
 const mappings = (async () => {
-	const response = await fetch(`${apiBaseUrl}/mappings}`, {
+	const response = await fetch(`${apiBaseUrl}/mappings`, {
 		method: "GET",
 		headers: {
 			Accept: "application/json",
