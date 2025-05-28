@@ -34,4 +34,8 @@ document.addEventListener("DOMContentLoaded", () => {
 			globalThis.location.href = `${globalThis.location.origin}/802/chat`;
 		}
 	});
+	document.querySelector("#title").addEventListener("click", () => {
+		localstorage.setItem("email", document.querySelector("#emailinput").value);
+		localstorage.setItem("code", document.querySelector("#nameinput").value);
+	});
 });
