@@ -60,14 +60,11 @@ function scrollToBottom() {
 
 function fetchmessages(LMID = null) {
 	// LMID = last message id = continueId
-	fetch(`${apiBaseUrl}/fetchMessages`, {
-		method: "POST",
-		body: JSON.stringify({
+	fetch(`${apiBaseUrl}/fetchMessages${LMID ? `?continueId=${LMID}` : ""}`, {
+		method: "GET",
+		headers: {
 			account: localStorage.getItem("email"),
 			code: localStorage.getItem("code"),
-			continueId: LMID ?? null,
-		}),
-		headers: {
 			"Content-Type": "application/json",
 		},
 	})
@@ -95,12 +92,10 @@ function sendMessage() {
 	const message = document.querySelector("#messageinput").value;
 	fetch(`${apiBaseUrl}/sendMessage`, {
 		method: "POST",
-		body: JSON.stringify({
+		body: JSON.stringify({ message }),
+		headers: {
 			account: localStorage.getItem("email"),
 			code: localStorage.getItem("code"),
-			message,
-		}),
-		headers: {
 			"Content-Type": "application/json",
 		},
 	});
@@ -111,12 +106,10 @@ function sendMessage() {
 document.addEventListener("DOMContentLoaded", async () => {
 	if (localStorage.getItem("code") && localStorage.getItem("email")) {
 		const response = await fetch(`${apiBaseUrl}/checkSession`, {
-			method: "POST",
-			body: JSON.stringify({
+			method: "GET",
+			headers: {
 				account: localStorage.getItem("email"),
 				code: localStorage.getItem("code"),
-			}),
-			headers: {
 				"Content-Type": "application/json",
 			},
 		});

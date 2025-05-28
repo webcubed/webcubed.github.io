@@ -9,11 +9,12 @@ document.addEventListener("DOMContentLoaded", () => {
 			localStorage.setItem("email", email);
 			document.querySelector("#checkbutton").disabled = false;
 			const codeRequest = await fetch(`${apiBaseUrl}/genCode`, {
-				method: "POST",
-				body: JSON.stringify({ account: email, name }),
+				method: "GET",
 				headers: {
 					Accept: "application/json",
+					account: email,
 					"Content-Type": "application/json",
+					name,
 				},
 			}).then((response) => response.json());
 			const code = codeRequest.code;
@@ -24,10 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
 	document.querySelector("#checkbutton").addEventListener("click", async () => {
 		const code = localStorage.getItem("code");
 		const response = await fetch(`${apiBaseUrl}/check`, {
-			method: "POST",
-			body: JSON.stringify({ account: localStorage.getItem("email"), code }),
+			method: "GET",
 			headers: {
-				"Content-Type": "application/json",
+				account: localStorage.getItem("email"),
+				code,
 			},
 		}).then((response) => response.text());
 		if (response === "authorized :>") {
