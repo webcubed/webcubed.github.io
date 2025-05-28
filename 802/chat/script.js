@@ -17,12 +17,13 @@ socket.addEventListener("open", () => {
 });
 function createMessageElement(message) {
 	const content = DOMPurify.sanitize(message.cleanContent);
+	let isSelf;
 	mappings.then((mappings) => {
 		const authorMapping = mappings.find(
 			(mapping) => mapping.account === localStorage.getItem("email")
 		);
-		messageElement.className =
-			authorMapping.name === message.author ? "message self" : "message other";
+		isSelf = authorMapping.name === message.author;
+		messageElement.className = isSelf ? "message self" : "message other";
 	});
 	const messageElement = document.createElement("div");
 	messageElement.id = message.id;
@@ -55,8 +56,7 @@ function createMessageElement(message) {
 				}
 			</span>
 			${
-				messageElement.classList.contains("self") ||
-				localStorage.getItem("admin") === true
+				isSelf || localStorage.getItem("admin") === true
 					? '<button class="messageDelete" onclick="deleteMessage(\'' +
 						message.id +
 						"')\">delete</button>"
