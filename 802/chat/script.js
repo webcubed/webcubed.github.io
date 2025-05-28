@@ -57,14 +57,14 @@ function createMessageElement(message) {
 		const isSelf = authorMapping.name === message.author;
 		messageElement.className = isSelf ? "message self" : "message other";
 		if (isSelf) {
-			messageElement.querySelector(".messageHeader").append(
-				(document
-					.createElement("button")
-					.classList.add("messageDelete").textContent =
-					"delete").addEventListener("click", () => {
-					deleteMessage(message.id);
-				})
-			);
+			const deleteButton = document.createElement("button");
+			deleteButton.classList.add("messageDelete");
+			deleteButton.textContent = "delete";
+			deleteButton.addEventListener("click", () => {
+				deleteMessage(message.id);
+			});
+			messageElement.append(deleteButton);
+			messageElement.querySelector(".messageHeader").append(deleteButton);
 		}
 	});
 	return messageElement;
