@@ -1,4 +1,5 @@
-body,html {
+body,
+html {
 	font-family: "lexend", sans-serif;
 }
 hr {
@@ -24,11 +25,10 @@ span.title {
 	top: 34px;
 }
 #calendar {
-
 }
 .box {
 	background-color: var(--mantle);
-	border-radius: .5rem;
+	border-radius: 0.5rem;
 	padding: 5px;
 	width: calc(50% - 10px);
 	aspect-ratio: 1;

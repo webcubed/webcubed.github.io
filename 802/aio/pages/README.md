@@ -1,4 +1,3 @@
-
 # These are the website versions of the AIOs
 
 ---
@@ -14,7 +13,7 @@
       - More consistent
     - If we were to use this method: things to consider:
       - Have the table go into more specific tables?
-      - The more complex pages that *aren't* markdown will need to have styles and scripts inline or somet
+      - The more complex pages that _aren't_ markdown will need to have styles and scripts inline or somet
       - Use fetch to get the pages
   - Or they can be their own pages/sites
     - Benefits:

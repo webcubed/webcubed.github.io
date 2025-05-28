@@ -55,6 +55,10 @@ html {
 	background-color: var(--base);
 	border-radius: 0.5rem 0.5rem 0.5rem 0;
 }
+.messageHeader {
+	display: flex;
+	justify-content: space-between;
+}
 .messageTimestamp {
 	font-size: 0.8rem;
 	color: var(--subtext0);

@@ -4,6 +4,53 @@ const mappings = (async () => {
 	const response = await fetch("https://recline-backend.vercel.app/mappings");
 	return response.json();
 })();
+const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
+socket.addEventListener("open", () => {
+	socket.send(`${localStorage.getItem("email")} is connected`);
+});
+function createMessageElement(message) {
+	const content = DOMPurify.sanitize(message.cleanContent);
+	mappings.then((mappings) => {
+		const authorMapping = mappings.find(
+			(mapping) => mapping.account === localStorage.getItem("email")
+		);
+		messageElement.className =
+			authorMapping.name === message.author ? "message self" : "message other";
+	});
+	const messageElement = document.createElement("div");
+	messageElement.classList.add("message");
+	messageElement.innerHTML = `
+		<div class="messageHeader">
+			<b class="messageAuthor">${message.author}: </b>
+			<span class="messageTimestamp">
+				${
+					new Date(Number.parseInt(message.timestamp, 10))
+						.toISOString()
+						.slice(0, 10) === new Date().toISOString().slice(0, 10)
+						? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+								undefined,
+								{
+									weekday: "short",
+									hour: "2-digit",
+									minute: "2-digit",
+								}
+							)
+						: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+								undefined,
+								{
+									month: "short",
+									day: "numeric",
+									hour: "2-digit",
+									minute: "2-digit",
+								}
+							)
+				}
+			</span>
+		</div>
+		<p class="messageContent">${content}</p>
+	`;
+	return messageElement;
+}
 
 function scrollToBottom() {
 	document.querySelector("#messages").scrollTo({
@@ -33,45 +80,7 @@ function fetchmessages(LMID = null) {
 			// Reverse the array if LMID is specified
 			if (LMID) messages.reverse();
 			for (const message of messages) {
-				const content = DOMPurify.sanitize(message.cleanContent);
-				const messageElement = document.createElement("div");
-				mappings.then((mappings) => {
-					const authorMapping = mappings.find(
-						(mapping) => mapping.account === localStorage.getItem("email")
-					);
-					messageElement.className =
-						authorMapping.name === message.author
-							? "message self"
-							: "message other";
-				});
-				messageElement.innerHTML = `
-				<b class="messageAuthor">${message.author}: </b>
-				<p class="messageContent">${content}</p>
-				<span class="messageTimestamp">
-				${
-					new Date(Number.parseInt(message.timestamp, 10))
-						.toISOString()
-						.slice(0, 10) === new Date().toISOString().slice(0, 10)
-						? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-								undefined,
-								{
-									weekday: "short",
-									hour: "2-digit",
-									minute: "2-digit",
-								}
-							)
-						: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-								undefined,
-								{
-									month: "short",
-									day: "numeric",
-									hour: "2-digit",
-									minute: "2-digit",
-								}
-							)
-				}
-				</span>
-				`;
+				const messageElement = createMessageElement(message);
 				if (LMID === null) {
 					messagesContainer.append(messageElement);
 					scrollToBottom();
@@ -100,76 +109,29 @@ function sendMessage() {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
-	try {
-		if (localStorage.getItem("code") && localStorage.getItem("email")) {
-			const response = await fetch(`${apiBaseUrl}/checkSession`, {
-				method: "POST",
-				body: JSON.stringify({
-					account: localStorage.getItem("email"),
-					code: localStorage.getItem("code"),
-				}),
-				headers: {
-					"Content-Type": "application/json",
-				},
-			});
-			const data = await response.text();
-			if (data !== "authorized :>") {
-				globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
-			}
-		} else {
+	if (localStorage.getItem("code") && localStorage.getItem("email")) {
+		const response = await fetch(`${apiBaseUrl}/checkSession`, {
+			method: "POST",
+			body: JSON.stringify({
+				account: localStorage.getItem("email"),
+				code: localStorage.getItem("code"),
+			}),
+			headers: {
+				"Content-Type": "application/json",
+			},
+		});
+		const data = await response.text();
+		if (data !== "authorized :>") {
 			globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 		}
-	} catch {
+	} else {
 		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 	}
 
 	const messagesContainer = document.querySelector("#messages");
-	const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
-	socket.addEventListener("open", () => {
-		socket.send(`${localStorage.getItem("email")} is connected`);
-	});
 	socket.addEventListener("message", (event) => {
 		const message = JSON.parse(event.data);
-		// Data will most likely contain a message object
-		const content = DOMPurify.sanitize(message.cleanContent);
-		const messageElement = document.createElement("div");
-		mappings.then((mappings) => {
-			const authorMapping = mappings.find(
-				(mapping) => mapping.account === localStorage.getItem("email")
-			);
-			messageElement.className =
-				authorMapping.name === message.author
-					? "message self"
-					: "message other";
-		});
-		messageElement.innerHTML = `
-			<b class="messageAuthor">${message.author}: </b>
-			<p class="messageContent">${content}</p>
-			<span class="messageTimestamp">
-		${
-			new Date(Number.parseInt(message.timestamp, 10))
-				.toISOString()
-				.slice(0, 10) === new Date().toISOString().slice(0, 10)
-				? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-						undefined,
-						{
-							weekday: "short",
-							hour: "2-digit",
-							minute: "2-digit",
-						}
-					)
-				: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-						undefined,
-						{
-							month: "short",
-							day: "numeric",
-							hour: "2-digit",
-							minute: "2-digit",
-						}
-					)
-		}
-			</span>
-		`;
+		const messageElement = createMessageElement(message);
 		messagesContainer.append(messageElement);
 		scrollToBottom();
 	});
