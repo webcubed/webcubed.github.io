@@ -23,30 +23,32 @@ function createMessageElement(message) {
 	messageElement.innerHTML = `
 		<div class="messageHeader">
 			<b class="messageAuthor">${message.author}: </b>
-			<span class="messageTimestamp">
-				${
-					new Date(Number.parseInt(message.timestamp, 10))
-						.toISOString()
-						.slice(0, 10) === new Date().toISOString().slice(0, 10)
-						? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-								undefined,
-								{
-									weekday: "short",
-									hour: "2-digit",
-									minute: "2-digit",
-								}
-							)
-						: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
-								undefined,
-								{
-									month: "short",
-									day: "numeric",
-									hour: "2-digit",
-									minute: "2-digit",
-								}
-							)
-				}
-			</span>
+			<div class="headerRight">
+				<span class="messageTimestamp">
+					${
+						new Date(Number.parseInt(message.timestamp, 10))
+							.toISOString()
+							.slice(0, 10) === new Date().toISOString().slice(0, 10)
+							? new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+									undefined,
+									{
+										weekday: "short",
+										hour: "2-digit",
+										minute: "2-digit",
+									}
+								)
+							: new Date(Number.parseInt(message.timestamp, 10)).toLocaleString(
+									undefined,
+									{
+										month: "short",
+										day: "numeric",
+										hour: "2-digit",
+										minute: "2-digit",
+									}
+								)
+					}
+				</span>
+			</div>
 		</div>
 		<p class="messageContent">${content}</p>
 	`;
@@ -64,7 +66,9 @@ function createMessageElement(message) {
 				deleteMessage(message.id);
 			});
 			messageElement.append(deleteButton);
-			messageElement.querySelector(".messageHeader").append(deleteButton);
+			messageElement
+				.querySelector(".messageHeader > .headerRight")
+				.append(deleteButton);
 		}
 	});
 	return messageElement;
@@ -123,14 +127,18 @@ function sendMessage() {
 function deleteMessage(id) {
 	if (
 		!document
-			.querySelector(`#message-${id} > .messageHeader > .messageDelete`)
+			.querySelector(
+				`#message-${id} > .messageHeader > .headerRight > .messageDelete`
+			)
 			.classList.contains("confirming")
 	) {
 		document
-			.querySelector(`#message-${id} > .messageHeader > .messageDelete`)
+			.querySelector(
+				`#message-${id} > .messageHeader > .headerRight > .messageDelete`
+			)
 			.classList.add("confirming");
 		document.querySelector(
-			`#message-${id} > .messageHeader > .messageDelete`
+			`#message-${id} > .messageHeader > .headerRight > .messageDelete`
 		).innerHTML = "you sure?";
 		return;
 	}

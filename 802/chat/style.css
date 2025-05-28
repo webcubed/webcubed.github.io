@@ -59,6 +59,10 @@ html {
 	display: flex;
 	justify-content: space-between;
 }
+.headerRight {
+	display: flex;
+	gap: 10px;
+}
 .messageTimestamp {
 	font-size: 0.8rem;
 	color: var(--subtext0);
