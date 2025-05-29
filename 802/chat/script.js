@@ -173,7 +173,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			scrollToBottom();
 		} else if (data.type === "delete") {
 			// Physically remove element from dom
-			document.querySelector(`#${data.data}`).remove();
+			document.querySelector(`#message-${data.data}`).remove();
 		}
 	});
 	fetchMessages();
