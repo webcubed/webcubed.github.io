@@ -11,10 +11,9 @@ const mappings = (async () => {
 	});
 	return response.json();
 })();
-const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
-socket.addEventListener("open", () => {
-	socket.send(`${localStorage.getItem("email")} is connected`);
-});
+const maxRetries = 30;
+let retryCount = 0;
+const retryDelay = 5000;
 function createMessageElement(message) {
 	const content = DOMPurify.sanitize(message.cleanContent);
 	const messageElement = document.createElement("div");
@@ -147,6 +146,49 @@ function deleteMessage(id) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+	function connectToWebsocket() {
+		const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
+		socket.addEventListener("open", () => {
+			socket.send(`${localStorage.getItem("email")} is connected`);
+		});
+		socket.addEventListener("message", (event) => {
+			const data = JSON.parse(event.data);
+			if (data.type === "message") {
+				const message = data.data;
+				const messageElement = createMessageElement(message);
+				messagesContainer.append(messageElement);
+				scrollToBottom();
+			} else if (data.type === "delete") {
+				// Physically remove element from dom
+				document.querySelector(`#message-${data.data}`).remove();
+			}
+		});
+		socket.addEventListener("close", () => {
+			// Retry connection
+			if (retryCount < maxRetries) {
+				setTimeout(() => {
+					retryCount++;
+					new Toast(
+						"warning",
+						"Websocket Connection lost",
+						`Retrying connection... Attempt ${retryCount}`,
+						5000
+					);
+					connectToWebsocket();
+				}, retryDelay);
+			} else {
+				new Toast(
+					"error",
+					"Websocket Connection lost",
+					"Max retries reached. Giving up. If you want to try again, reload the page.",
+					5000
+				);
+			}
+		});
+	}
+
+	connectToWebsocket();
+
 	if (localStorage.getItem("code") && localStorage.getItem("email")) {
 		const response = await fetch(`${apiBaseUrl}/checkSession`, {
 			method: "GET",
@@ -164,18 +206,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 	}
 
 	const messagesContainer = document.querySelector("#messages");
-	socket.addEventListener("message", (event) => {
-		const data = JSON.parse(event.data);
-		if (data.type === "message") {
-			const message = data.data;
-			const messageElement = createMessageElement(message);
-			messagesContainer.append(messageElement);
-			scrollToBottom();
-		} else if (data.type === "delete") {
-			// Physically remove element from dom
-			document.querySelector(`#message-${data.data}`).remove();
-		}
-	});
 	fetchMessages();
 	scrollToBottom();
 	document.querySelector("#messageinput").focus();
