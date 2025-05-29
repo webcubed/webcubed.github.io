@@ -150,6 +150,18 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
 		socket.addEventListener("open", () => {
 			socket.send(`${localStorage.getItem("email")} is connected`);
+			if (retryCount > 0) {
+				new Toast(
+					"success",
+					"Websocket Connection restored. Refetching messages.",
+					`Reconnected after ${retryCount} attempts`,
+					5000
+				);
+				retryCount = 0;
+				// Clear messages & refetch
+				messagesContainer.innerHTML = "";
+				fetchMessages();
+			}
 		});
 		socket.addEventListener("message", (event) => {
 			const data = JSON.parse(event.data);
