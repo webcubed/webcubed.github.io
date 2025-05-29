@@ -16,6 +16,11 @@ document.addEventListener("DOMContentLoaded", () => {
 					name,
 				},
 			}).then((response) => response.json());
+			if (codeRequest.error) {
+				new Toast("error", codeRequest.error, codeRequest.error, 7500);
+				return;
+			}
+
 			const code = codeRequest.code;
 			document.querySelector("#codedisplay").textContent = code;
 			// Store code into localstorage
