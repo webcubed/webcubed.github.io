@@ -125,21 +125,13 @@ function sendMessage() {
 }
 
 function deleteMessage(id) {
-	if (
-		!document
-			.querySelector(
-				`#message-${id} > .messageHeader > .headerRight > .messageDelete`
-			)
-			.classList.contains("confirming")
-	) {
-		document
-			.querySelector(
-				`#message-${id} > .messageHeader > .headerRight > .messageDelete`
-			)
-			.classList.add("confirming");
-		document.querySelector(
-			`#message-${id} > .messageHeader > .headerRight > .messageDelete`
-		).innerHTML = "you sure?";
+	const deleteElement = document.querySelector(
+		`#message-${id} > .messageHeader > .headerRight > .messageDelete`
+	);
+	if (!deleteElement.classList.contains("confirming")) {
+		deleteElement.classList.add("confirming");
+		deleteElement.classList.remove("material-symbols-outlined");
+		deleteElement.innerHTML = "you sure?";
 		return;
 	}
 
