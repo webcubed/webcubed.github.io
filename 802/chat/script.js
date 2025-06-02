@@ -155,6 +155,7 @@ function deleteMessage(id) {
 }
 
 document.addEventListener("DOMContentLoaded", async () => {
+	const messagesContainer = document.querySelector("#messages");
 	function connectToWebsocket() {
 		const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
 		socket.addEventListener("open", () => {
@@ -226,7 +227,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 	}
 
-	const messagesContainer = document.querySelector("#messages");
 	fetchMessages();
 	scrollToBottom();
 	document.querySelector("#messageinput").focus();
