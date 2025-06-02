@@ -1,5 +1,6 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
+let continueScroll;
 const mappings = (async () => {
 	const response = await fetch(`${apiBaseUrl}/mappings`, {
 		method: "GET",
@@ -108,6 +109,9 @@ function fetchMessages(LMID = null) {
 					scrollToBottom();
 				} else {
 					messagesContainer.prepend(messageElement);
+					messagesContainer.scrollTo({
+						top: messagesContainer.scrollHeight - continueScroll,
+					});
 				}
 			}
 		});
@@ -234,8 +238,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 				sendMessage();
 			}
 		});
-	document.querySelector("#messages").addEventListener("scroll", () => {
-		if (document.querySelector("#messages").scrollTop === 0) {
+	messagesContainer.addEventListener("scroll", () => {
+		if (messagesContainer.scrollTop === 0) {
+			// Store scroll relative to bottom
+			continueScroll =
+				messagesContainer.scrollHeight - messagesContainer.scrollTop;
+
 			fetchMessages(continueId);
 		}
 	});
