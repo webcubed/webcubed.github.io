@@ -58,12 +58,7 @@ function createMessageElement(message) {
 		<p class="messageContent">${content}</p>
 	`;
 	mappings.then((mappings) => {
-		const authorMapping = mappings.find(
-			(mapping) => mapping.account === localStorage.getItem("email")
-		);
-		const isSelf =
-			authorMapping.name === message.author ||
-			message.email === localStorage.getItem("email");
+		const isSelf = message.email === localStorage.getItem("email");
 		messageElement.className = isSelf ? "message self" : "message other";
 		if (isSelf || localStorage.getItem("admin")) {
 			const deleteButton = document.createElement("span");
