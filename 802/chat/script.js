@@ -24,7 +24,7 @@ function createMessageElement(message) {
 			<b class="messageAuthor">${message.author}: </b>
 			<div class="headerRight">
 				<span class="messageTimestamp">
-					${() => {
+					${(() => {
 						const today = new Date();
 						const messageDate = new Date(
 							Number.parseInt(message.timestamp, 10)
@@ -50,7 +50,7 @@ function createMessageElement(message) {
 							hour: "2-digit",
 							minute: "2-digit",
 						});
-					}}
+					})()}
 				</span>
 			</div>
 		</div>
