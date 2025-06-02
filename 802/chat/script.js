@@ -22,9 +22,11 @@ function createMessageElement(message) {
 	messageElement.classList.add("message");
 	messageElement.innerHTML = `
 		<div class="messageHeader">
-			<b class="messageAuthor">${message.author}: </b>
+			<b class="messageAuthor" title=${message.email}>${message.author}: </b>
 			<div class="headerRight">
-				<span class="messageTimestamp">
+				<span class="messageTimestamp" title="Timestamp: ${message.timestamp}, Parsed: ${new Date(
+					message.timestamp
+				).toLocaleString()}">
 					${(() => {
 						const today = new Date();
 						const messageDate = new Date(
