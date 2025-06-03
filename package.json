@@ -8,7 +8,8 @@
 		"gensw": "workbox generateSW workbox-config.js",
 		"format": "prettier --write .",
 		"xo": "xo --prettier",
-		"xo:fix": "xo --fix --prettier"
+		"xo:fix": "xo --fix --prettier",
+		"prepare": "husky"
 	},
 	"keywords": [],
 	"author": "",
@@ -19,8 +20,9 @@
 		"workbox-cli": "^7.3.0"
 	},
 	"devDependencies": {
-		"globals": "16.0.0",
-		"xo": "^0.60.0"
+		"globals": "16.2.0",
+		"husky": "^9.1.7",
+		"xo": "1.0.5"
 	},
 	"xo": {
 		"envs": [
