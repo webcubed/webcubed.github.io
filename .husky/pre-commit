@@ -1,3 +1,1 @@
-pnpm format
-pnpm xo:fix
 pnpm gensw
