@@ -14,8 +14,8 @@ html {
 	display: flex;
 	gap: 10px;
 	width: 90%;
-	bottom: 45px;
 	justify-content: space-between;
+	align-items: end;
 	left: 50%;
 	transform: translateX(-50%);
 }
