@@ -31,7 +31,7 @@ html {
 	border: none;
 	color: var(--text);
 	font-family: Lexend;
-	flex-grow: 1;
+	flex: 1;
 	transition: background-color 0.2s;
 	padding: 0.5rem;
 	border-radius: 0.5rem;
@@ -68,14 +68,13 @@ html {
 	border-radius: 0.5rem;
 	padding: 10px;
 	position: fixed;
-	left: 50%;
-	transform: translateX(-50%);
+	left: 5%;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	bottom: 100px;
 	top: 0;
 	height: 60%;
-	width: 90%;
+	width: 70%;
 	margin: auto;
 }
 .message {

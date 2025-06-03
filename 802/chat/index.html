@@ -25,10 +25,22 @@
 	<body>
 		<h1>cool chat</h1>
 		<div id="content">
-			<div id="messageswrapper">
-				<div id="messages"></div>
+			<div id="top" class="section">
+				<div id="messageswrapper">
+					<div id="messages"></div>
+				</div>
+				<div id="users">
+					<div id="onlineusers" class="userlistcontainer">
+						<h3>online</h3>
+						<div id="onlinelist" class="userlist"></div>
+					</div>
+					<div id="offlineusers" class="userlistcontainer">
+						<h3>offline</h3>
+						<div id="offlinelist" class="userlist"></div>
+					</div>
+				</div>
 			</div>
-			<div id="bottom">
+			<div id="bottom" class="section">
 				<div id="status">
 					<div id="websocketstatus"></div>
 				</div>
