@@ -16,7 +16,7 @@ const maxRetries = 30;
 let retryCount = 0;
 const retryDelay = 5000;
 function createMessageElement(message) {
-	const content = DOMPurify.sanitize(message.cleanContent);
+	const content = DOMPurify.sanitize(marked.parse(message.cleanContent));
 	const messageElement = document.createElement("div");
 	messageElement.id = `message-${message.id}`;
 	messageElement.classList.add("message");
