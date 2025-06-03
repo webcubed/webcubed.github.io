@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-dom-node-text-content */
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
 let continueScroll;
@@ -108,7 +109,7 @@ function fetchMessages(LMID = null) {
 }
 
 function sendMessage() {
-	const message = document.querySelector("#messageinput").textContent;
+	const message = document.querySelector("#messageinput").innerText;
 	fetch(`${apiBaseUrl}/sendMessage`, {
 		method: "POST",
 		body: JSON.stringify({ message }),
@@ -119,7 +120,7 @@ function sendMessage() {
 		},
 	});
 	// Clear input field
-	document.querySelector("#messageinput").textContent = "";
+	document.querySelector("#messageinput").innerText = "";
 }
 
 function deleteMessage(id) {
