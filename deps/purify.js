@@ -6,7 +6,9 @@
 		: typeof define === "function" && define.amd
 			? define(factory)
 			: ((global =
-					typeof globalThis !== "undefined" ? globalThis : global || self),
+					typeof globalThis === "undefined"
+						? global || globalThis
+						: globalThis),
 				(global.DOMPurify = factory()));
 })(this, function () {
 	"use strict";
@@ -18,28 +20,24 @@
 		getPrototypeOf,
 		getOwnPropertyDescriptor,
 	} = Object;
-	let { freeze, seal, create } = Object; // eslint-disable-line import/no-mutable-exports
+	let { freeze, seal, create } = Object;
 	let { apply, construct } = typeof Reflect !== "undefined" && Reflect;
-	if (!freeze) {
-		freeze = function freeze(x) {
-			return x;
-		};
-	}
-	if (!seal) {
-		seal = function seal(x) {
-			return x;
-		};
-	}
-	if (!apply) {
-		apply = function apply(fun, thisValue, args) {
-			return fun.apply(thisValue, args);
-		};
-	}
-	if (!construct) {
-		construct = function construct(Func, args) {
-			return new Func(...args);
-		};
-	}
+	freeze ||= function freeze(x) {
+		return x;
+	};
+
+	seal ||= function seal(x) {
+		return x;
+	};
+
+	apply ||= function apply(fun, thisValue, arguments_) {
+		return fun.apply(thisValue, arguments_);
+	};
+
+	construct ||= function construct(Function_, arguments_) {
+		return new Function_(...arguments_);
+	};
+
 	const arrayForEach = unapply(Array.prototype.forEach);
 	const arrayLastIndexOf = unapply(Array.prototype.lastIndexOf);
 	const arrayPop = unapply(Array.prototype.pop);
@@ -60,41 +58,48 @@
 	 * @param func - The function to be wrapped and called.
 	 * @returns A new function that calls the given function with a specified thisArg and arguments.
 	 */
-	function unapply(func) {
-		return function (thisArg) {
-			if (thisArg instanceof RegExp) {
-				thisArg.lastIndex = 0;
+	function unapply(function_) {
+		return function (thisArgument) {
+			if (thisArgument instanceof RegExp) {
+				thisArgument.lastIndex = 0;
 			}
+
 			for (
-				var _len = arguments.length,
-					args = new Array(_len > 1 ? _len - 1 : 0),
+				var _length = arguments.length,
+					arguments_ = Array.from({ length: _length > 1 ? _length - 1 : 0 }),
 					_key = 1;
-				_key < _len;
+				_key < _length;
 				_key++
 			) {
-				args[_key - 1] = arguments[_key];
+				arguments_[_key - 1] = arguments[_key];
 			}
-			return apply(func, thisArg, args);
+
+			return apply(function_, thisArgument, arguments_);
 		};
 	}
+
 	/**
 	 * Creates a new function that constructs an instance of the given constructor function with the provided arguments.
 	 *
 	 * @param func - The constructor function to be wrapped and called.
 	 * @returns A new function that constructs an instance of the given constructor function with the provided arguments.
 	 */
-	function unconstruct(func) {
+	function unconstruct(function_) {
 		return function () {
 			for (
-				var _len2 = arguments.length, args = new Array(_len2), _key2 = 0;
-				_key2 < _len2;
+				var _length2 = arguments.length,
+					arguments_ = new Array(_length2),
+					_key2 = 0;
+				_key2 < _length2;
 				_key2++
 			) {
-				args[_key2] = arguments[_key2];
+				arguments_[_key2] = arguments[_key2];
 			}
-			return construct(func, args);
+
+			return construct(function_, arguments_);
 		};
 	}
+
 	/**
 	 * Add properties to a lookup table
 	 *
@@ -104,7 +109,7 @@
 	 * @returns The modified set with added elements.
 	 */
 	function addToSet(set, array) {
-		let transformCaseFunc =
+		const transformCaseFunction =
 			arguments.length > 2 && arguments[2] !== undefined
 				? arguments[2]
 				: stringToLowerCase;
@@ -114,23 +119,28 @@
 			// Prevent prototype setters from intercepting set as a this value.
 			setPrototypeOf(set, null);
 		}
+
 		let l = array.length;
 		while (l--) {
 			let element = array[l];
 			if (typeof element === "string") {
-				const lcElement = transformCaseFunc(element);
+				const lcElement = transformCaseFunction(element);
 				if (lcElement !== element) {
 					// Config presets (e.g. tags.js, attrs.js) are immutable.
 					if (!isFrozen(array)) {
 						array[l] = lcElement;
 					}
+
 					element = lcElement;
 				}
 			}
+
 			set[element] = true;
 		}
+
 		return set;
 	}
+
 	/**
 	 * Clean up an array to harden against CSPP
 	 *
@@ -144,8 +154,10 @@
 				array[index] = null;
 			}
 		}
+
 		return array;
 	}
+
 	/**
 	 * Shallow clone an object
 	 *
@@ -170,8 +182,10 @@
 				}
 			}
 		}
+
 		return newObject;
 	}
+
 	/**
 	 * This method automatically checks if the prop is function or getter and behaves accordingly.
 	 *
@@ -179,22 +193,26 @@
 	 * @param prop - The property name for which to find the getter function.
 	 * @returns The getter function found in the prototype chain or a fallback function.
 	 */
-	function lookupGetter(object, prop) {
+	function lookupGetter(object, property) {
 		while (object !== null) {
-			const desc = getOwnPropertyDescriptor(object, prop);
+			const desc = getOwnPropertyDescriptor(object, property);
 			if (desc) {
 				if (desc.get) {
 					return unapply(desc.get);
 				}
+
 				if (typeof desc.value === "function") {
 					return unapply(desc.value);
 				}
 			}
+
 			object = getPrototypeOf(object);
 		}
+
 		function fallbackValue() {
 			return null;
 		}
+
 		return fallbackValue;
 	}
 
@@ -864,18 +882,18 @@
 	const DOCTYPE_NAME = seal(/^html$/i);
 	const CUSTOM_ELEMENT = seal(/^[a-z][.\w]*(-[.\w]+)+$/i);
 
-	var EXPRESSIONS = /*#__PURE__*/ Object.freeze({
+	const EXPRESSIONS = /* #__PURE__ */ Object.freeze({
 		__proto__: null,
-		ARIA_ATTR: ARIA_ATTR,
-		ATTR_WHITESPACE: ATTR_WHITESPACE,
-		CUSTOM_ELEMENT: CUSTOM_ELEMENT,
-		DATA_ATTR: DATA_ATTR,
-		DOCTYPE_NAME: DOCTYPE_NAME,
-		ERB_EXPR: ERB_EXPR,
-		IS_ALLOWED_URI: IS_ALLOWED_URI,
-		IS_SCRIPT_OR_DATA: IS_SCRIPT_OR_DATA,
-		MUSTACHE_EXPR: MUSTACHE_EXPR,
-		TMPLIT_EXPR: TMPLIT_EXPR,
+		ARIA_ATTR,
+		ATTR_WHITESPACE,
+		CUSTOM_ELEMENT,
+		DATA_ATTR,
+		DOCTYPE_NAME,
+		ERB_EXPR,
+		IS_ALLOWED_URI,
+		IS_SCRIPT_OR_DATA,
+		MUSTACHE_EXPR,
+		TMPLIT_EXPR,
 	});
 
 	/* eslint-disable @typescript-eslint/indent */
@@ -897,8 +915,9 @@
 		notation: 12, // Deprecated
 	};
 	const getGlobal = function getGlobal() {
-		return typeof window === "undefined" ? null : window;
+		return typeof globalThis === "undefined" ? null : globalThis;
 	};
+
 	/**
 	 * Creates a no-op policy for internal use only.
 	 * Don't export this function outside this module!
@@ -917,6 +936,7 @@
 		) {
 			return null;
 		}
+
 		// Allow the callers to control the unique policy name
 		// by adding a data-tt-policy-suffix to the script element with the DOMPurify.
 		// Policy creation with duplicate names throws in Trusted Types.
@@ -925,6 +945,7 @@
 		if (purifyHostElement && purifyHostElement.hasAttribute(ATTR_NAME)) {
 			suffix = purifyHostElement.getAttribute(ATTR_NAME);
 		}
+
 		const policyName = "dompurify" + (suffix ? "#" + suffix : "");
 		try {
 			return trustedTypes.createPolicy(policyName, {
@@ -935,7 +956,7 @@
 					return scriptUrl;
 				},
 			});
-		} catch (_) {
+		} catch {
 			// Policy creation failed (most likely another DOMPurify script has
 			// already run). Skip creating the policy, as this will only cause errors
 			// if TT are enforced.
@@ -945,6 +966,7 @@
 			return null;
 		}
 	};
+
 	const _createHooksMap = function _createHooksMap() {
 		return {
 			afterSanitizeAttributes: [],
@@ -958,8 +980,9 @@
 			uponSanitizeShadowNode: [],
 		};
 	};
+
 	function createDOMPurify() {
-		let window =
+		const window =
 			arguments.length > 0 && arguments[0] !== undefined
 				? arguments[0]
 				: getGlobal();
@@ -977,6 +1000,7 @@
 			DOMPurify.isSupported = false;
 			return DOMPurify;
 		}
+
 		let { document } = window;
 		const originalDocument = document;
 		const currentScript = originalDocument.currentScript;
@@ -1009,6 +1033,7 @@
 				document = template.content.ownerDocument;
 			}
 		}
+
 		let trustedTypesPolicy;
 		let emptyHTML = "";
 		const {
@@ -1245,7 +1270,7 @@
 		let PARSER_MEDIA_TYPE = null;
 		const SUPPORTED_PARSER_MEDIA_TYPES = ["application/xhtml+xml", "text/html"];
 		const DEFAULT_PARSER_MEDIA_TYPE = "text/html";
-		let transformCaseFunc = null;
+		let transformCaseFunction = null;
 		/* Keep a reference to config to pass to hooks */
 		let CONFIG = null;
 		/* Ideally, do not touch anything below this line */
@@ -1254,6 +1279,7 @@
 		const isRegexOrFunction = function isRegexOrFunction(testValue) {
 			return testValue instanceof RegExp || testValue instanceof Function;
 		};
+
 		/**
 		 * _parseConfig
 		 *
@@ -1266,10 +1292,12 @@
 			if (CONFIG && CONFIG === cfg) {
 				return;
 			}
+
 			/* Shield configuration object from tampering */
 			if (!cfg || typeof cfg !== "object") {
 				cfg = {};
 			}
+
 			/* Shield configuration object from prototype pollution */
 			cfg = clone(cfg);
 			PARSER_MEDIA_TYPE =
@@ -1278,16 +1306,16 @@
 					? DEFAULT_PARSER_MEDIA_TYPE
 					: cfg.PARSER_MEDIA_TYPE;
 			// HTML tags and attributes are not case-sensitive, converting to lowercase. Keeping XHTML as is.
-			transformCaseFunc =
+			transformCaseFunction =
 				PARSER_MEDIA_TYPE === "application/xhtml+xml"
 					? stringToString
 					: stringToLowerCase;
 			/* Set configuration parameters */
 			ALLOWED_TAGS = objectHasOwnProperty(cfg, "ALLOWED_TAGS")
-				? addToSet({}, cfg.ALLOWED_TAGS, transformCaseFunc)
+				? addToSet({}, cfg.ALLOWED_TAGS, transformCaseFunction)
 				: DEFAULT_ALLOWED_TAGS;
 			ALLOWED_ATTR = objectHasOwnProperty(cfg, "ALLOWED_ATTR")
-				? addToSet({}, cfg.ALLOWED_ATTR, transformCaseFunc)
+				? addToSet({}, cfg.ALLOWED_ATTR, transformCaseFunction)
 				: DEFAULT_ALLOWED_ATTR;
 			ALLOWED_NAMESPACES = objectHasOwnProperty(cfg, "ALLOWED_NAMESPACES")
 				? addToSet({}, cfg.ALLOWED_NAMESPACES, stringToString)
@@ -1296,24 +1324,24 @@
 				? addToSet(
 						clone(DEFAULT_URI_SAFE_ATTRIBUTES),
 						cfg.ADD_URI_SAFE_ATTR,
-						transformCaseFunc
+						transformCaseFunction
 					)
 				: DEFAULT_URI_SAFE_ATTRIBUTES;
 			DATA_URI_TAGS = objectHasOwnProperty(cfg, "ADD_DATA_URI_TAGS")
 				? addToSet(
 						clone(DEFAULT_DATA_URI_TAGS),
 						cfg.ADD_DATA_URI_TAGS,
-						transformCaseFunc
+						transformCaseFunction
 					)
 				: DEFAULT_DATA_URI_TAGS;
 			FORBID_CONTENTS = objectHasOwnProperty(cfg, "FORBID_CONTENTS")
-				? addToSet({}, cfg.FORBID_CONTENTS, transformCaseFunc)
+				? addToSet({}, cfg.FORBID_CONTENTS, transformCaseFunction)
 				: DEFAULT_FORBID_CONTENTS;
 			FORBID_TAGS = objectHasOwnProperty(cfg, "FORBID_TAGS")
-				? addToSet({}, cfg.FORBID_TAGS, transformCaseFunc)
+				? addToSet({}, cfg.FORBID_TAGS, transformCaseFunction)
 				: clone({});
 			FORBID_ATTR = objectHasOwnProperty(cfg, "FORBID_ATTR")
-				? addToSet({}, cfg.FORBID_ATTR, transformCaseFunc)
+				? addToSet({}, cfg.FORBID_ATTR, transformCaseFunction)
 				: clone({});
 			USE_PROFILES = objectHasOwnProperty(cfg, "USE_PROFILES")
 				? cfg.USE_PROFILES
@@ -1347,6 +1375,7 @@
 				CUSTOM_ELEMENT_HANDLING.tagNameCheck =
 					cfg.CUSTOM_ELEMENT_HANDLING.tagNameCheck;
 			}
+
 			if (
 				cfg.CUSTOM_ELEMENT_HANDLING &&
 				isRegexOrFunction(cfg.CUSTOM_ELEMENT_HANDLING.attributeNameCheck)
@@ -1354,6 +1383,7 @@
 				CUSTOM_ELEMENT_HANDLING.attributeNameCheck =
 					cfg.CUSTOM_ELEMENT_HANDLING.attributeNameCheck;
 			}
+
 			if (
 				cfg.CUSTOM_ELEMENT_HANDLING &&
 				typeof cfg.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements ===
@@ -1362,12 +1392,15 @@
 				CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements =
 					cfg.CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements;
 			}
+
 			if (SAFE_FOR_TEMPLATES) {
 				ALLOW_DATA_ATTR = false;
 			}
+
 			if (RETURN_DOM_FRAGMENT) {
 				RETURN_DOM = true;
 			}
+
 			/* Parse profile info */
 			if (USE_PROFILES) {
 				ALLOWED_TAGS = addToSet({}, text);
@@ -1376,68 +1409,88 @@
 					addToSet(ALLOWED_TAGS, html$1);
 					addToSet(ALLOWED_ATTR, html);
 				}
+
 				if (USE_PROFILES.svg === true) {
 					addToSet(ALLOWED_TAGS, svg$1);
 					addToSet(ALLOWED_ATTR, svg);
 					addToSet(ALLOWED_ATTR, xml);
 				}
+
 				if (USE_PROFILES.svgFilters === true) {
 					addToSet(ALLOWED_TAGS, svgFilters);
 					addToSet(ALLOWED_ATTR, svg);
 					addToSet(ALLOWED_ATTR, xml);
 				}
+
 				if (USE_PROFILES.mathMl === true) {
 					addToSet(ALLOWED_TAGS, mathMl$1);
 					addToSet(ALLOWED_ATTR, mathMl);
 					addToSet(ALLOWED_ATTR, xml);
 				}
 			}
+
 			/* Merge configuration parameters */
 			if (cfg.ADD_TAGS) {
 				if (ALLOWED_TAGS === DEFAULT_ALLOWED_TAGS) {
 					ALLOWED_TAGS = clone(ALLOWED_TAGS);
 				}
-				addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunc);
+
+				addToSet(ALLOWED_TAGS, cfg.ADD_TAGS, transformCaseFunction);
 			}
+
 			if (cfg.ADD_ATTR) {
 				if (ALLOWED_ATTR === DEFAULT_ALLOWED_ATTR) {
 					ALLOWED_ATTR = clone(ALLOWED_ATTR);
 				}
-				addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunc);
+
+				addToSet(ALLOWED_ATTR, cfg.ADD_ATTR, transformCaseFunction);
 			}
+
 			if (cfg.ADD_URI_SAFE_ATTR) {
-				addToSet(URI_SAFE_ATTRIBUTES, cfg.ADD_URI_SAFE_ATTR, transformCaseFunc);
+				addToSet(
+					URI_SAFE_ATTRIBUTES,
+					cfg.ADD_URI_SAFE_ATTR,
+					transformCaseFunction
+				);
 			}
+
 			if (cfg.FORBID_CONTENTS) {
 				if (FORBID_CONTENTS === DEFAULT_FORBID_CONTENTS) {
 					FORBID_CONTENTS = clone(FORBID_CONTENTS);
 				}
-				addToSet(FORBID_CONTENTS, cfg.FORBID_CONTENTS, transformCaseFunc);
+
+				addToSet(FORBID_CONTENTS, cfg.FORBID_CONTENTS, transformCaseFunction);
 			}
+
 			/* Add #text in case KEEP_CONTENT is set to true */
 			if (KEEP_CONTENT) {
 				ALLOWED_TAGS["#text"] = true;
 			}
+
 			/* Add html, head and body to ALLOWED_TAGS in case WHOLE_DOCUMENT is true */
 			if (WHOLE_DOCUMENT) {
 				addToSet(ALLOWED_TAGS, ["html", "head", "body"]);
 			}
+
 			/* Add tbody to ALLOWED_TAGS in case tables are permitted, see #286, #365 */
 			if (ALLOWED_TAGS.table) {
 				addToSet(ALLOWED_TAGS, ["tbody"]);
 				delete FORBID_TAGS.tbody;
 			}
+
 			if (cfg.TRUSTED_TYPES_POLICY) {
 				if (typeof cfg.TRUSTED_TYPES_POLICY.createHTML !== "function") {
 					throw typeErrorCreate(
 						'TRUSTED_TYPES_POLICY configuration option must provide a "createHTML" hook.'
 					);
 				}
+
 				if (typeof cfg.TRUSTED_TYPES_POLICY.createScriptURL !== "function") {
 					throw typeErrorCreate(
 						'TRUSTED_TYPES_POLICY configuration option must provide a "createScriptURL" hook.'
 					);
 				}
+
 				// Overwrite existing TrustedTypes policy.
 				trustedTypesPolicy = cfg.TRUSTED_TYPES_POLICY;
 				// Sign local variables required by `sanitize`.
@@ -1450,18 +1503,22 @@
 						currentScript
 					);
 				}
+
 				// If creating the internal policy succeeded sign internal variables.
 				if (trustedTypesPolicy !== null && typeof emptyHTML === "string") {
 					emptyHTML = trustedTypesPolicy.createHTML("");
 				}
 			}
+
 			// Prevent further manipulation of configuration.
 			// Not available in IE8, Safari 5, etc.
 			if (freeze) {
 				freeze(cfg);
 			}
+
 			CONFIG = cfg;
 		};
+
 		/* Keep track of all possible SVG and MathML tags
 		 * so that we can perform the namespace checks
 		 * correctly. */
@@ -1487,11 +1544,13 @@
 					tagName: "template",
 				};
 			}
+
 			const tagName = stringToLowerCase(element.tagName);
 			const parentTagName = stringToLowerCase(parent.tagName);
 			if (!ALLOWED_NAMESPACES[element.namespaceURI]) {
 				return false;
 			}
+
 			if (element.namespaceURI === SVG_NAMESPACE) {
 				// The only way to switch from HTML namespace to SVG
 				// is via <svg>. If it happens via any other tag, then
@@ -1499,6 +1558,7 @@
 				if (parent.namespaceURI === HTML_NAMESPACE) {
 					return tagName === "svg";
 				}
+
 				// The only way to switch from MathML to SVG is via`
 				// svg if parent is either <annotation-xml> or MathML
 				// text integration points.
@@ -1509,10 +1569,12 @@
 							MATHML_TEXT_INTEGRATION_POINTS[parentTagName])
 					);
 				}
+
 				// We only allow elements that are defined in SVG
 				// spec. All others are disallowed in SVG namespace.
 				return Boolean(ALL_SVG_TAGS[tagName]);
 			}
+
 			if (element.namespaceURI === MATHML_NAMESPACE) {
 				// The only way to switch from HTML namespace to MathML
 				// is via <math>. If it happens via any other tag, then
@@ -1520,15 +1582,18 @@
 				if (parent.namespaceURI === HTML_NAMESPACE) {
 					return tagName === "math";
 				}
+
 				// The only way to switch from SVG to MathML is via
 				// <math> and HTML integration points
 				if (parent.namespaceURI === SVG_NAMESPACE) {
 					return tagName === "math" && HTML_INTEGRATION_POINTS[parentTagName];
 				}
+
 				// We only allow elements that are defined in MathML
 				// spec. All others are disallowed in MathML namespace.
 				return Boolean(ALL_MATHML_TAGS[tagName]);
 			}
+
 			if (element.namespaceURI === HTML_NAMESPACE) {
 				// The only way to switch from SVG to HTML is via
 				// HTML integration points, and from MathML to HTML
@@ -1539,12 +1604,14 @@
 				) {
 					return false;
 				}
+
 				if (
 					parent.namespaceURI === MATHML_NAMESPACE &&
 					!MATHML_TEXT_INTEGRATION_POINTS[parentTagName]
 				) {
 					return false;
 				}
+
 				// We disallow tags that are specific for MathML
 				// or SVG and should never appear in HTML namespace
 				return (
@@ -1552,6 +1619,7 @@
 					(COMMON_SVG_AND_HTML_ELEMENTS[tagName] || !ALL_SVG_TAGS[tagName])
 				);
 			}
+
 			// For XHTML and XML documents that support custom namespaces
 			if (
 				PARSER_MEDIA_TYPE === "application/xhtml+xml" &&
@@ -1559,12 +1627,14 @@
 			) {
 				return true;
 			}
+
 			// The code should never reach this place (this means
 			// that the element somehow got namespace that is not
 			// HTML, SVG, MathML or allowed via ALLOWED_NAMESPACES).
 			// Return false just in case.
 			return false;
 		};
+
 		/**
 		 * _forceRemove
 		 *
@@ -1577,10 +1647,11 @@
 			try {
 				// eslint-disable-next-line unicorn/prefer-dom-node-remove
 				getParentNode(node).removeChild(node);
-			} catch (_) {
+			} catch {
 				remove(node);
 			}
 		};
+
 		/**
 		 * _removeAttribute
 		 *
@@ -1593,26 +1664,28 @@
 					attribute: element.getAttributeNode(name),
 					from: element,
 				});
-			} catch (_) {
+			} catch {
 				arrayPush(DOMPurify.removed, {
 					attribute: null,
 					from: element,
 				});
 			}
+
 			element.removeAttribute(name);
 			// We void attribute values for unremovable "is" attributes
 			if (name === "is") {
 				if (RETURN_DOM || RETURN_DOM_FRAGMENT) {
 					try {
 						_forceRemove(element);
-					} catch (_) {}
+					} catch {}
 				} else {
 					try {
 						element.setAttribute(name, "");
-					} catch (_) {}
+					} catch {}
 				}
 			}
 		};
+
 		/**
 		 * _initDocument
 		 *
@@ -1621,7 +1694,7 @@
 		 */
 		const _initDocument = function _initDocument(dirty) {
 			/* Create a HTML document */
-			let doc = null;
+			let document_ = null;
 			let leadingWhitespace = null;
 			if (FORCE_BODY) {
 				dirty = "<remove></remove>" + dirty;
@@ -1630,6 +1703,7 @@
 				const matches = stringMatch(dirty, /^[\r\n\t ]+/);
 				leadingWhitespace = matches && matches[0];
 			}
+
 			if (
 				PARSER_MEDIA_TYPE === "application/xhtml+xml" &&
 				NAMESPACE === HTML_NAMESPACE
@@ -1640,6 +1714,7 @@
 					dirty +
 					"</body></html>";
 			}
+
 			const dirtyPayload = trustedTypesPolicy
 				? trustedTypesPolicy.createHTML(dirty)
 				: dirty;
@@ -1649,39 +1724,44 @@
 			 */
 			if (NAMESPACE === HTML_NAMESPACE) {
 				try {
-					doc = new DOMParser().parseFromString(
+					document_ = new DOMParser().parseFromString(
 						dirtyPayload,
 						PARSER_MEDIA_TYPE
 					);
-				} catch (_) {}
+				} catch {}
 			}
+
 			/* Use createHTMLDocument in case DOMParser is not available */
-			if (!doc || !doc.documentElement) {
-				doc = implementation.createDocument(NAMESPACE, "template", null);
+			if (!document_ || !document_.documentElement) {
+				document_ = implementation.createDocument(NAMESPACE, "template", null);
 				try {
-					doc.documentElement.innerHTML = IS_EMPTY_INPUT
+					document_.documentElement.innerHTML = IS_EMPTY_INPUT
 						? emptyHTML
 						: dirtyPayload;
-				} catch (_) {
+				} catch {
 					// Syntax error if dirtyPayload is invalid xml
 				}
 			}
-			const body = doc.body || doc.documentElement;
+
+			const body = document_.body || document_.documentElement;
 			if (dirty && leadingWhitespace) {
 				body.insertBefore(
 					document.createTextNode(leadingWhitespace),
 					body.childNodes[0] || null
 				);
 			}
+
 			/* Work on whole document or just its body */
 			if (NAMESPACE === HTML_NAMESPACE) {
 				return getElementsByTagName.call(
-					doc,
+					document_,
 					WHOLE_DOCUMENT ? "html" : "body"
 				)[0];
 			}
-			return WHOLE_DOCUMENT ? doc.documentElement : body;
+
+			return WHOLE_DOCUMENT ? document_.documentElement : body;
 		};
+
 		/**
 		 * Creates a NodeIterator object that you can use to traverse filtered lists of nodes or elements in a document.
 		 *
@@ -1701,6 +1781,7 @@
 				null
 			);
 		};
+
 		/**
 		 * _isClobbered
 		 *
@@ -1721,6 +1802,7 @@
 					typeof element.hasChildNodes !== "function")
 			);
 		};
+
 		/**
 		 * Checks whether the given object is a DOM node.
 		 *
@@ -1730,11 +1812,13 @@
 		const _isNode = function _isNode(value) {
 			return typeof Node === "function" && value instanceof Node;
 		};
+
 		function _executeHooks(hooks, currentNode, data) {
 			arrayForEach(hooks, (hook) => {
 				hook.call(DOMPurify, currentNode, data, CONFIG);
 			});
 		}
+
 		/**
 		 * _sanitizeElements
 		 *
@@ -1753,8 +1837,9 @@
 				_forceRemove(currentNode);
 				return true;
 			}
+
 			/* Now let's check the element's type and name */
-			const tagName = transformCaseFunc(currentNode.nodeName);
+			const tagName = transformCaseFunction(currentNode.nodeName);
 			/* Execute a hook if present */
 			_executeHooks(hooks.uponSanitizeElement, currentNode, {
 				tagName,
@@ -1771,11 +1856,13 @@
 				_forceRemove(currentNode);
 				return true;
 			}
+
 			/* Remove any occurrence of processing instructions */
 			if (currentNode.nodeType === NODE_TYPE.progressingInstruction) {
 				_forceRemove(currentNode);
 				return true;
 			}
+
 			/* Remove any kind of possibly harmful comments */
 			if (
 				SAFE_FOR_XML &&
@@ -1785,6 +1872,7 @@
 				_forceRemove(currentNode);
 				return true;
 			}
+
 			/* Remove element if anything forbids its presence */
 			if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
 				/* Check if we have a custom element to handle */
@@ -1795,6 +1883,7 @@
 					) {
 						return false;
 					}
+
 					if (
 						CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function &&
 						CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)
@@ -1802,6 +1891,7 @@
 						return false;
 					}
 				}
+
 				/* Keep content except for bad-listed elements */
 				if (KEEP_CONTENT && !FORBID_CONTENTS[tagName]) {
 					const parentNode =
@@ -1817,9 +1907,11 @@
 						}
 					}
 				}
+
 				_forceRemove(currentNode);
 				return true;
 			}
+
 			/* Check whether element has a valid namespace */
 			if (
 				currentNode instanceof Element &&
@@ -1828,6 +1920,7 @@
 				_forceRemove(currentNode);
 				return true;
 			}
+
 			/* Make sure that older browsers don't get fallback-tag mXSS */
 			if (
 				(tagName === "noscript" ||
@@ -1838,6 +1931,7 @@
 				_forceRemove(currentNode);
 				return true;
 			}
+
 			/* Sanitize element content to be template-safe */
 			if (SAFE_FOR_TEMPLATES && currentNode.nodeType === NODE_TYPE.text) {
 				/* Get the element's text content */
@@ -1852,10 +1946,12 @@
 					currentNode.textContent = content;
 				}
 			}
+
 			/* Execute a hook if present */
 			_executeHooks(hooks.afterSanitizeElements, currentNode, null);
 			return false;
 		};
+
 		/**
 		 * _isValidAttribute
 		 *
@@ -1874,6 +1970,7 @@
 			) {
 				return false;
 			}
+
 			/* Allow valid data-* attributes: At least one character after "-"
           (https://html.spec.whatwg.org/multipage/dom.html#embedding-custom-non-visible-data-with-the-data-*-attributes)
           XML-compatible (https://html.spec.whatwg.org/multipage/infrastructure.html#xml-compatible and http://www.w3.org/TR/xml/#d0e804)
@@ -1933,6 +2030,7 @@
 			} else;
 			return true;
 		};
+
 		/**
 		 * _isBasicCustomElement
 		 * checks if at least one dash is included in tagName, and it's not the first char
@@ -1946,6 +2044,7 @@
 				tagName !== "annotation-xml" && stringMatch(tagName, CUSTOM_ELEMENT)
 			);
 		};
+
 		/**
 		 * _sanitizeAttributes
 		 *
@@ -1964,6 +2063,7 @@
 			if (!attributes || _isClobbered(currentNode)) {
 				return;
 			}
+
 			const hookEvent = {
 				attrName: "",
 				attrValue: "",
@@ -1974,10 +2074,10 @@
 			let l = attributes.length;
 			/* Go backwards over all attributes; safely remove bad ones */
 			while (l--) {
-				const attr = attributes[l];
-				const { name, namespaceURI, value: attrValue } = attr;
-				const lcName = transformCaseFunc(name);
-				const initValue = attrValue;
+				const attribute = attributes[l];
+				const { name, namespaceURI, value: attributeValue } = attribute;
+				const lcName = transformCaseFunction(name);
+				const initValue = attributeValue;
 				let value = name === "value" ? initValue : stringTrim(initValue);
 				/* Execute a hook if present */
 				hookEvent.attrName = lcName;
@@ -1995,6 +2095,7 @@
 					// Prefix the value and later re-create the attribute with the sanitized value
 					value = SANITIZE_NAMED_PROPS_PREFIX + value;
 				}
+
 				/* Work around a security issue with comments inside attributes */
 				if (
 					SAFE_FOR_XML &&
@@ -2003,32 +2104,38 @@
 					_removeAttribute(name, currentNode);
 					continue;
 				}
+
 				/* Did the hooks approve of the attribute? */
 				if (hookEvent.forceKeepAttr) {
 					continue;
 				}
+
 				/* Did the hooks approve of the attribute? */
 				if (!hookEvent.keepAttr) {
 					_removeAttribute(name, currentNode);
 					continue;
 				}
+
 				/* Work around a security issue in jQuery 3.0 */
 				if (!ALLOW_SELF_CLOSE_IN_ATTR && regExpTest(/\/>/i, value)) {
 					_removeAttribute(name, currentNode);
 					continue;
 				}
+
 				/* Sanitize attribute content to be template-safe */
 				if (SAFE_FOR_TEMPLATES) {
 					arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], (expr) => {
 						value = stringReplace(value, expr, " ");
 					});
 				}
+
 				/* Is `value` valid for this attribute? */
-				const lcTag = transformCaseFunc(currentNode.nodeName);
+				const lcTag = transformCaseFunction(currentNode.nodeName);
 				if (!_isValidAttribute(lcTag, lcName, value)) {
 					_removeAttribute(name, currentNode);
 					continue;
 				}
+
 				/* Handle attributes that require Trusted Types */
 				if (
 					trustedTypesPolicy &&
@@ -2042,6 +2149,7 @@
 								value = trustedTypesPolicy.createHTML(value);
 								break;
 							}
+
 							case "TrustedScriptURL": {
 								value = trustedTypesPolicy.createScriptURL(value);
 								break;
@@ -2049,6 +2157,7 @@
 						}
 					}
 				}
+
 				/* Handle invalid data-* attribute set by try-catching it */
 				if (value !== initValue) {
 					try {
@@ -2058,19 +2167,22 @@
 							/* Fallback to setAttribute() for browser-unrecognized namespaces e.g. "x-schema". */
 							currentNode.setAttribute(name, value);
 						}
+
 						if (_isClobbered(currentNode)) {
 							_forceRemove(currentNode);
 						} else {
 							arrayPop(DOMPurify.removed);
 						}
-					} catch (_) {
+					} catch {
 						_removeAttribute(name, currentNode);
 					}
 				}
 			}
+
 			/* Execute a hook if present */
 			_executeHooks(hooks.afterSanitizeAttributes, currentNode, null);
 		};
+
 		/**
 		 * _sanitizeShadowDOM
 		 *
@@ -2093,12 +2205,14 @@
 					_sanitizeShadowDOM(shadowNode.content);
 				}
 			}
+
 			/* Execute a hook if present */
 			_executeHooks(hooks.afterSanitizeShadowDOM, fragment, null);
 		};
+
 		// eslint-disable-next-line complexity
 		DOMPurify.sanitize = function (dirty) {
-			let cfg =
+			const cfg =
 				arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 			let body = null;
 			let importedNode = null;
@@ -2111,6 +2225,7 @@
 			if (IS_EMPTY_INPUT) {
 				dirty = "<!-->";
 			}
+
 			/* Stringify, in case dirty is an object */
 			if (typeof dirty !== "string" && !_isNode(dirty)) {
 				if (typeof dirty.toString === "function") {
@@ -2122,24 +2237,28 @@
 					throw typeErrorCreate("toString is not a function");
 				}
 			}
+
 			/* Return dirty HTML if DOMPurify cannot run */
 			if (!DOMPurify.isSupported) {
 				return dirty;
 			}
+
 			/* Assign config vars */
 			if (!SET_CONFIG) {
 				_parseConfig(cfg);
 			}
+
 			/* Clean up removed elements */
 			DOMPurify.removed = [];
 			/* Check if dirty is correctly typed for IN_PLACE */
 			if (typeof dirty === "string") {
 				IN_PLACE = false;
 			}
+
 			if (IN_PLACE) {
 				/* Do some early pre-sanitization to avoid unsafe root nodes */
 				if (dirty.nodeName) {
-					const tagName = transformCaseFunc(dirty.nodeName);
+					const tagName = transformCaseFunction(dirty.nodeName);
 					if (!ALLOWED_TAGS[tagName] || FORBID_TAGS[tagName]) {
 						throw typeErrorCreate(
 							"root node is forbidden and cannot be sanitized in-place"
@@ -2176,6 +2295,7 @@
 						? trustedTypesPolicy.createHTML(dirty)
 						: dirty;
 				}
+
 				/* Initialize the document to work on */
 				body = _initDocument(dirty);
 				/* Check we have a DOM node from the data */
@@ -2183,10 +2303,12 @@
 					return RETURN_DOM ? null : RETURN_TRUSTED_TYPE ? emptyHTML : "";
 				}
 			}
+
 			/* Remove first element node (ours) if FORCE_BODY is set */
 			if (body && FORCE_BODY) {
 				_forceRemove(body.firstChild);
 			}
+
 			/* Get node iterator */
 			const nodeIterator = _createNodeIterator(IN_PLACE ? dirty : body);
 			/* Now start iterating over the created document */
@@ -2200,10 +2322,12 @@
 					_sanitizeShadowDOM(currentNode.content);
 				}
 			}
+
 			/* If we sanitized `dirty` in-place, return it. */
 			if (IN_PLACE) {
 				return dirty;
 			}
+
 			/* Return sanitized string or DOM */
 			if (RETURN_DOM) {
 				if (RETURN_DOM_FRAGMENT) {
@@ -2215,6 +2339,7 @@
 				} else {
 					returnNode = body;
 				}
+
 				if (ALLOWED_ATTR.shadowroot || ALLOWED_ATTR.shadowrootmode) {
 					/*
             AdoptNode() is not used because internal state is not reset
@@ -2225,8 +2350,10 @@
           */
 					returnNode = importNode.call(originalDocument, returnNode, true);
 				}
+
 				return returnNode;
 			}
+
 			let serializedHTML = WHOLE_DOCUMENT ? body.outerHTML : body.innerHTML;
 			/* Serialize doctype if allowed */
 			if (
@@ -2243,41 +2370,50 @@
 					">\n" +
 					serializedHTML;
 			}
+
 			/* Sanitize final string template-safe */
 			if (SAFE_FOR_TEMPLATES) {
 				arrayForEach([MUSTACHE_EXPR, ERB_EXPR, TMPLIT_EXPR], (expr) => {
 					serializedHTML = stringReplace(serializedHTML, expr, " ");
 				});
 			}
+
 			return trustedTypesPolicy && RETURN_TRUSTED_TYPE
 				? trustedTypesPolicy.createHTML(serializedHTML)
 				: serializedHTML;
 		};
+
 		DOMPurify.setConfig = function () {
-			let cfg =
+			const cfg =
 				arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 			_parseConfig(cfg);
 			SET_CONFIG = true;
 		};
+
 		DOMPurify.clearConfig = function () {
 			CONFIG = null;
 			SET_CONFIG = false;
 		};
-		DOMPurify.isValidAttribute = function (tag, attr, value) {
+
+		DOMPurify.isValidAttribute = function (tag, attribute, value) {
 			/* Initialize shared config vars if necessary. */
 			if (!CONFIG) {
 				_parseConfig({});
 			}
-			const lcTag = transformCaseFunc(tag);
-			const lcName = transformCaseFunc(attr);
+
+			const lcTag = transformCaseFunction(tag);
+			const lcName = transformCaseFunction(attribute);
 			return _isValidAttribute(lcTag, lcName, value);
 		};
+
 		DOMPurify.addHook = function (entryPoint, hookFunction) {
 			if (typeof hookFunction !== "function") {
 				return;
 			}
+
 			arrayPush(hooks[entryPoint], hookFunction);
 		};
+
 		DOMPurify.removeHook = function (entryPoint, hookFunction) {
 			if (hookFunction !== undefined) {
 				const index = arrayLastIndexOf(hooks[entryPoint], hookFunction);
@@ -2285,18 +2421,23 @@
 					? undefined
 					: arraySplice(hooks[entryPoint], index, 1)[0];
 			}
+
 			return arrayPop(hooks[entryPoint]);
 		};
+
 		DOMPurify.removeHooks = function (entryPoint) {
 			hooks[entryPoint] = [];
 		};
+
 		DOMPurify.removeAllHooks = function () {
 			hooks = _createHooksMap();
 		};
+
 		return DOMPurify;
 	}
-	var purify = createDOMPurify();
+
+	const purify = createDOMPurify();
 
 	return purify;
 });
-//# sourceMappingURL=purify.js.map
+// # sourceMappingURL=purify.js.map

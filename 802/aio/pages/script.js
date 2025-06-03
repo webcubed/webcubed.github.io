@@ -1,4 +1,4 @@
-function renderDOMFromMarkdownFile(path) {
+function _renderDOMFromMarkdownFile(path) {
 	return fetch(path)
 		.then((response) => response.text())
 		.then((markdown) => {

@@ -38,7 +38,7 @@
 			"sw.js",
 			"workbox-*.js",
 			"**/*.old.js",
-			"libs.*"
+			"deps/**"
 		]
 	}
 }
