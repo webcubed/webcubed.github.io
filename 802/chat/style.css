@@ -19,7 +19,6 @@ html {
 	left: 50%;
 	transform: translateX(-50%);
 	bottom: 2rem;
-	max-height: 14.5rem;
 }
 .messagebutton {
 	height: 2.5rem;
@@ -46,6 +45,7 @@ html {
 	overflow-y: scroll;
 	max-width: 90%;
 	max-height: 75%;
+	max-height: 12.5rem;
 }
 #messageinput:hover {
 	background-color: var(--surface1);

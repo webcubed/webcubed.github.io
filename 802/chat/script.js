@@ -6,7 +6,9 @@ let retryCount = 0;
 const retryDelay = 5000;
 
 function createMessageElement(message) {
-	const content = DOMPurify.sanitize(marked.parse(message.cleanContent));
+	const content = DOMPurify.sanitize(
+		marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
+	);
 	const messageElement = document.createElement("div");
 	messageElement.id = `message-${message.id}`;
 	messageElement.classList.add("message");
@@ -106,7 +108,7 @@ function fetchMessages(LMID = null) {
 }
 
 function sendMessage() {
-	const message = document.querySelector("#messageinput").value;
+	const message = document.querySelector("#messageinput").textContent;
 	fetch(`${apiBaseUrl}/sendMessage`, {
 		method: "POST",
 		body: JSON.stringify({ message }),
@@ -117,7 +119,7 @@ function sendMessage() {
 		},
 	});
 	// Clear input field
-	document.querySelector("#messageinput").value = "";
+	document.querySelector("#messageinput").textContent = "";
 }
 
 function deleteMessage(id) {
