@@ -151,8 +151,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 			if (retryCount > 0) {
 				new Toast(
 					"success",
-					"Websocket Connection restored. Refetching messages.",
-					`Reconnected after ${retryCount} attempts`,
+					"Websocket Connection restored",
+					`Reconnected after ${retryCount} attempts. Refetching messages.`,
 					5000
 				);
 				retryCount = 0;

@@ -27,15 +27,17 @@
 		<div id="messageswrapper">
 			<div id="messages"></div>
 		</div>
-		<button
-			onclick="scrollToBottom()"
-			style="position: fixed; bottom: 100px; right: 100px"
-		>
-			jump to bottom
-		</button>
-		<div id="inputcontainer">
-			<input id="messageinput" />
-			<button id="submit">Send</button>
+		<div id="bottom">
+			<div id="status">
+				<div id="websocketstatus"></div>
+			</div>
+			<div id="inputcontainer">
+				<div id="messageinput" contenteditable="true"></div>
+				<button id="submit">Send</button>
+				<button id="jumpbutton" onclick="scrollToBottom()">
+					jump to bottom
+				</button>
+			</div>
 		</div>
 		<div id="toastscontainer"></div>
 	</body>

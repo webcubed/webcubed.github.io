@@ -1,8 +1,15 @@
 html {
 	overflow: hidden;
 }
+#bottom {
+	bottom: 0;
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 100%;
+}
 #inputcontainer {
-	position: fixed;
+	position: relative;
 	display: flex;
 	gap: 10px;
 	width: 90%;
@@ -11,8 +18,42 @@ html {
 	left: 50%;
 	transform: translateX(-50%);
 }
+#jumpbutton {
+	right: 0;
+	position: relative;
+}
 #messageinput {
+	background-color: var(--surface0);
+	border: none;
+	color: var(--text);
+	font-family: Lexend;
 	flex-grow: 1;
+	transition: background-color 0.2s;
+	padding: 0.5rem;
+	border-radius: 0.5rem;
+	font-size: 1rem;
+	line-height: 1.5rem !important;
+	white-space-collapse: collapse;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	text-wrap-mode: wrap;
+	overflow-y: scroll;
+	/*keep constant width*/
+	max-width: 90%;
+	/*keep maximum height*/
+	/*keep minimum height*/
+}
+#messageinput:hover {
+	background-color: var(--surface1);
+	transition: background-color 0.2s;
+}
+#messageinput:focus {
+	outline: none;
+}
+#messageinput:disabled {
+	background-color: var(--surface0);
+	color: var(--overlay0);
+	cursor: not-allowed;
 }
 #messageswrapper {
 	position: absolute;
