@@ -1,20 +1,10 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
 let continueScroll;
-const mappings = (async () => {
-	const response = await fetch(`${apiBaseUrl}/mappings`, {
-		method: "GET",
-		headers: {
-			Accept: "application/json",
-			account: localStorage.getItem("email"),
-			code: localStorage.getItem("code"),
-		},
-	});
-	return response.json();
-})();
 const maxRetries = 30;
 let retryCount = 0;
 const retryDelay = 5000;
+
 function createMessageElement(message) {
 	const content = DOMPurify.sanitize(marked.parse(message.cleanContent));
 	const messageElement = document.createElement("div");
@@ -59,22 +49,21 @@ function createMessageElement(message) {
 		</div>
 		<p class="messageContent">${content}</p>
 	`;
-	mappings.then((mappings) => {
-		const isSelf = message.email === localStorage.getItem("email");
-		messageElement.className = isSelf ? "message self" : "message other";
-		if (isSelf || localStorage.getItem("admin")) {
-			const deleteButton = document.createElement("span");
-			deleteButton.classList = "messageDelete material-symbols-outlined";
-			deleteButton.textContent = "delete";
-			deleteButton.addEventListener("click", () => {
-				deleteMessage(message.id);
-			});
-			messageElement.append(deleteButton);
-			messageElement
-				.querySelector(".messageHeader > .headerRight")
-				.append(deleteButton);
-		}
-	});
+	const isSelf = message.email === localStorage.getItem("email");
+	messageElement.className = isSelf ? "message self" : "message other";
+	if (isSelf || localStorage.getItem("admin")) {
+		const deleteButton = document.createElement("span");
+		deleteButton.classList = "messageDelete material-symbols-outlined";
+		deleteButton.textContent = "delete";
+		deleteButton.addEventListener("click", () => {
+			deleteMessage(message.id);
+		});
+		messageElement.append(deleteButton);
+		messageElement
+			.querySelector(".messageHeader > .headerRight")
+			.append(deleteButton);
+	}
+
 	return messageElement;
 }
 
