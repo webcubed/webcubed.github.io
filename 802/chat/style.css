@@ -7,6 +7,10 @@ html {
 	left: 50%;
 	transform: translateX(-50%);
 	width: 100%;
+	height: 5rem;
+	display: grid;
+	grid-template-rows: 1fr 1fr;
+	gap: 5px;
 }
 #inputcontainer {
 	position: relative;
@@ -17,6 +21,10 @@ html {
 	justify-content: space-between;
 	left: 50%;
 	transform: translateX(-50%);
+}
+#buttons {
+	/*keep constant height*/
+	height: 2.5rem;
 }
 #jumpbutton {
 	right: 0;
@@ -38,10 +46,8 @@ html {
 	overflow-wrap: break-word;
 	text-wrap-mode: wrap;
 	overflow-y: scroll;
-	/*keep constant width*/
 	max-width: 90%;
-	/*keep maximum height*/
-	/*keep minimum height*/
+	max-height: 75%;
 }
 #messageinput:hover {
 	background-color: var(--surface1);
