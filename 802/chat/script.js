@@ -85,7 +85,7 @@ function scrollToBottom() {
 }
 
 function fetchMessages(LMID = null) {
-	// LMID = last message id = continueId
+	// LMID = Last Message ID = continueId
 	fetch(`${apiBaseUrl}/fetchMessages${LMID ? `?continueId=${LMID}` : ""}`, {
 		method: "GET",
 		headers: {
