@@ -251,7 +251,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 		socket.addEventListener("close", retryConnection);
 		document.addEventListener("focus", () => {
-			if (socket.readyState !== 1) {
+			if (socket.readyState === socket.CLOSED) {
 				retryConnection();
 			}
 		});
