@@ -217,10 +217,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 				case "update": {
 					const message = data.data;
-					const messageElement = createMessageElement(message);
-					document
-						.querySelector(`#message-${message.id}`)
-						.replaceWith(messageElement);
+					const content = DOMPurify.sanitize(
+						marked.parse(message.replaceAll("\n", "<br>"))
+					);
+					document.querySelector(`#message-${message.id}`).innerHTML = content;
 
 					break;
 				}
