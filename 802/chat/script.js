@@ -3,6 +3,7 @@ const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
 let continueScroll;
 const maxRetries = 30;
+let notificationsPermitted = Notification.permission === "granted";
 let retryCount = 0;
 const retryDelay = 5000;
 
@@ -147,6 +148,21 @@ function deleteMessage(id) {
 }
 
 let sendNotifications = false;
+document.addEventListener(
+	"click",
+	async () => {
+		if (notificationsPermitted) return;
+		const prompt = await promptForNotificationPermission();
+		if (prompt) {
+			await Notification.requestPermission();
+		}
+
+		if (prompt && Notification.permission === "granted") {
+			sendNotifications = true;
+		}
+	},
+	{ once: true }
+);
 document.addEventListener("DOMContentLoaded", async () => {
 	const messagesContainer = document.querySelector("#messages");
 	function connectToWebsocket() {
