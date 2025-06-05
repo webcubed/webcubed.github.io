@@ -195,7 +195,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					// Push notification
 					if (sendNotifications) {
 						new Notification(
-							"802 Chat",
+							`${message.author} (802 Chat)`,
 							{
 								body: message.cleanContent,
 							},
