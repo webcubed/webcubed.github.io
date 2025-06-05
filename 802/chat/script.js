@@ -263,14 +263,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 		function retryConnection() {
 			if (retryCount < maxRetries) {
+				new Toast(
+					"warning",
+					"Websocket Connection lost",
+					`Retrying connection... Attempt ${retryCount}`,
+					5000
+				);
 				setTimeout(() => {
 					retryCount++;
-					new Toast(
-						"warning",
-						"Websocket Connection lost",
-						`Retrying connection... Attempt ${retryCount}`,
-						5000
-					);
 					connectToWebsocket();
 				}, retryDelay);
 			} else {
@@ -280,6 +280,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					"Max retries reached. Giving up. If you want to try again, reload the page.",
 					5000
 				);
+				socket.removeEventListener("close", retryConnection);
 			}
 		}
 
