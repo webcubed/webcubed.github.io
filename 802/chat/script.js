@@ -56,9 +56,9 @@ function createMessageElement(
 				${
 					editedTimestamp === ""
 						? ""
-						: `<i class="messageEdited" title="Edited: ${editedTimestamp}, Parsed: ${new Date(
+						: /* html */ `<i class="messageEdited" title="Edited: ${editedTimestamp}, Parsed: ${new Date(
 								editedTimestamp
-							).toLocaleString()}">
+							).toLocaleString()}">Edited: 
 					${(() => {
 						const today = new Date();
 						const messageDate = new Date(Number.parseInt(editedTimestamp, 10));
@@ -83,7 +83,7 @@ function createMessageElement(
 							hour: "2-digit",
 							minute: "2-digit",
 						});
-					})()}">Edited</i>`
+					})()}</i>`
 				}
 			</div>
 		</div>
