@@ -107,7 +107,7 @@ html {
 	display: flex;
 	gap: 10px;
 }
-.messageTimestamp {
+.messageTimestamp, .messageEdited {
 	font-size: 0.8rem;
 	color: var(--subtext0);
 	margin-bottom: 5px;

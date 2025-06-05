@@ -8,7 +8,10 @@ let notificationsPermitted = Notification.permission === "granted";
 let retryCount = 0;
 const retryDelay = 5000;
 
-function createMessageElement(message, editedTimestamp = null) {
+function createMessageElement(
+	message,
+	editedTimestamp = message.editedTimestamp
+) {
 	const content = DOMPurify.sanitize(
 		marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
 	);
@@ -51,8 +54,9 @@ function createMessageElement(message, editedTimestamp = null) {
 					})()}
 				</span>
 				${
-					editedTimestamp
-						? `<i class="messageEdited" title="Edited: ${editedTimestamp}, Parsed: ${new Date(
+					editedTimestamp === ""
+						? ""
+						: `<i class="messageEdited" title="Edited: ${editedTimestamp}, Parsed: ${new Date(
 								editedTimestamp
 							).toLocaleString()}">
 					${(() => {
@@ -80,7 +84,6 @@ function createMessageElement(message, editedTimestamp = null) {
 							minute: "2-digit",
 						});
 					})()}">Edited</i>`
-						: ""
 				}
 			</div>
 		</div>
