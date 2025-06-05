@@ -1,3 +1,4 @@
+/* eslint-disable @stylistic/indent */
 /* eslint-disable unicorn/prefer-dom-node-text-content */
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
@@ -7,7 +8,7 @@ let notificationsPermitted = Notification.permission === "granted";
 let retryCount = 0;
 const retryDelay = 5000;
 
-function createMessageElement(message) {
+function createMessageElement(message, editedTimestamp = null) {
 	const content = DOMPurify.sanitize(
 		marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
 	);
@@ -49,6 +50,38 @@ function createMessageElement(message) {
 						});
 					})()}
 				</span>
+				${
+					editedTimestamp
+						? `<i class="messageEdited" title="Edited: ${editedTimestamp}, Parsed: ${new Date(
+								editedTimestamp
+							).toLocaleString()}">
+					${(() => {
+						const today = new Date();
+						const messageDate = new Date(Number.parseInt(editedTimestamp, 10));
+						const yesterday = new Date(today.getTime() - 1000 * 60 * 60 * 24);
+						if (today.toDateString() === messageDate.toDateString()) {
+							return messageDate.toLocaleString(undefined, {
+								hour: "2-digit",
+								minute: "2-digit",
+							});
+						}
+
+						if (yesterday.toDateString() === messageDate.toDateString()) {
+							return `Yesterday at ${messageDate.toLocaleString(undefined, {
+								hour: "2-digit",
+								minute: "2-digit",
+							})}`;
+						}
+
+						return messageDate.toLocaleString(undefined, {
+							month: "short",
+							day: "numeric",
+							hour: "2-digit",
+							minute: "2-digit",
+						});
+					})()}">Edited</i>`
+						: ""
+				}
 			</div>
 		</div>
 		<p class="messageContent">${content}</p>
@@ -158,7 +191,7 @@ document.addEventListener(
 		}
 
 		if (prompt && Notification.permission === "granted") {
-			sendNotifications = true;
+			notificationsPermitted = true;
 		}
 	},
 	{ once: true }
@@ -217,7 +250,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 				case "update": {
 					const message = data.data;
-					const content = createMessageElement(message);
+					const content = createMessageElement(message, data.editedTimestamp);
 					document.querySelector(`#message-${message.id}`).replaceWith(content);
 
 					break;
@@ -252,6 +285,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 			sendNotifications = true;
 		});
 		document.addEventListener("focus", () => {
+			sendNotifications = false;
+
 			if (socket.readyState === socket.CLOSED) {
 				retryConnection();
 			}
