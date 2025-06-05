@@ -54,7 +54,7 @@ function createMessageElement(
 					})()}
 				</span>
 				${
-					editedTimestamp === ""
+					editedTimestamp === null
 						? ""
 						: /* html */ `<i class="messageEdited" title="Edited: ${editedTimestamp}, Parsed: ${new Date(
 								editedTimestamp
