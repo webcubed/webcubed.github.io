@@ -144,18 +144,20 @@ async function fetchMessages(LMID = null) {
 	if (LMID) messages.reverse();
 	for (const message of messages) {
 		const messageElement = createMessageElement(message);
-		const lastMessageTimestamp = Number.parseInt(
-			messagesContainer.lastElementChild
-				.querySelector(".messageHeader > .headerRight > .messageTimestamp")
-				.title.match(/Timestamp: (\d+),/)[1]
-		);
-		// Check day
-		const messageTimestamp = message.timestamp;
-		if (differentDays(lastMessageTimestamp, messageTimestamp)) {
-			const dayLine = document.createElement("div");
-			dayLine.className = "dayDivider";
-			dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
-			messagesContainer.append(dayLine);
+
+		if (messagesContainer.lastElementChild !== null) {
+			const lastMessageTimestamp = Number.parseInt(
+				messagesContainer.lastElementChild
+					.querySelector(".messageHeader > .headerRight > .messageTimestamp")
+					.title.match(/Timestamp: (\d+),/)[1]
+			);
+			const messageTimestamp = message.timestamp;
+			if (differentDays(lastMessageTimestamp, messageTimestamp)) {
+				const dayLine = document.createElement("div");
+				dayLine.className = "dayDivider";
+				dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
+				messagesContainer.append(dayLine);
+			}
 		}
 
 		if (LMID === null) {
@@ -253,20 +255,21 @@ document.addEventListener("DOMContentLoaded", async () => {
 			switch (data.type) {
 				case "message": {
 					const message = data.data;
-					const lastMessageTimestamp = Number.parseInt(
-						messagesContainer.lastElementChild
-							.querySelector(
-								".messageHeader > .headerRight > .messageTimestamp"
-							)
-							.title.match(/Timestamp: (\d+),/)[1]
-					);
-					// Check day
-					const messageTimestamp = message.timestamp;
-					if (differentDays(lastMessageTimestamp, messageTimestamp)) {
-						const dayLine = document.createElement("div");
-						dayLine.className = "dayDivider";
-						dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
-						messagesContainer.append(dayLine);
+					if (messagesContainer.lastElementChild !== null) {
+						const lastMessageTimestamp = Number.parseInt(
+							messagesContainer.lastElementChild
+								.querySelector(
+									".messageHeader > .headerRight > .messageTimestamp"
+								)
+								.title.match(/Timestamp: (\d+),/)[1]
+						);
+						const messageTimestamp = message.timestamp;
+						if (differentDays(lastMessageTimestamp, messageTimestamp)) {
+							const dayLine = document.createElement("div");
+							dayLine.className = "dayDivider";
+							dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
+							messagesContainer.append(dayLine);
+						}
 					}
 
 					const messageElement = createMessageElement(message);
