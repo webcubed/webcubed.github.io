@@ -197,7 +197,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						new Notification(
 							"802 Chat",
 							{
-								body: message.message,
+								body: message.cleanContent,
 							},
 							() => {
 								window.focus();
