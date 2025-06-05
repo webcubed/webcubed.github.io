@@ -218,7 +218,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				case "update": {
 					const message = data.data;
 					const content = DOMPurify.sanitize(
-						marked.parse(message.replaceAll("\n", "<br>"))
+						marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
 					);
 					document.querySelector(`#message-${message.id}`).innerHTML = content;
 
