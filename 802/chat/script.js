@@ -201,12 +201,16 @@ document.addEventListener(
 );
 document.addEventListener("DOMContentLoaded", async () => {
 	const messagesContainer = document.querySelector("#messages");
+	const WSStatusElement = document.querySelector("#websocketstatus");
 	function connectToWebsocket() {
 		const socket = new WebSocket(
 			`${apiBaseUrl.replace("https", "wss")}?email=${localStorage.getItem("email")}&code=${localStorage.getItem("code")}`
 		);
 		socket.addEventListener("open", () => {
 			socket.send(`${localStorage.getItem("email")} is connected`);
+			WSStatusElement.textContent = "Connected";
+			WSStatusElement.classList.remove("error");
+			WSStatusElement.classList.add("success");
 			if (retryCount > 0) {
 				new Toast(
 					"success",
@@ -263,15 +267,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 		function retryConnection() {
 			if (retryCount < maxRetries) {
-				new Toast(
-					"warning",
-					"Websocket Connection lost",
-					`Retrying connection... Attempt ${retryCount}`,
-					5000
-				);
 				setTimeout(() => {
 					retryCount++;
 					connectToWebsocket();
+					new Toast(
+						"warning",
+						"Websocket Connection lost",
+						`Retrying connection... Attempt ${retryCount}`,
+						5000
+					);
 				}, retryDelay);
 			} else {
 				new Toast(
@@ -281,19 +285,23 @@ document.addEventListener("DOMContentLoaded", async () => {
 					5000
 				);
 				socket.removeEventListener("close", retryConnection);
+				WSStatusElement.textContent = "Disconnected";
+				WSStatusElement.classList.remove("success");
+				WSStatusElement.classList.add("error");
 			}
 		}
 
-		socket.addEventListener("close", retryConnection);
+		socket.addEventListener("close", () => {
+			WSStatusElement.textContent = "Disconnected";
+			WSStatusElement.classList.remove("success");
+			WSStatusElement.classList.add("error");
+			retryConnection();
+		});
 		document.addEventListener("blur", () => {
 			sendNotifications = true;
 		});
 		document.addEventListener("focus", () => {
 			sendNotifications = false;
-
-			if (socket.readyState === socket.CLOSED) {
-				retryConnection();
-			}
 		});
 	}
 
