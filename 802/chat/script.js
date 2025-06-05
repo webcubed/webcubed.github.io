@@ -220,7 +220,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 					const content = DOMPurify.sanitize(
 						marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
 					);
-					document.querySelector(`#message-${message.id}`).innerHTML = content;
+					document.querySelector(
+						`#message-${message.id} > .messageContent`
+					).innerHTML = content;
 
 					break;
 				}
