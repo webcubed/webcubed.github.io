@@ -14,7 +14,7 @@ function createMessageElement(message) {
 	const messageElement = document.createElement("div");
 	messageElement.id = `message-${message.id}`;
 	messageElement.classList.add("message");
-	messageElement.innerHTML = `
+	messageElement.innerHTML = /* html */ `
 		<div class="messageHeader">
 			<b class="messageAuthor" title=${message.email}>${message.author}: </b>
 			<div class="headerRight">
@@ -217,12 +217,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 				case "update": {
 					const message = data.data;
-					const content = DOMPurify.sanitize(
-						marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
-					);
-					document.querySelector(
-						`#message-${message.id} > .messageContent`
-					).innerHTML = content;
+					const content = createMessageElement(message);
+					document.querySelector(`#message-${message.id}`).replaceWith(content);
 
 					break;
 				}
@@ -252,13 +248,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 
 		socket.addEventListener("close", retryConnection);
+		document.addEventListener("blur", () => {
+			sendNotifications = true;
+		});
 		document.addEventListener("focus", () => {
 			if (socket.readyState === socket.CLOSED) {
 				retryConnection();
 			}
-		});
-		document.addEventListener("blur", () => {
-			sendNotifications = true;
 		});
 	}
 
