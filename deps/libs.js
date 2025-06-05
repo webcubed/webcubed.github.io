@@ -1,4 +1,4 @@
-// eslint-disable-next-line no-unused-vars
+/* eslint-disable no-unused-vars */
 async function promptForUpdate() {
 	const dialog = document.createElement("dialog");
 	dialog.innerHTML = /* html */ `
@@ -25,34 +25,62 @@ async function promptForUpdate() {
 	return result;
 }
 
+async function promptForNotificationPermission() {
+	const dialog = document.createElement("dialog");
+	dialog.innerHTML = /* html */ `
+	<p>Allow notifications? Click "yes" to recieve a prompt requesting notification permission (accept it pls)</p>
+	<button id="confirm">yes</button>
+	<button id="cancel">no</button>
+	`;
+	document.body.append(dialog);
+	dialog.showModal();
+
+	const confirmButton = dialog.querySelector("#confirm");
+	const cancelButton = dialog.querySelector("#cancel");
+	const result = new Promise((resolve) => {
+		confirmButton.addEventListener("click", () => {
+			dialog.close();
+			resolve(true);
+		});
+
+		cancelButton.addEventListener("click", () => {
+			dialog.close();
+			resolve(false);
+		});
+	});
+	return result;
+}
+
 /* ----------------------------- timeout system ----------------------------- */
-Timeout = function (callback, delay) {
-	let timerId;
-	let start;
-	let remaining = delay;
+class Timeout {
+	constructor(callback, delay) {
+		let timerId;
+		let start;
+		let remaining = delay;
 
-	this.pause = function () {
-		globalThis.clearTimeout(timerId);
-		timerId = null;
-		remaining -= Date.now() - start;
-	};
+		this.pause = function () {
+			globalThis.clearTimeout(timerId);
+			timerId = null;
+			remaining -= Date.now() - start;
+		};
 
-	this.resume = function () {
-		if (timerId) {
-			return;
-		}
+		this.resume = function () {
+			if (timerId) {
+				return;
+			}
 
-		start = Date.now();
-		timerId = globalThis.setTimeout(callback, remaining);
-	};
+			start = Date.now();
+			timerId = globalThis.setTimeout(callback, remaining);
+		};
 
-	this.resume();
-};
+		this.resume();
+	}
+}
 
 /* -------------------------------------------------------------------------- */
 /*                                Toasts System                               */
 /* -------------------------------------------------------------------------- */
-Toast = class {
+class Toast {
 	static currentId = 0;
 
 	constructor(type, title, content, duration) {
@@ -63,8 +91,7 @@ Toast = class {
 		this.durationinms = duration;
 		this.durationins = this.durationinms / 1000 + "s";
 		this.toast = document.createElement("div");
-		this.toast.classList.add("toast");
-		this.toast.classList.add(type + "toast");
+		this.toast.classList.add("toast", type + "toast");
 		if (type === "automove") this.toast.classList.add("infotoast"); // Serialize title and content in case of xss
 		this.title = this.title.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
 		this.content = this.content.replaceAll("<", "&lt;").replaceAll(">", "&gt;");
@@ -74,7 +101,10 @@ Toast = class {
 			`<span class="cblock">$1</span>`
 		);
 		// Make newline if content includes \n and remove \n from string
-		this.content = this.content.split("\n").join("<br>").replaceAll("\\n", "");
+		this.content = this.content
+			.split("\n")
+			.join("<br>")
+			.replaceAll(String.raw`\n`, "");
 		if (["warning", "error", "success", "info"].includes(type)) {
 			this.toast.innerHTML = /* html */ `
             <div class="ttitle">
@@ -231,9 +261,9 @@ Toast = class {
 			exit === "fade-out" ? 500 : 280
 		);
 	}
-};
+}
 // Tooltip system
-Tooltip = class {
+class Tooltip {
 	constructor(element, positioning, content) {
 		this.element = element;
 		this.positioning = positioning;
@@ -255,8 +285,8 @@ Tooltip = class {
 
 	updateTooltipPosition(mouseEvent, a) {
 		const coords = this.element.getBoundingClientRect();
-		const scrollX = window.scrollX;
-		const scrollY = window.scrollY;
+		const { scrollX } = globalThis;
+		const { scrollY } = globalThis;
 		if (a) {
 			this.tooltipElement.style.minWidth = getComputedStyle(
 				this.tooltipElement
@@ -264,196 +294,235 @@ Tooltip = class {
 		}
 
 		if (mouseEvent) {
-			const { clientX, clientY } = mouseEvent;
-			switch (this.positioning) {
-				case "follow-top": {
-					this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth / 2}px`;
-					this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight - 20}px`; // 10px offset
-					break;
-				}
-
-				case "follow-bottom": {
-					this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth / 2}px`;
-					this.tooltipElement.style.top = `${clientY + 20}px`; // 5px offset
-					break;
-				}
-
-				case "follow-left": {
-					this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth - 20}px`; // 5px offset
-					this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight / 2}px`;
-					break;
-				}
-
-				case "follow-right": {
-					this.tooltipElement.style.left = `${clientX + 20}px`; // 5px offset
-					this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight / 2}px`;
-					break;
-				}
-
-				case "top": {
-					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY - this.tooltipElement.offsetHeight}px`;
-					break;
-				}
-
-				case "bottom": {
-					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
-					break;
-				}
-
-				case "left": {
-					this.tooltipElement.style.left = `${coords.left + scrollX - this.tooltipElement.offsetWidth - 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
-					break;
-				}
-
-				case "right": {
-					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width + 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
-					break;
-				}
-			}
-
-			/* ------------------ start adapting tooltip functionality ------------------ */
-			// Get the viewport dimensions
-			const viewportWidth = window.innerWidth;
-			const viewportHeight = window.innerHeight;
-
-			// Calculate the position of the tooltip
-			const style = globalThis.getComputedStyle(this.tooltipElement);
-			const tooltipLeft = this.tooltipElement.getBoundingClientRect().left;
-			const tooltipTop = Number.parseInt(style.top.slice(0, -2));
-			const tooltipRight = Number.parseInt(style.right.slice(0, -2));
-			const tooltipBottom = Number.parseInt(style.bottom.slice(0, -2));
-
-			// Check if the tooltip hits the right wall
-			if (tooltipRight < 0) {
-				if (this.positioning.includes("right")) {
-					this.positioning = this.positioning.replace("right", "left");
-				} else if (this.positioning.includes("follow-right")) {
-					this.positioning = this.positioning.replace(
-						"follow-right",
-						"follow-left"
-					);
-				}
-			}
-
-			// Check if the tooltip hits the left wall
-			if (tooltipLeft < 0 && this.positioning.includes("left")) {
-				this.positioning = this.positioning.replace("left", "right");
-			}
-
-			// Check if the tooltip hits the top wall
-			if (tooltipTop < 30 && this.positioning.includes("top")) {
-				this.positioning = this.positioning.replace("top", "bottom");
-				this.updateTooltipPosition(mouseEvent);
-			}
-
-			// Check if the tooltip hits the bottom wall
-			if (
-				tooltipBottom < viewportHeight &&
-				this.positioning.includes("bottom")
-			) {
-				this.positioning = this.positioning.replace("bottom", "top");
-			}
-
-			const originalPositioning =
-				this.tooltipElement.getAttribute("og-position");
-			let revertToOriginal = false;
-
-			// Calculate the position based on the cursor or the binding element
-			let potentialLeft;
-			let potentialRight;
-			let potentialBottom;
-			let potentialTop;
-			if (originalPositioning.startsWith("follow-")) {
-				// Follow cursor logic
-				const cursorOffsetX = mouseEvent.clientX;
-				potentialLeft = cursorOffsetX - 20 - this.tooltipElement.offsetWidth;
-				potentialRight = cursorOffsetX + this.tooltipElement.offsetWidth + 20;
-				potentialTop =
-					mouseEvent.clientY - 20 - this.tooltipElement.offsetHeight;
-				potentialBottom =
-					mouseEvent.clientY + this.tooltipElement.offsetHeight + 20;
-			} else {
-				// Static positioning relative to the binding element logic
-				const boundElementRect = this.element.getBoundingClientRect();
-				if (originalPositioning === "left" || originalPositioning === "right") {
-					potentialLeft =
-						boundElementRect.left - this.tooltipElement.offsetWidth;
-					potentialRight =
-						boundElementRect.right + this.tooltipElement.offsetWidth;
-				} else {
-					// For top and bottom positioning, you would handle Y coordinates similarly
-					if (originalPositioning === "top") {
-						potentialTop =
-							boundElementRect.top - this.tooltipElement.offsetHeight;
-						potentialBottom =
-							boundElementRect.bottom + this.tooltipElement.offsetHeight;
-					} else if (originalPositioning === "bottom") {
-						potentialTop = boundElementRect.bottom;
-						potentialBottom =
-							boundElementRect.bottom + this.tooltipElement.offsetHeight;
-					}
-					// ...
-				}
-			}
-
-			// Check if the calculated position is within the viewport
-			if (
-				originalPositioning.includes("right") &&
-				potentialRight < viewportWidth
-			) {
-				revertToOriginal = true;
-			} else if (originalPositioning.includes("left") && potentialLeft > 0) {
-				revertToOriginal = true;
-			}
-			// Add similar checks for top and bottom positioning if needed
-			else if (originalPositioning.includes("top") && potentialTop > 30) {
-				revertToOriginal = true;
-			} else if (
-				originalPositioning.includes("bottom") &&
-				potentialBottom < viewportHeight
-			) {
-				revertToOriginal = true;
-			}
-
-			// Revert to the original positioning if possible and update the data-position attribute
-			if (revertToOriginal) {
-				this.positioning = originalPositioning;
-				this.tooltipElement.dataset.position = originalPositioning;
-			} else {
-				// Update the data-position attribute as the positioning changes
-				this.tooltipElement.dataset.position = this.positioning;
-			}
+			this._setTooltipPositionWithMouse(mouseEvent, coords, scrollX, scrollY);
+			this._adaptTooltipToViewport(mouseEvent);
 		} else {
-			switch (this.positioning) {
-				case "top": {
-					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY - this.tooltipElement.offsetHeight}px`;
-					break;
+			this._setTooltipPositionStatic(coords, scrollX, scrollY);
+		}
+	}
+
+	_setTooltipPositionWithMouse(mouseEvent, coords, scrollX, scrollY) {
+		const { clientX, clientY } = mouseEvent;
+		switch (this.positioning) {
+			case "follow-top": {
+				this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth / 2}px`;
+				this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight - 20}px`;
+				break;
+			}
+
+			case "follow-bottom": {
+				this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth / 2}px`;
+				this.tooltipElement.style.top = `${clientY + 20}px`;
+				break;
+			}
+
+			case "follow-left": {
+				this.tooltipElement.style.left = `${clientX - this.tooltipElement.offsetWidth - 20}px`;
+				this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight / 2}px`;
+				break;
+			}
+
+			case "follow-right": {
+				this.tooltipElement.style.left = `${clientX + 20}px`;
+				this.tooltipElement.style.top = `${clientY - this.tooltipElement.offsetHeight / 2}px`;
+				break;
+			}
+
+			case "top": {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY - this.tooltipElement.offsetHeight}px`;
+				break;
+			}
+
+			case "bottom": {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
+				break;
+			}
+
+			case "left": {
+				this.tooltipElement.style.left = `${coords.left + scrollX - this.tooltipElement.offsetWidth - 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
+				break;
+			}
+
+			case "right": {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
+				break;
+			}
+
+			default: {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
+				break;
+			}
+		}
+	}
+
+	_setTooltipPositionStatic(coords, scrollX, scrollY) {
+		switch (this.positioning) {
+			case "top": {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY - this.tooltipElement.offsetHeight}px`;
+				break;
+			}
+
+			case "bottom": {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
+				break;
+			}
+
+			case "left": {
+				this.tooltipElement.style.left = `${coords.left + scrollX - this.tooltipElement.offsetWidth - 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
+				break;
+			}
+
+			case "right": {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
+				break;
+			}
+
+			default: {
+				this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
+				this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
+				break;
+			}
+		}
+	}
+
+	_adaptTooltipToViewport(mouseEvent) {
+		const viewportWidth = window.innerWidth;
+		const viewportHeight = window.innerHeight;
+		const style = globalThis.getComputedStyle(this.tooltipElement);
+		const tooltipLeft = this.tooltipElement.getBoundingClientRect().left;
+		const tooltipTop = Number.parseInt(style.top.slice(0, -2));
+		const tooltipRight = Number.parseInt(style.right.slice(0, -2));
+		const tooltipBottom = Number.parseInt(style.bottom.slice(0, -2));
+
+		this._adjustHorizontalPosition(tooltipLeft, tooltipRight);
+		this._adjustVerticalPosition(tooltipTop, tooltipBottom, mouseEvent);
+
+		const originalPositioning = this.tooltipElement.getAttribute("og-position");
+		const potentials = this._calculatePotentialPositions(
+			originalPositioning,
+			mouseEvent
+		);
+		const viewport = { width: viewportWidth, height: viewportHeight };
+
+		const revertToOriginal = this._shouldRevertToOriginal(
+			originalPositioning,
+			potentials,
+			viewport
+		);
+
+		if (revertToOriginal) {
+			this.positioning = originalPositioning;
+			this.tooltipElement.dataset.position = originalPositioning;
+		} else {
+			this.tooltipElement.dataset.position = this.positioning;
+		}
+	}
+
+	_adjustHorizontalPosition(tooltipLeft, tooltipRight) {
+		if (tooltipRight < 0) {
+			if (this.positioning.includes("right")) {
+				this.positioning = this.positioning.replace("right", "left");
+			} else if (this.positioning.includes("follow-right")) {
+				this.positioning = this.positioning.replace(
+					"follow-right",
+					"follow-left"
+				);
+			}
+		}
+
+		if (tooltipLeft < 0 && this.positioning.includes("left")) {
+			this.positioning = this.positioning.replace("left", "right");
+		}
+	}
+
+	_adjustVerticalPosition(tooltipTop, tooltipBottom, mouseEvent) {
+		if (tooltipTop < 30 && this.positioning.includes("top")) {
+			this.positioning = this.positioning.replace("top", "bottom");
+			this.updateTooltipPosition(mouseEvent);
+		}
+
+		if (
+			tooltipBottom < window.innerHeight &&
+			this.positioning.includes("bottom")
+		) {
+			this.positioning = this.positioning.replace("bottom", "top");
+		}
+	}
+
+	_calculatePotentialPositions(originalPositioning, mouseEvent) {
+		let potentialLeft;
+		let potentialRight;
+		let potentialBottom;
+		let potentialTop;
+		if (originalPositioning.startsWith("follow-")) {
+			const cursorOffsetX = mouseEvent ? mouseEvent.clientX : 0;
+			const cursorOffsetY = mouseEvent ? mouseEvent.clientY : 0;
+			potentialLeft = cursorOffsetX - 20 - this.tooltipElement.offsetWidth;
+			potentialRight = cursorOffsetX + this.tooltipElement.offsetWidth + 20;
+			potentialTop = cursorOffsetY - 20 - this.tooltipElement.offsetHeight;
+			potentialBottom = cursorOffsetY + this.tooltipElement.offsetHeight + 20;
+		} else {
+			const boundElementRect = this.element.getBoundingClientRect();
+			if (originalPositioning === "left" || originalPositioning === "right") {
+				potentialLeft = boundElementRect.left - this.tooltipElement.offsetWidth;
+				potentialRight =
+					boundElementRect.right + this.tooltipElement.offsetWidth;
+			} else {
+				if (originalPositioning === "top") {
+					potentialTop =
+						boundElementRect.top - this.tooltipElement.offsetHeight;
+					potentialBottom =
+						boundElementRect.bottom + this.tooltipElement.offsetHeight;
 				}
 
-				case "bottom": {
-					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width / 2 - this.tooltipElement.offsetWidth / 2 + 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height}px`;
-					break;
-				}
-
-				case "left": {
-					this.tooltipElement.style.left = `${coords.left + scrollX - this.tooltipElement.offsetWidth - 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
-					break;
-				}
-
-				case "right": {
-					this.tooltipElement.style.left = `${coords.left + scrollX + coords.width + 10}px`;
-					this.tooltipElement.style.top = `${coords.top + scrollY + coords.height / 2 - this.tooltipElement.offsetHeight / 2}px`;
-					break;
+				if (originalPositioning === "bottom") {
+					potentialTop = boundElementRect.bottom;
+					potentialBottom =
+						boundElementRect.bottom + this.tooltipElement.offsetHeight;
 				}
 			}
 		}
+
+		return { potentialLeft, potentialRight, potentialTop, potentialBottom };
+	}
+
+	_shouldRevertToOriginal(originalPositioning, potentials, viewport) {
+		const { potentialLeft, potentialRight, potentialTop, potentialBottom } =
+			potentials;
+		const { width: viewportWidth, height: viewportHeight } = viewport;
+
+		if (
+			originalPositioning.includes("right") &&
+			potentialRight < viewportWidth
+		) {
+			return true;
+		}
+
+		if (originalPositioning.includes("left") && potentialLeft > 0) {
+			return true;
+		}
+
+		if (originalPositioning.includes("top") && potentialTop > 30) {
+			return true;
+		}
+
+		if (
+			originalPositioning.includes("bottom") &&
+			potentialBottom < viewportHeight
+		) {
+			return true;
+		}
+
+		return false;
 	}
 
 	attachEvents() {
@@ -495,4 +564,4 @@ Tooltip = class {
 	hideTooltip() {
 		this.tooltipElement.style.opacity = "0";
 	}
-};
+}

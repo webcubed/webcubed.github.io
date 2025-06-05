@@ -1,6 +1,4 @@
-module.exports = {
-	globDirectory: ".",
-	globPatterns: ["**/*.{html,js,css,md}"],
-	swDest: "sw.js",
-	ignoreURLParametersMatching: [/^utm_/, /^fbclid$/],
-};
+export const globDirectory = ".";
+export const globPatterns = ["**/*.{html,js,css,md}"];
+export const swDest = "sw.js";
+export const ignoreURLParametersMatching = [/^utm_/, /^fbclid$/];

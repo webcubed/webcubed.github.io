@@ -7,10 +7,10 @@
 		"test": "xo",
 		"gensw": "workbox generateSW workbox-config.js",
 		"format": "prettier --write .",
-		"xo": "xo --prettier",
-		"xo:fix": "xo --fix --prettier",
-		"prepare": "husky"
+		"xo": "xo --config xo.config.js --semicolon --prettier",
+		"xo:fix": "xo --fix --config xo.config.js --semicolon --prettier"
 	},
+	"type": "module",
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
@@ -23,22 +23,5 @@
 		"globals": "16.2.0",
 		"husky": "^9.1.7",
 		"xo": "1.0.5"
-	},
-	"xo": {
-		"envs": [
-			"browser"
-		],
-		"rules": {
-			"no-new": "off",
-			"no-undef": "off",
-			"radix": "off"
-		},
-		"ignores": [
-			"workbox-config.js",
-			"sw.js",
-			"workbox-*.js",
-			"**/*.old.js",
-			"deps/**"
-		]
 	}
 }

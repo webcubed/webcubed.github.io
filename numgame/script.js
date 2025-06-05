@@ -86,7 +86,7 @@ class Game {
 
 	generateNumber() {
 		let number = "";
-		const possibleDigits = this.allowedDigits.slice();
+		const possibleDigits = [...this.allowedDigits];
 		for (let i = 0; i < Number.parseInt(this.numberLength); i++) {
 			const index = Math.floor(Math.random() * possibleDigits.length);
 			number += possibleDigits[index];
@@ -137,9 +137,9 @@ class Game {
 		// Should only be run after number generation
 		// check digits that match up exactly (split guess into array and generated number into array, compare)
 		// split guess into array
-		const guessArray = guess.split("");
+		const guessArray = [...guess];
 		// Split generated number into array
-		const generatedNumberArray = number.split("");
+		const generatedNumberArray = [...number];
 		// Compare arrays
 		let correctDigits = 0;
 		for (const [i, element] of guessArray.entries()) {
@@ -313,8 +313,8 @@ document.addEventListener("DOMContentLoaded", () => {
 		let correctPositions = "";
 		if (configValues.showCorrectPositions) {
 			// Split guess into array and compare against generated number
-			const guessArray = guess.split("");
-			const generatedNumberArray = number.split("");
+			const guessArray = [...guess];
+			const generatedNumberArray = [...number];
 
 			// For the ones that don't match up, set as -
 			// for the ones that do match up, set as is

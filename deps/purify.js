@@ -1003,7 +1003,7 @@
 
 		let { document } = window;
 		const originalDocument = document;
-		const currentScript = originalDocument.currentScript;
+		const { currentScript } = originalDocument;
 		const {
 			DocumentFragment,
 			HTMLTemplateElement,
@@ -1277,7 +1277,7 @@
 		/* ______________________________________________ */
 		const formElement = document.createElement("form");
 		const isRegexOrFunction = function isRegexOrFunction(testValue) {
-			return testValue instanceof RegExp || testValue instanceof Function;
+			return testValue instanceof RegExp || typeof testValue === "function";
 		};
 
 		/**
@@ -1885,7 +1885,7 @@
 					}
 
 					if (
-						CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function &&
+						typeof CUSTOM_ELEMENT_HANDLING.tagNameCheck === "function" &&
 						CUSTOM_ELEMENT_HANDLING.tagNameCheck(tagName)
 					) {
 						return false;
@@ -1989,11 +1989,12 @@
 					(_isBasicCustomElement(lcTag) &&
 						((CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp &&
 							regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, lcTag)) ||
-							(CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function &&
+							(typeof CUSTOM_ELEMENT_HANDLING.tagNameCheck === "function" &&
 								CUSTOM_ELEMENT_HANDLING.tagNameCheck(lcTag))) &&
 						((CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof RegExp &&
 							regExpTest(CUSTOM_ELEMENT_HANDLING.attributeNameCheck, lcName)) ||
-							(CUSTOM_ELEMENT_HANDLING.attributeNameCheck instanceof Function &&
+							(typeof CUSTOM_ELEMENT_HANDLING.attributeNameCheck ===
+								"function" &&
 								CUSTOM_ELEMENT_HANDLING.attributeNameCheck(lcName)))) ||
 					// Alternative, second condition checks if it's an `is`-attribute, AND
 					// the value passes whatever the user has configured for CUSTOM_ELEMENT_HANDLING.tagNameCheck
@@ -2001,7 +2002,7 @@
 						CUSTOM_ELEMENT_HANDLING.allowCustomizedBuiltInElements &&
 						((CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof RegExp &&
 							regExpTest(CUSTOM_ELEMENT_HANDLING.tagNameCheck, value)) ||
-							(CUSTOM_ELEMENT_HANDLING.tagNameCheck instanceof Function &&
+							(typeof CUSTOM_ELEMENT_HANDLING.tagNameCheck === "function" &&
 								CUSTOM_ELEMENT_HANDLING.tagNameCheck(value))))
 				);
 				else {

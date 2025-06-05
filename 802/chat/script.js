@@ -76,36 +76,37 @@ function scrollToBottom() {
 	});
 }
 
-function fetchMessages(LMID = null) {
+async function fetchMessages(LMID = null) {
 	// LMID = Last Message ID = continueId
-	fetch(`${apiBaseUrl}/fetchMessages${LMID ? `?continueId=${LMID}` : ""}`, {
-		method: "GET",
-		headers: {
-			account: localStorage.getItem("email"),
-			code: localStorage.getItem("code"),
-		},
-	})
-		.then((response) => response.json())
-		.then((data) => {
-			// Scratch that let's do parsing serverside
-			continueId = data.continueId;
-			const messages = data.messages;
-			const messagesContainer = document.querySelector("#messages");
-			// Reverse the array if LMID is specified
-			if (LMID) messages.reverse();
-			for (const message of messages) {
-				const messageElement = createMessageElement(message);
-				if (LMID === null) {
-					messagesContainer.append(messageElement);
-					scrollToBottom();
-				} else {
-					messagesContainer.prepend(messageElement);
-					messagesContainer.scrollTo({
-						top: messagesContainer.scrollHeight - continueScroll,
-					});
-				}
-			}
-		});
+	const response = await fetch(
+		`${apiBaseUrl}/fetchMessages${LMID ? `?continueId=${LMID}` : ""}`,
+		{
+			method: "GET",
+			headers: {
+				account: localStorage.getItem("email"),
+				code: localStorage.getItem("code"),
+			},
+		}
+	);
+	const data = await response.json();
+	// Scratch that let's do parsing serverside
+	continueId = data.continueId;
+	const { messages } = data;
+	const messagesContainer = document.querySelector("#messages");
+	// Reverse the array if LMID is specified
+	if (LMID) messages.reverse();
+	for (const message of messages) {
+		const messageElement = createMessageElement(message);
+		if (LMID === null) {
+			messagesContainer.append(messageElement);
+			scrollToBottom();
+		} else {
+			messagesContainer.prepend(messageElement);
+			messagesContainer.scrollTo({
+				top: messagesContainer.scrollHeight - continueScroll,
+			});
+		}
+	}
 }
 
 function sendMessage() {
@@ -145,10 +146,13 @@ function deleteMessage(id) {
 	});
 }
 
+let sendNotifications = false;
 document.addEventListener("DOMContentLoaded", async () => {
 	const messagesContainer = document.querySelector("#messages");
 	function connectToWebsocket() {
-		const socket = new WebSocket(`${apiBaseUrl.replace("https", "wss")}`);
+		const socket = new WebSocket(
+			`${apiBaseUrl.replace("https", "wss")}?email=${localStorage.getItem("email")}&code=${localStorage.getItem("code")}`
+		);
 		socket.addEventListener("open", () => {
 			socket.send(`${localStorage.getItem("email")} is connected`);
 			if (retryCount > 0) {
@@ -166,18 +170,48 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 		socket.addEventListener("message", (event) => {
 			const data = JSON.parse(event.data);
-			if (data.type === "message") {
-				const message = data.data;
-				const messageElement = createMessageElement(message);
-				messagesContainer.append(messageElement);
-				scrollToBottom();
-			} else if (data.type === "delete") {
-				// Physically remove element from dom
-				document.querySelector(`#message-${data.data}`).remove();
+			switch (data.type) {
+				case "message": {
+					const message = data.data;
+					const messageElement = createMessageElement(message);
+					messagesContainer.append(messageElement);
+					scrollToBottom();
+					// Push notification
+					if (sendNotifications) {
+						new Notification(
+							"802 Chat",
+							{
+								body: message.message,
+							},
+							() => {
+								window.focus();
+							}
+						);
+					}
+
+					break;
+				}
+
+				case "delete": {
+					// Physically remove element from dom
+					document.querySelector(`#message-${data.data}`).remove();
+
+					break;
+				}
+
+				case "edit": {
+					const message = data.data;
+					const messageElement = createMessageElement(message);
+					document
+						.querySelector(`#message-${message.id}`)
+						.replaceWith(messageElement);
+
+					break;
+				}
+				// No default
 			}
 		});
-		socket.addEventListener("close", () => {
-			// Retry connection
+		function retryConnection() {
 			if (retryCount < maxRetries) {
 				setTimeout(() => {
 					retryCount++;
@@ -197,6 +231,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 					5000
 				);
 			}
+		}
+
+		socket.addEventListener("close", retryConnection);
+		document.addEventListener("focus", () => {
+			if (socket.readyState !== 1) {
+				retryConnection();
+			}
+		});
+		document.addEventListener("blur", () => {
+			sendNotifications = true;
 		});
 	}
 
