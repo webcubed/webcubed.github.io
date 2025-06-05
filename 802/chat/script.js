@@ -215,7 +215,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					break;
 				}
 
-				case "edit": {
+				case "update": {
 					const message = data.data;
 					const messageElement = createMessageElement(message);
 					document
