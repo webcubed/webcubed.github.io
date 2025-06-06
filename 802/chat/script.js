@@ -145,7 +145,10 @@ async function fetchMessages(LMID = null) {
 	for (const message of messages) {
 		const messageElement = createMessageElement(message);
 
-		if (messagesContainer.lastElementChild !== null) {
+		if (
+			messagesContainer.lastElementChild !== null &&
+			!messagesContainer.lastElementChild.classList.contains("dayDivider")
+		) {
 			const lastMessageTimestamp = Number.parseInt(
 				messagesContainer.lastElementChild
 					.querySelector(".messageHeader > .headerRight > .messageTimestamp")
@@ -255,7 +258,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 			switch (data.type) {
 				case "message": {
 					const message = data.data;
-					if (messagesContainer.lastElementChild !== null) {
+					if (
+						messagesContainer.lastElementChild !== null &&
+						!messagesContainer.lastElementChild.classList.contains("dayDivider")
+					) {
 						const lastMessageTimestamp = Number.parseInt(
 							messagesContainer.lastElementChild
 								.querySelector(
