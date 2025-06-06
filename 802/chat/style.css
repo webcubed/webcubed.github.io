@@ -81,8 +81,7 @@ html {
 .dayDivider {
 	width: 100%;
 	height: 0;
-	margin-bottom: 0.5rem;
-	margin-top: 1.5rem;
+	margin: 1rem 0;
 	display: flex;
 	border: thin solid var(--base);
 	box-sizing: border-box;

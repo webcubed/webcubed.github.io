@@ -249,6 +249,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				);
 				retryCount = 0;
 				// Clear messages & refetch
+				scrollToBottom();
 				messagesContainer.innerHTML = "";
 				fetchMessages();
 			}
