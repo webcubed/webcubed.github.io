@@ -144,29 +144,46 @@ async function fetchMessages(LMID = null) {
 	if (LMID) messages.reverse();
 	for (const message of messages) {
 		const messageElement = createMessageElement(message);
-
-		if (
-			messagesContainer.lastElementChild !== null &&
-			!messagesContainer.lastElementChild.classList.contains("dayDivider")
-		) {
-			const lastMessageTimestamp = Number.parseInt(
-				messagesContainer.lastElementChild
-					.querySelector(".messageHeader > .headerRight > .messageTimestamp")
-					.title.match(/Timestamp: (\d+),/)[1]
-			);
-			const messageTimestamp = message.timestamp;
-			if (differentDays(lastMessageTimestamp, messageTimestamp)) {
-				const dayLine = document.createElement("div");
-				dayLine.className = "dayDivider";
-				dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
-				messagesContainer.append(dayLine);
-			}
-		}
-
 		if (LMID === null) {
+			if (
+				messagesContainer.lastElementChild !== null &&
+				!messagesContainer.lastElementChild.classList.contains("dayDivider")
+			) {
+				const lastMessageTimestamp = Number.parseInt(
+					messagesContainer.lastElementChild
+						.querySelector(".messageHeader > .headerRight > .messageTimestamp")
+						.title.match(/Timestamp: (\d+),/)[1]
+				);
+				const messageTimestamp = message.timestamp;
+				if (differentDays(lastMessageTimestamp, messageTimestamp)) {
+					const dayLine = document.createElement("div");
+					dayLine.className = "dayDivider";
+					dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
+					messagesContainer.append(dayLine);
+				}
+			}
+
 			messagesContainer.append(messageElement);
 			scrollToBottom();
 		} else {
+			if (
+				messagesContainer.firstElementChild !== null &&
+				!messagesContainer.firstElementChild.classList.contains("dayDivider")
+			) {
+				const firstMessageTimestamp = Number.parseInt(
+					messagesContainer.firstElementChild
+						.querySelector(".messageHeader > .headerRight > .messageTimestamp")
+						.title.match(/Timestamp: (\d+),/)[1]
+				);
+				const messageTimestamp = message.timestamp;
+				if (differentDays(firstMessageTimestamp, messageTimestamp)) {
+					const dayLine = document.createElement("div");
+					dayLine.className = "dayDivider";
+					dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
+					messagesContainer.append(dayLine);
+				}
+			}
+
 			messagesContainer.prepend(messageElement);
 			messagesContainer.scrollTo({
 				top: messagesContainer.scrollHeight - continueScroll,
