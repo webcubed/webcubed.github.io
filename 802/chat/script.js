@@ -181,7 +181,7 @@ async function fetchMessages(LMID = null) {
 				if (differentDays(firstMessageTimestamp, messageTimestamp)) {
 					const dayLine = document.createElement("div");
 					dayLine.className = "dayDivider";
-					dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
+					dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(firstMessageTimestamp))}</span>`;
 					messagesContainer.prepend(dayLine);
 				}
 			}
