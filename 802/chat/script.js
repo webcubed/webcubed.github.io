@@ -147,7 +147,9 @@ async function fetchMessages(LMID = null) {
 		if (LMID === null) {
 			if (
 				messagesContainer.lastElementChild !== null &&
-				!messagesContainer.lastElementChild.classList.contains("dayDivider")
+				!messagesContainer.lastElementChild.classList.contains("dayDivider") &&
+				messagesContainer.lastElementChild.id.match(/message-(\d+)/)[1] !==
+					message.id
 			) {
 				const lastMessageTimestamp = Number.parseInt(
 					messagesContainer.lastElementChild
