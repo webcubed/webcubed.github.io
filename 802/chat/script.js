@@ -182,7 +182,7 @@ async function fetchMessages(LMID = null) {
 					const dayLine = document.createElement("div");
 					dayLine.className = "dayDivider";
 					dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
-					messagesContainer.append(dayLine);
+					messagesContainer.prepend(dayLine);
 				}
 			}
 
