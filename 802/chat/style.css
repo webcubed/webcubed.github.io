@@ -1,11 +1,20 @@
 html {
 	overflow: hidden;
 }
+body {
+	display: flex;
+	flex-direction: column;
+}
+#content {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+}
+#top {
+	flex-grow: 1;
+}
 #bottom {
-	bottom: 0;
-	position: absolute;
-	left: 50%;
-	transform: translateX(-50%);
+	position: relative;
 	width: 100%;
 	min-height: 5rem;
 	display: flex;
