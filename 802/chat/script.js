@@ -10,7 +10,8 @@ const retryDelay = 5000;
 
 function createMessageElement(
 	message,
-	editedTimestamp = message.editedTimestamp
+	editedTimestamp = message.editedTimestamp,
+	initial = false
 ) {
 	const content = DOMPurify.sanitize(
 		marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
@@ -99,7 +100,7 @@ function createMessageElement(
 		<p class="messageContent">${content}</p>
 	`;
 
-	appendEmbeds(messageElement, message);
+	appendEmbeds(messageElement, message, initial);
 	const isSelf = message.email === localStorage.getItem("email");
 	messageElement.className = isSelf ? "message self" : "message other";
 	if (isSelf || localStorage.getItem("admin")) {
@@ -118,7 +119,7 @@ function createMessageElement(
 	return messageElement;
 }
 
-function appendEmbeds(messageElement, message) {
+function appendEmbeds(messageElement, message, initial) {
 	// If attachments exist, append them
 	if (message.attachments && message.attachments.length > 0) {
 		const attachmentsContainer = document.createElement("div");
@@ -149,6 +150,7 @@ function appendEmbeds(messageElement, message) {
 			if (attachmentElement.tagName === "IMG") {
 				attachmentElement.addEventListener("load", () => {
 					attachmentElement.className += " loaded";
+					if (initial) scrollToBottom();
 				});
 				attachmentElement.addEventListener("error", () => {
 					attachmentElement.remove();
@@ -178,6 +180,7 @@ function appendEmbeds(messageElement, message) {
 					embedElement.referrerPolicy = "no-referrer";
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
+						if (initial) scrollToBottom();
 					});
 					embedElement.addEventListener("error", () => {
 						embedElement.remove();
@@ -200,6 +203,7 @@ function appendEmbeds(messageElement, message) {
 					embedElement.referrerPolicy = "no-referrer";
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
+						if (initial) scrollToBottom();
 					});
 					messageElement.append(embedElement);
 
@@ -219,6 +223,7 @@ function appendEmbeds(messageElement, message) {
 					embedElement.referrerPolicy = "no-referrer";
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
+						if (initial) scrollToBottom();
 					});
 					messageElement.append(embedElement);
 
@@ -238,6 +243,7 @@ function appendEmbeds(messageElement, message) {
 					});
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
+						if (initial) scrollToBottom();
 					});
 					embedElement.addEventListener("error", () => {
 						embedElement.remove();
@@ -305,7 +311,7 @@ function differentDays(firstTimstamp, secondTimestamp) {
 	);
 }
 
-async function fetchMessages(LMID = null) {
+async function fetchMessages(LMID = null, initial = false) {
 	// LMID = Last Message ID = continueId
 	const response = await fetch(
 		`${apiBaseUrl}/fetchMessages${LMID ? `?continueId=${LMID}` : ""}`,
@@ -325,7 +331,7 @@ async function fetchMessages(LMID = null) {
 	// Reverse the array if LMID is specified
 	if (LMID) messages.reverse();
 	for (const message of messages) {
-		const messageElement = createMessageElement(message);
+		const messageElement = createMessageElement(message, true);
 		if (LMID === null) {
 			if (
 				messagesContainer.lastElementChild !== null &&
@@ -611,7 +617,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	connectToWebsocket();
 
-	fetchMessages();
+	fetchMessages(null, true);
 	scrollToBottom();
 	/* --------------------------- input functionality -------------------------- */
 	document.querySelector("#messageinput").focus();
