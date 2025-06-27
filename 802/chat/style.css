@@ -178,6 +178,22 @@ body {
 	flex-direction: column;
 	overflow-y: scroll;
 }
+.discord {
+	color: var(--blue);
+}
+.idle {
+	color: var(--yellow);
+
+}
+.dnd {
+	color: var(--red);
+}
+.online {
+	color: var(--green);
+}
+.offline {
+	color: var(--overlay0);
+}
 #status {
 	display: flex;
 	gap: 1rem;

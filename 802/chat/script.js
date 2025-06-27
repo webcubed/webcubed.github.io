@@ -567,7 +567,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						userElement.classList.add("discord");
 					}
 
-					userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status">${data.data.status}</span></p>`;
+					userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">${data.data.status}</span></p>`;
 					document.querySelector("#onlinelist").append(userElement);
 
 					break;
