@@ -603,15 +603,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 				userElement.dataset.status = data.data.status;
 				userElement.querySelector(".status").textContent =
 					`(${data.data.status})`;
-				userElement.classList.remove("online", "idle", "dnd", "offline");
-				userElement.classList.add(data.data.status);
+				userElement
+					.querySelector(".status")
+					.classList.remove("online", "idle", "dnd", "offline");
+				userElement.querySelector(".status").classList.add(data.data.status);
 			}
 
 			if (data.data.discord) {
 				userElement.dataset.discord = data.data.discord;
-				userElement.classList.add("discord");
+				userElement.querySelector(".status").classList.add("discord");
 			} else if (userElement) {
-				userElement.classList.remove("discord");
+				userElement.querySelector(".status").classList.remove("discord");
 			}
 
 			if (data.data.status === "offline" && userElement) {
