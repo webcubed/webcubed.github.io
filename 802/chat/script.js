@@ -497,92 +497,162 @@ document.addEventListener("DOMContentLoaded", async () => {
 				getOnlineMembers();
 			}
 		});
+		function handleMessageTypeMessage(data) {
+			const message = data.data;
+			if (
+				messagesContainer.lastElementChild !== null &&
+				!messagesContainer.lastElementChild.classList.contains("dayDivider")
+			) {
+				const lastMessageTimestamp = Number.parseInt(
+					messagesContainer.lastElementChild
+						.querySelector(".messageHeader > .headerRight > .messageTimestamp")
+						.title.match(/Timestamp: (\d+),/)[1]
+				);
+				const messageTimestamp = message.timestamp;
+				if (differentDays(lastMessageTimestamp, messageTimestamp)) {
+					const dayLine = document.createElement("div");
+					dayLine.className = "dayDivider";
+					dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
+					messagesContainer.append(dayLine);
+				}
+			}
+
+			const messageElement = createMessageElement(message);
+			messagesContainer.append(messageElement);
+			scrollToBottom();
+			// Push notification
+			if (sendNotifications) {
+				new Notification(
+					`${message.author} (802 Chat)`,
+					{
+						body: message.cleanContent,
+					},
+					() => {
+						window.focus();
+					}
+				);
+			}
+		}
+
+		function handleMessageTypeDelete(data) {
+			// Physically remove element from dom
+			document.querySelector(`#message-${data.data}`).remove();
+		}
+
+		function handleMessageTypeUpdate(data) {
+			const message = data.data;
+			const content = createMessageElement(message, data.editedTimestamp);
+			document.querySelector(`#message-${message.id}`).replaceWith(content);
+		}
+
+		function handleMessageTypeConnect(data) {
+			// Another user connected, add to online user list
+			const existingUserElement = document.querySelector(
+				`[data-email="${data.data.email}"]`
+			);
+			let userElement;
+			if (
+				existingUserElement !== null &&
+				existingUserElement.dataset.discord !== data.data.discord.toString()
+			) {
+				existingUserElement.remove();
+				userElement = document.createElement("div");
+			} else if (existingUserElement === null) {
+				userElement = document.createElement("div");
+			} else {
+				userElement = existingUserElement;
+			}
+
+			userElement.className = "onlineUser";
+			userElement.dataset.email = data.data.email;
+			userElement.dataset.status = data.data.status;
+			userElement.dataset.discord = data.data.discord;
+			if (data.data.discord) {
+				userElement.classList.add("discord");
+			}
+
+			userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
+			document.querySelector("#onlinelist").append(userElement);
+			if (sendNotifications) {
+				new Notification(
+					`User Status Update (802 Chat)`,
+					{
+						body: `${data.data.email} is now ${data.data.status}`,
+					},
+					() => {
+						window.focus();
+					}
+				);
+			}
+		}
+
+		function handleMessageTypeDisconnect(data) {
+			// Another user disconnected, remove from online user list
+			for (const userElement of document.querySelectorAll(`.onlineUser`)) {
+				if (userElement.dataset.email === data.data.email) {
+					userElement.remove();
+				}
+			}
+		}
+
+		function handleMessageTypePresenceUpdate(data) {
+			// Update the status of an online user
+			const userElement = document.querySelector(
+				`.onlineUser[data-email="${data.data.email}"]`
+			);
+			if (userElement) {
+				userElement.dataset.status = data.data.status;
+				userElement.querySelector(".status").textContent =
+					`(${data.data.status})`;
+				userElement.classList.remove("online", "idle", "dnd", "offline");
+				userElement.classList.add(data.data.status);
+			}
+
+			if (data.data.discord) {
+				userElement.dataset.discord = data.data.discord;
+				userElement.classList.add("discord");
+			} else if (userElement) {
+				userElement.classList.remove("discord");
+			}
+
+			if (data.data.status === "offline" && userElement) {
+				userElement.remove();
+			}
+
+			if (sendNotifications) {
+				new Notification(
+					`User Status Update (802 Chat)`,
+					{
+						body: `${data.data.email} is now ${data.data.status}`,
+					},
+					() => {
+						window.focus();
+					}
+				);
+			}
+		}
+
 		socket.addEventListener("message", (event) => {
 			const data = JSON.parse(event.data);
 			switch (data.type) {
-				case "message": {
-					const message = data.data;
-					if (
-						messagesContainer.lastElementChild !== null &&
-						!messagesContainer.lastElementChild.classList.contains("dayDivider")
-					) {
-						const lastMessageTimestamp = Number.parseInt(
-							messagesContainer.lastElementChild
-								.querySelector(
-									".messageHeader > .headerRight > .messageTimestamp"
-								)
-								.title.match(/Timestamp: (\d+),/)[1]
-						);
-						const messageTimestamp = message.timestamp;
-						if (differentDays(lastMessageTimestamp, messageTimestamp)) {
-							const dayLine = document.createElement("div");
-							dayLine.className = "dayDivider";
-							dayLine.innerHTML = `<span class="dayDividerText">${new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(new Date(messageTimestamp))}</span>`;
-							messagesContainer.append(dayLine);
-						}
-					}
-
-					const messageElement = createMessageElement(message);
-					messagesContainer.append(messageElement);
-					scrollToBottom();
-					// Push notification
-					if (sendNotifications) {
-						new Notification(
-							`${message.author} (802 Chat)`,
-							{
-								body: message.cleanContent,
-							},
-							() => {
-								window.focus();
-							}
-						);
-					}
-
+				case "message":
+					handleMessageTypeMessage(data);
 					break;
-				}
-
-				case "delete": {
-					// Physically remove element from dom
-					document.querySelector(`#message-${data.data}`).remove();
-
+				case "delete":
+					handleMessageTypeDelete(data);
 					break;
-				}
-
-				case "update": {
-					const message = data.data;
-					const content = createMessageElement(message, data.editedTimestamp);
-					document.querySelector(`#message-${message.id}`).replaceWith(content);
-
+				case "update":
+					handleMessageTypeUpdate(data);
 					break;
-				}
-
-				case "connect": {
-					// Another user connected, add to online user list
-					const userElement = document.createElement("div");
-					userElement.className = "onlineUser";
-					userElement.dataset.email = data.data.email;
-					userElement.dataset.status = data.data.status;
-					userElement.dataset.discord = data.data.discord;
-					if (data.data.discord) {
-						userElement.classList.add("discord");
-					}
-
-					userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
-					document.querySelector("#onlinelist").append(userElement);
-
+				case "connect":
+					handleMessageTypeConnect(data);
 					break;
-				}
-
-				case "disconnect": {
-					// Another user disconnected, remove from online user list
-					for (const userElement of document.querySelectorAll(`.onlineUser`)) {
-						if (userElement.dataset.email === data.data.email) {
-							userElement.remove();
-						}
-					}
-
+				case "disconnect":
+					handleMessageTypeDisconnect(data);
 					break;
-				}
+				case "presenceupdate":
+					handleMessageTypePresenceUpdate(data);
+					break;
 				// No default
 			}
 		});
