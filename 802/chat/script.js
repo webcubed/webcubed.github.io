@@ -276,7 +276,6 @@ function createReplyElement(id) {
 			`Could not find message with ID ${id}. It may have been deleted.`,
 			5000
 		);
-		return;
 	}
 	// From the element, we can derive
 }
@@ -635,24 +634,35 @@ document.addEventListener("DOMContentLoaded", async () => {
 		socket.addEventListener("message", (event) => {
 			const data = JSON.parse(event.data);
 			switch (data.type) {
-				case "message":
+				case "message": {
 					handleMessageTypeMessage(data);
 					break;
-				case "delete":
+				}
+
+				case "delete": {
 					handleMessageTypeDelete(data);
 					break;
-				case "update":
+				}
+
+				case "update": {
 					handleMessageTypeUpdate(data);
 					break;
-				case "connect":
+				}
+
+				case "connect": {
 					handleMessageTypeConnect(data);
 					break;
-				case "disconnect":
+				}
+
+				case "disconnect": {
 					handleMessageTypeDisconnect(data);
 					break;
-				case "presenceupdate":
+				}
+
+				case "updatepresence": {
 					handleMessageTypePresenceUpdate(data);
 					break;
+				}
 				// No default
 			}
 		});
