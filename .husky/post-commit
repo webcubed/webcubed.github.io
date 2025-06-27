@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+echo $(git rev-parse HEAD) > version.txt
+git add .
+git commit -m "Update version.txt"
