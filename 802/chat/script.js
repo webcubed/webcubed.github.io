@@ -395,6 +395,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 	}
 
+	try {
+		const revidElement = document.querySelector("#revid");
+		const versionResponse = await fetch("/version.txt");
+		const versionText = await versionResponse.text();
+		revidElement.textContent = versionText.slice(0, 8);
+		revidElement.title = `Commit SHA: ${versionText}`;
+	} catch {}
+
 	const messagesContainer = document.querySelector("#messages");
 	const WSStatusElement = document.querySelector("#websocketstatus");
 	function connectToWebsocket() {
