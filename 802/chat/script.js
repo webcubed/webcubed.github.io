@@ -148,6 +148,7 @@ function createMessageElement(
 
 	return messageElement;
 }
+
 // TODO
 function createReplyElement(id) {
 	// Create the top attachment with a preview of the message being replied to
@@ -419,6 +420,27 @@ document.addEventListener("DOMContentLoaded", async () => {
 					const message = data.data;
 					const content = createMessageElement(message, data.editedTimestamp);
 					document.querySelector(`#message-${message.id}`).replaceWith(content);
+
+					break;
+				}
+
+				case "connect": {
+					// Another user connected, add to online user list
+					const userElement = document.createElement("div");
+					userElement.className = "onlineUser";
+					userElement.textContent = data.data;
+					document.querySelector("#onlinelist").append(userElement);
+
+					break;
+				}
+
+				case "disconnect": {
+					// Another user disconnected, remove from online user list
+					for (const userElement of document.querySelectorAll(`.onlineUser`)) {
+						if (userElement.textContent === data.data) {
+							userElement.remove();
+						}
+					}
 
 					break;
 				}
