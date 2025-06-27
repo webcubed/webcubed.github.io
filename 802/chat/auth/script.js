@@ -7,8 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const versionText = await versionResponse.text();
 		if (versionText === "dev") {
 			revidElement.textContent = "dev";
-			revidElement.title =
-				"This is a development (not cloudflare pages) version of the chat.";
+			revidElement.title = "This is a development version of the chat.";
 			revidElement.classList.add("dev");
 			return;
 		}
