@@ -84,8 +84,22 @@ body {
 	height: calc(100% - 20px);
 	margin: auto;
 }
-.messagesAttachments > img, .messagesAttachments > video, .messagesAttachments > audio {
+.messagesAttachments > img,
+.messagesAttachments > video,
+.messagesAttachments > audio {
+	max-height: 50vh;
+	border-radius: 0.5rem;
+	display: block;
 	max-width: 100%;
+	margin: 0.5rem auto;
+}
+.message > img,
+.message > video,
+.message > audio {
+	max-width: 100%;
+	border-radius: 0.5rem;
+	display: block;
+	margin: 0.5rem auto;
 }
 .dayDivider {
 	width: 100%;
