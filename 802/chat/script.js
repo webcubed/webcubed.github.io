@@ -663,7 +663,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		});
 		const data = await onlineResponse.json();
 		// Sort alphabetical
-		data.sort((a, b) => a.localeCompare(b));
+		data.sort((a, b) => a.email.localeCompare(b.email));
 		const onlineUsersContainer = document.querySelector("#onlinelist");
 		onlineUsersContainer.innerHTML = ""; // Clear existing users
 		for (const user of data) {
