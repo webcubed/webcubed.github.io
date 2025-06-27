@@ -182,7 +182,7 @@ function appendEmbeds(messageElement, message, initial) {
 			switch (embed.type) {
 				case "image": {
 					const embedElement = document.createElement("img");
-					embedElement.src = embed.image.proxyURL;
+					embedElement.src = embed.thumbnail.proxyURL;
 					embedElement.alt = embed.title || "Embed Image";
 					embedElement.addEventListener("error", () => {
 						if (embedElement.src === embed.url) {
@@ -205,12 +205,7 @@ function appendEmbeds(messageElement, message, initial) {
 
 				case "video": {
 					const embedElement = document.createElement("video");
-					embedElement.src = embed.video.proxyURL;
-					embedElement.addEventListener("error", () => {
-						if (embedElement.src !== embed.url) {
-							embedElement.src = embed.url;
-						}
-					});
+					embedElement.src = embed.url;
 					embedElement.controls = true;
 					embedElement.className = "messageEmbedVideo";
 					embedElement.referrerPolicy = "no-referrer";
@@ -245,15 +240,10 @@ function appendEmbeds(messageElement, message, initial) {
 
 				case "gifv": {
 					const embedElement = document.createElement("video");
-					embedElement.src = embed.video.proxyURL;
+					embedElement.src = embed.url;
 					embedElement.controls = true;
 					embedElement.className = "messageEmbedVideo";
 					embedElement.referrerPolicy = "no-referrer";
-					embedElement.addEventListener("error", () => {
-						if (embedElement.src !== embed.url) {
-							embedElement.src = embed.url;
-						}
-					});
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
 						if (initial) scrollToBottom();
