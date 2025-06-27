@@ -89,6 +89,27 @@ function createMessageElement(
 		</div>
 		<p class="messageContent">${content}</p>
 	`;
+
+	appendEmbeds(messageElement, message);
+	const isSelf = message.email === localStorage.getItem("email");
+	messageElement.className = isSelf ? "message self" : "message other";
+	if (isSelf || localStorage.getItem("admin")) {
+		const deleteButton = document.createElement("span");
+		deleteButton.classList = "messageDelete material-symbols-outlined";
+		deleteButton.textContent = "delete";
+		deleteButton.addEventListener("click", () => {
+			deleteMessage(message.id);
+		});
+		messageElement.append(deleteButton);
+		messageElement
+			.querySelector(".messageHeader > .headerRight")
+			.append(deleteButton);
+	}
+
+	return messageElement;
+}
+
+function appendEmbeds(messageElement, message) {
 	// If attachments exist, append them
 	if (message.attachments && message.attachments.length > 0) {
 		const attachmentsContainer = document.createElement("div");
@@ -131,22 +152,56 @@ function createMessageElement(
 		messageElement.append(attachmentsContainer);
 	}
 
-	const isSelf = message.email === localStorage.getItem("email");
-	messageElement.className = isSelf ? "message self" : "message other";
-	if (isSelf || localStorage.getItem("admin")) {
-		const deleteButton = document.createElement("span");
-		deleteButton.classList = "messageDelete material-symbols-outlined";
-		deleteButton.textContent = "delete";
-		deleteButton.addEventListener("click", () => {
-			deleteMessage(message.id);
-		});
-		messageElement.append(deleteButton);
-		messageElement
-			.querySelector(".messageHeader > .headerRight")
-			.append(deleteButton);
+	// Embeds as well
+	if (message.embeds && message.embeds.length > 0) {
+		for (const embed of message.embeds) {
+			if (embed.type === "image") {
+				const embedElement = document.createElement("img");
+				embedElement.src = embed.proxyURL || embed.url;
+				embedElement.alt = embed.title || "Embed Image";
+				embedElement.addEventListener("error", () => {
+					if (embedElement.src !== embed.url) {
+						embedElement.src = embed.url;
+					}
+				});
+				embedElement.className = "messageEmbedImage";
+				embedElement.referrerPolicy = "no-referrer";
+				embedElement.addEventListener("load", () => {
+					embedElement.className += " loaded";
+				});
+				embedElement.addEventListener("error", () => {
+					embedElement.remove();
+				});
+				messageElement.append(embedElement);
+			} else if (embed.type === "video") {
+				const embedElement = document.createElement("video");
+				embedElement.src = embed.proxyURL || embed.url;
+				embedElement.controls = true;
+				embedElement.className = "messageEmbedVideo";
+				embedElement.referrerPolicy = "no-referrer";
+				embedElement.addEventListener("load", () => {
+					embedElement.className += " loaded";
+				});
+				embedElement.addEventListener("error", () => {
+					embedElement.remove();
+				});
+				messageElement.append(embedElement);
+			} else if (embed.type === "audio") {
+				const embedElement = document.createElement("audio");
+				embedElement.src = embed.proxyURL || embed.url;
+				embedElement.controls = true;
+				embedElement.className = "messageEmbedAudio";
+				embedElement.referrerPolicy = "no-referrer";
+				embedElement.addEventListener("load", () => {
+					embedElement.className += " loaded";
+				});
+				embedElement.addEventListener("error", () => {
+					embedElement.remove();
+				});
+				messageElement.append(embedElement);
+			}
+		}
 	}
-
-	return messageElement;
 }
 
 // TODO
