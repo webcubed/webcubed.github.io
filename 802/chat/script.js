@@ -280,6 +280,23 @@ document.addEventListener(
 	{ once: true }
 );
 document.addEventListener("DOMContentLoaded", async () => {
+	/* ----------------------------- authentication ----------------------------- */
+	if (localStorage.getItem("code") && localStorage.getItem("email")) {
+		const response = await fetch(`${apiBaseUrl}/checkSession`, {
+			method: "GET",
+			headers: {
+				account: localStorage.getItem("email"),
+				code: localStorage.getItem("code"),
+			},
+		});
+		const data = await response.text();
+		if (data !== "authorized :>") {
+			globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
+		}
+	} else {
+		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
+	}
+
 	const messagesContainer = document.querySelector("#messages");
 	const WSStatusElement = document.querySelector("#websocketstatus");
 	function connectToWebsocket() {
@@ -408,24 +425,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	connectToWebsocket();
 
-	if (localStorage.getItem("code") && localStorage.getItem("email")) {
-		const response = await fetch(`${apiBaseUrl}/checkSession`, {
-			method: "GET",
-			headers: {
-				account: localStorage.getItem("email"),
-				code: localStorage.getItem("code"),
-			},
-		});
-		const data = await response.text();
-		if (data !== "authorized :>") {
-			globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
-		}
-	} else {
-		globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
-	}
-
 	fetchMessages();
 	scrollToBottom();
+	/* --------------------------- input functionality -------------------------- */
 	document.querySelector("#messageinput").focus();
 	document.querySelector("#submit").addEventListener("click", sendMessage);
 	document
@@ -436,6 +438,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				sendMessage();
 			}
 		});
+	/* ------------------------ fetch at top of container ----------------------- */
 	messagesContainer.addEventListener("scroll", () => {
 		if (messagesContainer.scrollTop === 0) {
 			// Store scroll relative to bottom
@@ -445,4 +448,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 			fetchMessages(continueId);
 		}
 	});
+	/* ---------------------------- get online users ---------------------------- */
+	fetch(`${apiBaseUrl}/online`, {
+		// Will return array of emails
+		method: "GET",
+		headers: {
+			account: localStorage.getItem("email"),
+			code: localStorage.getItem("code"),
+		},
+	})
+		.then((response) => response.json())
+		.then((data) => {
+			// Sort alphabetical
+			data.sort((a, b) => a.localeCompare(b));
+			const onlineUsersContainer = document.querySelector("#onlinelist");
+			for (const user of data) {
+				const userElement = document.createElement("div");
+				userElement.className = "onlineUser";
+				userElement.textContent = user;
+				onlineUsersContainer.append(userElement);
+			}
+		});
 });
