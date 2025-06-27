@@ -406,7 +406,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			return;
 		}
 
-		revidElement.textContent = versionText.slice(0, 8);
+		revidElement.textContent = versionText.slice(0, 7);
 		revidElement.title = `Commit SHA: ${versionText}`;
 		revidElement.href = `https://github.com/webcubed/webcubed.github.io/commit/${versionText}`;
 	} catch {}
