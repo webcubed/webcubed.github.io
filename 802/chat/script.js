@@ -567,7 +567,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 						userElement.classList.add("discord");
 					}
 
-					userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">${data.data.status}</span></p>`;
+					userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
 					document.querySelector("#onlinelist").append(userElement);
 
 					break;
@@ -672,7 +672,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 			userElement.dataset.email = user.email;
 			userElement.dataset.status = user.status;
 			userElement.dataset.status = user.discord;
-			userElement.textContent = user.email;
+			if (user.discord) {
+				userElement.classList.add("discord");
+			}
+
+			userElement.innerHTML = /* html */ `<p>${user.email} <span class="status ${user.status}">(${user.status})</span></p>`;
+
 			onlineUsersContainer.append(userElement);
 		}
 	}
