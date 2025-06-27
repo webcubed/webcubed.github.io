@@ -1,7 +1,7 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 
-document.addEventListener("DOMContentLoaded", () => {
-		try {
+document.addEventListener("DOMContentLoaded", async () => {
+	try {
 		const revidElement = document.querySelector("#revid");
 		const versionResponse = await fetch("/version.txt");
 		const versionText = await versionResponse.text();
@@ -15,7 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
 		revidElement.textContent = versionText.slice(0, 8);
 		revidElement.title = `Commit SHA: ${versionText}`;
-	} catch {}
+	} catch { }
+	
 	document
 		.querySelector("#submitbutton")
 		.addEventListener("click", async () => {
