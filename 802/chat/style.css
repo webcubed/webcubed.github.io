@@ -190,3 +190,6 @@ span#websocketstatus.success {
 span#websocketstatus.error {
 	color: var(--red);
 }
+.dev {
+	color: var(--blue);
+}
