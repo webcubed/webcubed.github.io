@@ -477,3 +477,6 @@ dialog {
 	color: var(--text);
 }
 /*apply the change*/
+.dev {
+	color: var(--blue);
+}
