@@ -12,8 +12,10 @@ async function promptForUpdate() {
 	const confirmButton = dialog.querySelector("#confirm");
 	const cancelButton = dialog.querySelector("#cancel");
 	const result = new Promise((resolve) => {
-		confirmButton.addEventListener("click", () => {
+		confirmButton.addEventListener("click", async () => {
 			dialog.close();
+			const response = await fetch("/version.txt");
+			localStorage.setItem("version", await response.text());
 			resolve(true);
 		});
 

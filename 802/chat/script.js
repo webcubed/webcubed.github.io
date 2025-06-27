@@ -560,7 +560,14 @@ document.addEventListener("DOMContentLoaded", async () => {
 					// Another user connected, add to online user list
 					const userElement = document.createElement("div");
 					userElement.className = "onlineUser";
-					userElement.textContent = data.data;
+					userElement.dataset.email = data.data.email;
+					userElement.dataset.status = data.data.status;
+					userElement.dataset.discord = data.data.discord;
+					if (data.data.discord) {
+						userElement.classList.add("discord");
+					}
+
+					userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status">${data.data.status}</span></p>`;
 					document.querySelector("#onlinelist").append(userElement);
 
 					break;
@@ -569,7 +576,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				case "disconnect": {
 					// Another user disconnected, remove from online user list
 					for (const userElement of document.querySelectorAll(`.onlineUser`)) {
-						if (userElement.textContent === data.data) {
+						if (userElement.dataset.email === data.data.email) {
 							userElement.remove();
 						}
 					}
@@ -662,9 +669,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 		for (const user of data) {
 			const userElement = document.createElement("div");
 			userElement.className = "onlineUser";
-			userElement.textContent = user;
+			userElement.dataset.email = user.email;
+			userElement.dataset.status = user.status;
+			userElement.dataset.status = user.discord;
+			userElement.textContent = user.email;
 			onlineUsersContainer.append(userElement);
 		}
 	}
+
 	getOnlineMembers();
 });
