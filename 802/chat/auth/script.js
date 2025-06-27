@@ -5,17 +5,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const revidElement = document.querySelector("#revid");
 		const versionResponse = await fetch("/version.txt");
 		const versionText = await versionResponse.text();
-		if (versionText === "dev") {
-			revidElement.textContent = "dev";
-			revidElement.title = "This is a development version of the site.";
-			revidElement.classList.add("dev");
-			return;
-		}
 
 		revidElement.textContent = versionText.slice(0, 7);
 		revidElement.title = `Commit SHA: ${versionText}`;
 		revidElement.href = `https://github.com/webcubed/webcubed.github.io/commit/${versionText}`;
-	} catch {}
+	} catch {
+		revidElement.textContent = "dev";
+		revidElement.title = "This is a development version of the site.";
+		revidElement.classList.add("dev");
+		return;
+	}
 
 	document
 		.querySelector("#submitbutton")

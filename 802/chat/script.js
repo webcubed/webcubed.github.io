@@ -155,50 +155,61 @@ function appendEmbeds(messageElement, message) {
 	// Embeds as well
 	if (message.embeds && message.embeds.length > 0) {
 		for (const embed of message.embeds) {
-			if (embed.type === "image") {
-				const embedElement = document.createElement("img");
-				embedElement.src = embed.proxyURL || embed.url;
-				embedElement.alt = embed.title || "Embed Image";
-				embedElement.addEventListener("error", () => {
-					if (embedElement.src !== embed.url) {
-						embedElement.src = embed.url;
-					}
-				});
-				embedElement.className = "messageEmbedImage";
-				embedElement.referrerPolicy = "no-referrer";
-				embedElement.addEventListener("load", () => {
-					embedElement.className += " loaded";
-				});
-				embedElement.addEventListener("error", () => {
-					embedElement.remove();
-				});
-				messageElement.append(embedElement);
-			} else if (embed.type === "video") {
-				const embedElement = document.createElement("video");
-				embedElement.src = embed.proxyURL || embed.url;
-				embedElement.controls = true;
-				embedElement.className = "messageEmbedVideo";
-				embedElement.referrerPolicy = "no-referrer";
-				embedElement.addEventListener("load", () => {
-					embedElement.className += " loaded";
-				});
-				embedElement.addEventListener("error", () => {
-					embedElement.remove();
-				});
-				messageElement.append(embedElement);
-			} else if (embed.type === "audio") {
-				const embedElement = document.createElement("audio");
-				embedElement.src = embed.proxyURL || embed.url;
-				embedElement.controls = true;
-				embedElement.className = "messageEmbedAudio";
-				embedElement.referrerPolicy = "no-referrer";
-				embedElement.addEventListener("load", () => {
-					embedElement.className += " loaded";
-				});
-				embedElement.addEventListener("error", () => {
-					embedElement.remove();
-				});
-				messageElement.append(embedElement);
+			switch (embed.type) {
+				case "image": {
+					const embedElement = document.createElement("img");
+					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.alt = embed.title || "Embed Image";
+					embedElement.addEventListener("error", () => {
+						if (embedElement.src !== embed.url) {
+							embedElement.src = embed.url;
+						}
+					});
+					embedElement.className = "messageEmbedImage";
+					embedElement.referrerPolicy = "no-referrer";
+					embedElement.addEventListener("load", () => {
+						embedElement.className += " loaded";
+					});
+					embedElement.addEventListener("error", () => {
+						embedElement.remove();
+					});
+					messageElement.append(embedElement);
+
+					break;
+				}
+				case "video": {
+					const embedElement = document.createElement("video");
+					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.controls = true;
+					embedElement.className = "messageEmbedVideo";
+					embedElement.referrerPolicy = "no-referrer";
+					embedElement.addEventListener("load", () => {
+						embedElement.className += " loaded";
+					});
+					embedElement.addEventListener("error", () => {
+						embedElement.remove();
+					});
+					messageElement.append(embedElement);
+
+					break;
+				}
+				case "audio": {
+					const embedElement = document.createElement("audio");
+					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.controls = true;
+					embedElement.className = "messageEmbedAudio";
+					embedElement.referrerPolicy = "no-referrer";
+					embedElement.addEventListener("load", () => {
+						embedElement.className += " loaded";
+					});
+					embedElement.addEventListener("error", () => {
+						embedElement.remove();
+					});
+					messageElement.append(embedElement);
+
+					break;
+				}
+				// No default
 			}
 		}
 	}
@@ -399,17 +410,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const revidElement = document.querySelector("#revid");
 		const versionResponse = await fetch("/version.txt");
 		const versionText = await versionResponse.text();
-		if (versionText === "dev") {
-			revidElement.textContent = "dev";
-			revidElement.title = "This is a development version of the site.";
-			revidElement.classList.add("dev");
-			return;
-		}
 
 		revidElement.textContent = versionText.slice(0, 7);
 		revidElement.title = `Commit SHA: ${versionText}`;
 		revidElement.href = `https://github.com/webcubed/webcubed.github.io/commit/${versionText}`;
-	} catch {}
+	} catch {
+		revidElement.textContent = "dev";
+		revidElement.title = "This is a development version of the site.";
+		revidElement.classList.add("dev");
+		return;
+	}
 
 	const messagesContainer = document.querySelector("#messages");
 	const WSStatusElement = document.querySelector("#websocketstatus");
