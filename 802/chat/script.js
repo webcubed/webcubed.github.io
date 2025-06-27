@@ -142,20 +142,33 @@ function appendEmbeds(messageElement, message, initial) {
 				attachmentElement.textContent = attachment.name;
 			}
 
-			attachmentElement.src = attachment.url;
-			attachmentElement.alt = attachment.name;
-			attachmentElement.referrerPolicy = "no-referrer";
-			attachmentElement.className = "messageAttachment";
-
-			if (attachmentElement.tagName === "IMG") {
-				attachmentElement.addEventListener("load", () => {
-					attachmentElement.className += " loaded";
-					if (initial) scrollToBottom();
+			attachmentElement.src = attachment.proxyURL || attachment.url;
+			if (
+				attachment.type.startsWith("video/") ||
+				attachment.type.startsWith("audio/")
+			) {
+				attachmentElement.addEventListener("error", () => {
+					if (attachmentElement.src !== attachment.url) {
+						attachmentElement.src = attachment.url;
+					}
 				});
+			} else {
 				attachmentElement.addEventListener("error", () => {
 					attachmentElement.remove();
 				});
 			}
+
+			attachmentElement.alt = attachment.name;
+			attachmentElement.referrerPolicy = "no-referrer";
+			attachmentElement.className = "messageAttachment";
+
+			attachmentElement.addEventListener("load", () => {
+				attachmentElement.className += " loaded";
+				if (initial) scrollToBottom();
+			});
+			attachmentElement.addEventListener("error", () => {
+				attachmentElement.remove();
+			});
 
 			attachmentsContainer.append(attachmentElement);
 		}
@@ -169,10 +182,12 @@ function appendEmbeds(messageElement, message, initial) {
 			switch (embed.type) {
 				case "image": {
 					const embedElement = document.createElement("img");
-					embedElement.src = embed.proxyURL;
+					embedElement.src = embed.image.proxyURL;
 					embedElement.alt = embed.title || "Embed Image";
 					embedElement.addEventListener("error", () => {
-						if (embedElement.src !== embed.url) {
+						if (embedElement.src === embed.url) {
+							embedElement.remove();
+						} else {
 							embedElement.src = embed.url;
 						}
 					});
@@ -182,9 +197,7 @@ function appendEmbeds(messageElement, message, initial) {
 						embedElement.className += " loaded";
 						if (initial) scrollToBottom();
 					});
-					embedElement.addEventListener("error", () => {
-						embedElement.remove();
-					});
+
 					messageElement.append(embedElement);
 
 					break;
@@ -192,7 +205,7 @@ function appendEmbeds(messageElement, message, initial) {
 
 				case "video": {
 					const embedElement = document.createElement("video");
-					embedElement.src = embed.proxyURL;
+					embedElement.src = embed.video.proxyURL;
 					embedElement.addEventListener("error", () => {
 						if (embedElement.src !== embed.url) {
 							embedElement.src = embed.url;
@@ -232,7 +245,7 @@ function appendEmbeds(messageElement, message, initial) {
 
 				case "gifv": {
 					const embedElement = document.createElement("video");
-					embedElement.src = embed.proxyURL;
+					embedElement.src = embed.video.proxyURL;
 					embedElement.controls = true;
 					embedElement.className = "messageEmbedVideo";
 					embedElement.referrerPolicy = "no-referrer";
@@ -663,4 +676,5 @@ document.addEventListener("DOMContentLoaded", async () => {
 			onlineUsersContainer.append(userElement);
 		}
 	}
+	getOnlineMembers();
 });
