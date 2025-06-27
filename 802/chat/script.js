@@ -334,7 +334,7 @@ async function fetchMessages(LMID = null, initial = false) {
 	// Reverse the array if LMID is specified
 	if (LMID) messages.reverse();
 	for (const message of messages) {
-		const messageElement = createMessageElement(message, null, true);
+		const messageElement = createMessageElement(message, null, initial);
 		if (LMID === null) {
 			if (
 				messagesContainer.lastElementChild !== null &&
