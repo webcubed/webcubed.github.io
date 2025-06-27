@@ -11,7 +11,11 @@ body {
 	flex-grow: 1;
 }
 #top {
+	display: flex;
 	flex-grow: 1;
+	justify-content: space-between;
+	gap: 10px;
+	height: 60vh;
 }
 #bottom {
 	position: relative;
@@ -68,23 +72,16 @@ body {
 	cursor: not-allowed;
 }
 #messageswrapper {
-	position: absolute;
-	left: 0;
-	top: 0;
-	bottom: 0;
+	max-width: 70%;
+	flex-grow: 1;
 }
 #messages {
 	background: var(--mantle);
 	border-radius: 0.5rem;
 	padding: 10px;
-	position: fixed;
-	left: 5%;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	bottom: 100px;
-	top: 0;
-	height: 60%;
-	width: 70%;
+	height: calc(100% - 20px);
 	margin: auto;
 }
 .dayDivider {
@@ -161,6 +158,9 @@ body {
 		"wght" 400,
 		"GRAD" 0,
 		"opsz" 20;
+}
+#users {
+	flex-grow: 2;
 }
 #status {
 	display: flex;

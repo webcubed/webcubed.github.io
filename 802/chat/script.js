@@ -106,11 +106,43 @@ function createMessageElement(
 
 	return messageElement;
 }
+// TODO
+function createReplyElement(id) {
+	// Create the top attachment with a preview of the message being replied to
+	// id = message of id being replied to
+	const messageElement = document.querySelector(`#message-${id}`);
+	if (!messageElement) {
+		new Toast(
+			"error",
+			"Message not found",
+			`Could not find message with ID ${id}. It may have been deleted.`,
+			5000
+		);
+		return;
+	}
+}
 
 function scrollToBottom() {
 	document.querySelector("#messages").scrollTo({
 		top: document.querySelector("#messages").scrollHeight,
 	});
+}
+
+function jumpToMessage(id) {
+	const messageElement = document.querySelector(`#message-${id}`);
+	if (messageElement) {
+		document.querySelector("#messages").scrollTo({
+			top: messageElement.offsetTop,
+			behavior: "smooth",
+		});
+	} else {
+		new Toast(
+			"error",
+			"Message not found",
+			`Could not find message with ID ${id}. It may have been deleted.`,
+			5000
+		);
+	}
 }
 
 function differentDays(firstTimstamp, secondTimestamp) {
