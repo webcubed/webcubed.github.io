@@ -89,6 +89,48 @@ function createMessageElement(
 		</div>
 		<p class="messageContent">${content}</p>
 	`;
+	// If attachments exist, append them
+	if (message.attachments && message.attachments.length > 0) {
+		const attachmentsContainer = document.createElement("div");
+		attachmentsContainer.className = "messageAttachments";
+		for (const attachment of message.attachments) {
+			let attachmentElement;
+			if (attachment.type.startsWith("video/")) {
+				attachmentElement = document.createElement("video");
+				attachmentElement.controls = true;
+			} else if (attachment.type.startsWith("audio/")) {
+				attachmentElement = document.createElement("audio");
+				attachmentElement.controls = true;
+			} else if (attachment.type.startsWith("image/")) {
+				attachmentElement = document.createElement("img");
+			} else {
+				attachmentElement = document.createElement("a");
+				attachmentElement.href = attachment.url;
+				attachmentElement.target = "_blank";
+				attachmentElement.rel = "noopener noreferrer";
+				attachmentElement.textContent = attachment.name;
+			}
+
+			attachmentElement.src = attachment.url;
+			attachmentElement.alt = attachment.name;
+			attachmentElement.referrerPolicy = "no-referrer";
+			attachmentElement.className = "messageAttachment";
+
+			if (attachmentElement.tagName === "IMG") {
+				attachmentElement.addEventListener("load", () => {
+					attachmentElement.className += " loaded";
+				});
+				attachmentElement.addEventListener("error", () => {
+					attachmentElement.remove();
+				});
+			}
+
+			attachmentsContainer.append(attachmentElement);
+		}
+
+		messageElement.append(attachmentsContainer);
+	}
+
 	const isSelf = message.email === localStorage.getItem("email");
 	messageElement.className = isSelf ? "message self" : "message other";
 	if (isSelf || localStorage.getItem("admin")) {
