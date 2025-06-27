@@ -491,6 +491,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 				scrollToBottom();
 				messagesContainer.innerHTML = "";
 				fetchMessages();
+				getOnlineMembers();
 			}
 		});
 		socket.addEventListener("message", (event) => {
@@ -641,23 +642,25 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 	});
 	/* ---------------------------- get online users ---------------------------- */
-	const onlineResponse = await fetch(`${apiBaseUrl}/online`, {
-		// Will return array of emails
-		method: "GET",
-		headers: {
-			account: localStorage.getItem("email"),
-			code: localStorage.getItem("code"),
-		},
-	});
-	const data = await onlineResponse.json();
-	// Sort alphabetical
-	data.sort((a, b) => a.localeCompare(b));
-	const onlineUsersContainer = document.querySelector("#onlinelist");
-	onlineUsersContainer.innerHTML = ""; // Clear existing users
-	for (const user of data) {
-		const userElement = document.createElement("div");
-		userElement.className = "onlineUser";
-		userElement.textContent = user;
-		onlineUsersContainer.append(userElement);
+	async function getOnlineMembers() {
+		const onlineResponse = await fetch(`${apiBaseUrl}/online`, {
+			// Will return array of emails
+			method: "GET",
+			headers: {
+				account: localStorage.getItem("email"),
+				code: localStorage.getItem("code"),
+			},
+		});
+		const data = await onlineResponse.json();
+		// Sort alphabetical
+		data.sort((a, b) => a.localeCompare(b));
+		const onlineUsersContainer = document.querySelector("#onlinelist");
+		onlineUsersContainer.innerHTML = ""; // Clear existing users
+		for (const user of data) {
+			const userElement = document.createElement("div");
+			userElement.className = "onlineUser";
+			userElement.textContent = user;
+			onlineUsersContainer.append(userElement);
+		}
 	}
 });
