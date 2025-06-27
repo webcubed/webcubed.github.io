@@ -16,6 +16,15 @@ function createMessageElement(
 		marked.parse(message.cleanContent.replaceAll("\n", "<br>"))
 	);
 	const messageElement = document.createElement("div");
+	messageElement.dataset.id = message.id;
+	messageElement.dataset.author = message.author;
+	messageElement.dataset.timestamp = message.timestamp;
+	messageElement.dataset.editedTimestamp = editedTimestamp;
+	messageElement.dataset.email = message.email;
+	messageElement.dataset.cleanContent = message.cleanContent;
+	messageElement.dataset.hasAttachments = message.attachments.length > 0;
+	messageElement.dataset.hasEmbeds = message.embeds.length > 0;
+	messageElement.dataset.content = content;
 	messageElement.id = `message-${message.id}`;
 	messageElement.classList.add("message");
 	messageElement.innerHTML = /* html */ `
@@ -177,6 +186,7 @@ function appendEmbeds(messageElement, message) {
 
 					break;
 				}
+
 				case "video": {
 					const embedElement = document.createElement("video");
 					embedElement.src = embed.proxyURL || embed.url;
@@ -193,6 +203,7 @@ function appendEmbeds(messageElement, message) {
 
 					break;
 				}
+
 				case "audio": {
 					const embedElement = document.createElement("audio");
 					embedElement.src = embed.proxyURL || embed.url;
@@ -207,6 +218,26 @@ function appendEmbeds(messageElement, message) {
 					});
 					messageElement.append(embedElement);
 
+					break;
+				}
+
+				case "gifv": {
+					const embedElement = document.createElement("video");
+					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.controls = true;
+					embedElement.className = "messageEmbedVideo";
+					embedElement.referrerPolicy = "no-referrer";
+					embedElement.addEventListener("load", () => {
+						embedElement.className += " loaded";
+					});
+					embedElement.addEventListener("error", () => {
+						embedElement.remove();
+					});
+					messageElement.append(embedElement);
+					const gifOverlay = document.createElement("div");
+					gifOverlay.className = "gifOverlay";
+					gifOverlay.textContent = "GIF";
+					messageElement.append(gifOverlay);
 					break;
 				}
 				// No default
@@ -229,6 +260,7 @@ function createReplyElement(id) {
 		);
 		return;
 	}
+	// From the element, we can derive
 }
 
 function scrollToBottom() {
