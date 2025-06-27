@@ -84,13 +84,12 @@ body {
 	height: calc(100% - 20px);
 	margin: auto;
 }
-.messagesAttachments > img,
-.messagesAttachments > video,
-.messagesAttachments > audio,
+.messageAttachments > img,
+.messageAttachments > video,
+.messageAttachments > audio,
 .message > img,
 .message > video,
 .message > audio {
-	max-height: 50vh;
 	border-radius: 0.5rem;
 	display: block;
 	max-width: 100%;
