@@ -167,7 +167,7 @@ function appendEmbeds(messageElement, message) {
 			switch (embed.type) {
 				case "image": {
 					const embedElement = document.createElement("img");
-					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.src = embed.proxyURL;
 					embedElement.alt = embed.title || "Embed Image";
 					embedElement.addEventListener("error", () => {
 						if (embedElement.src !== embed.url) {
@@ -189,15 +189,17 @@ function appendEmbeds(messageElement, message) {
 
 				case "video": {
 					const embedElement = document.createElement("video");
-					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.src = embed.proxyURL;
+					embedElement.addEventListener("error", () => {
+						if (embedElement.src !== embed.url) {
+							embedElement.src = embed.url;
+						}
+					});
 					embedElement.controls = true;
 					embedElement.className = "messageEmbedVideo";
 					embedElement.referrerPolicy = "no-referrer";
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
-					});
-					embedElement.addEventListener("error", () => {
-						embedElement.remove();
 					});
 					messageElement.append(embedElement);
 
@@ -206,15 +208,17 @@ function appendEmbeds(messageElement, message) {
 
 				case "audio": {
 					const embedElement = document.createElement("audio");
-					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.src = embed.proxyURL;
+					embedElement.addEventListener("error", () => {
+						if (embedElement.src !== embed.url) {
+							embedElement.src = embed.url;
+						}
+					});
 					embedElement.controls = true;
 					embedElement.className = "messageEmbedAudio";
 					embedElement.referrerPolicy = "no-referrer";
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
-					});
-					embedElement.addEventListener("error", () => {
-						embedElement.remove();
 					});
 					messageElement.append(embedElement);
 
@@ -223,10 +227,15 @@ function appendEmbeds(messageElement, message) {
 
 				case "gifv": {
 					const embedElement = document.createElement("video");
-					embedElement.src = embed.proxyURL || embed.url;
+					embedElement.src = embed.proxyURL;
 					embedElement.controls = true;
 					embedElement.className = "messageEmbedVideo";
 					embedElement.referrerPolicy = "no-referrer";
+					embedElement.addEventListener("error", () => {
+						if (embedElement.src !== embed.url) {
+							embedElement.src = embed.url;
+						}
+					});
 					embedElement.addEventListener("load", () => {
 						embedElement.className += " loaded";
 					});
