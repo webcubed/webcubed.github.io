@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+pnpm gensw
+echo $(git rev-parse HEAD) > version.txt
+git add .

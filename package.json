@@ -8,7 +8,8 @@
 		"gensw": "workbox generateSW workbox-config.js",
 		"format": "prettier --write .",
 		"xo": "xo --config xo.config.js --semicolon --prettier",
-		"xo:fix": "xo --fix --config xo.config.js --semicolon --prettier"
+		"xo:fix": "xo --fix --config xo.config.js --semicolon --prettier",
+		"prepare": "husky"
 	},
 	"type": "module",
 	"keywords": [],
@@ -19,9 +20,9 @@
 		"workbox-cli": "^7.3.0"
 	},
 	"devDependencies": {
-		"prettier": "^3.5.3",
+		"prettier": "^3.6.2",
 		"globals": "16.2.0",
 		"husky": "^9.1.7",
-		"xo": "1.0.5"
+		"xo": "1.1.1"
 	}
 }
