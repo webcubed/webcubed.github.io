@@ -181,6 +181,8 @@ body {
 }
 #status {
 	display: flex;
+	gap: 1rem;
+	align-items: center;
 }
 span#websocketstatus.success {
 	color: var(--green);
