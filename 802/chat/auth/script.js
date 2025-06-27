@@ -1,6 +1,21 @@
 const apiBaseUrl = "https://recline-backend.onrender.com";
 
 document.addEventListener("DOMContentLoaded", () => {
+		try {
+		const revidElement = document.querySelector("#revid");
+		const versionResponse = await fetch("/version.txt");
+		const versionText = await versionResponse.text();
+		if (versionText === "dev") {
+			revidElement.textContent = "dev";
+			revidElement.title =
+				"This is a development (not cloudflare pages) version of the chat.";
+			revidElement.classList.add("dev");
+			return;
+		}
+
+		revidElement.textContent = versionText.slice(0, 8);
+		revidElement.title = `Commit SHA: ${versionText}`;
+	} catch {}
 	document
 		.querySelector("#submitbutton")
 		.addEventListener("click", async () => {
