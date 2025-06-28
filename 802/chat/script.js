@@ -603,7 +603,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 		function handleMessageTypePresenceUpdate(data) {
 			// Update the status of an online user
-			const userElement = document.querySelector(
+			let userElement = document.querySelector(
 				`.onlineUser[data-email="${data.data.email}"]`
 			);
 			if (userElement) {
@@ -614,6 +614,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 					.querySelector(".status")
 					.classList.remove("online", "idle", "dnd", "offline");
 				userElement.querySelector(".status").classList.add(data.data.status);
+			} else {
+				userElement = document.createElement("div");
+				userElement.className = "onlineUser";
+				userElement.dataset.email = data.data.email;
+				userElement.dataset.status = data.data.status;
+				if (data.data.discord) {
+					userElement.dataset.discord = data.data.discord;
+					userElement.classList.add("discord");
+				} else {
+					userElement.dataset.discord = "";
+				}
+
+				userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
+				document.querySelector("#onlinelist").append(userElement);
 			}
 
 			if (data.data.discord) {
@@ -623,7 +637,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 				userElement.querySelector(".status").classList.remove("discord");
 			}
 
-			if (data.data.status === "offline" && userElement) {
+			if (
+				(data.data.status === "offline" || data.data.status === "invisible") &&
+				userElement
+			) {
 				userElement.remove();
 			}
 
