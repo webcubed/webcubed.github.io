@@ -1,8 +1,11 @@
 /* eslint-disable no-unused-vars */
-if (!localStorage.getItem("version")) {
-	const versionResponse = await fetch("/version.txt");
-	localStorage.setItem("version", await versionResponse.text());
-}
+// eslint-disable-next-line unicorn/prefer-top-level-await
+(async () => {
+	if (!localStorage.getItem("version")) {
+		const versionResponse = await fetch("/version.txt");
+		localStorage.setItem("version", await versionResponse.text());
+	}
+})();
 
 async function promptForUpdate() {
 	const dialog = document.createElement("dialog");
