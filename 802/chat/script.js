@@ -578,7 +578,40 @@ document.addEventListener("DOMContentLoaded", async () => {
 			}
 
 			userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
-			document.querySelector("#onlinelist").append(userElement);
+			const discordUsers = document.querySelectorAll(".onlineUser.discord");
+			const nonDiscordUsers = document.querySelectorAll(
+				".onlineUser:not(.discord)"
+			);
+			let refNode = null;
+
+			if (data.data.discord) {
+				for (const discordUser of discordUsers) {
+					if (data.data.email.localeCompare(discordUser.dataset.email) < 0) {
+						refNode = discordUser;
+						break;
+					}
+				}
+			} else {
+				for (const nonDiscordUser of nonDiscordUsers) {
+					if (data.data.email.localeCompare(nonDiscordUser.dataset.email) < 0) {
+						refNode = nonDiscordUser;
+						break;
+					}
+				}
+
+				if (!refNode && discordUsers.length > 0) {
+					refNode = discordUsers[0];
+				}
+			}
+
+			if (refNode) {
+				document
+					.querySelector("#onlinelist")
+					.insertBefore(userElement, refNode);
+			} else {
+				document.querySelector("#onlinelist").append(userElement);
+			}
+
 			if (sendNotifications) {
 				new Notification(
 					`User Status Update (802 Chat)`,
@@ -624,7 +657,26 @@ document.addEventListener("DOMContentLoaded", async () => {
 				userElement.dataset.status = data.data.status;
 				userElement.dataset.discord = "true";
 				userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
-				document.querySelector("#onlinelist").append(userElement);
+				const discordUsers = document.querySelectorAll(
+					'.onlineUser.discord:not([data-email="' + data.data.email + '"])'
+				);
+				const nonDiscordUsers = document.querySelectorAll(
+					'.onlineUser:not(.discord)[data-email!="' + data.data.email + '"]'
+				);
+				let refNode;
+				if (discordUsers.length > 0) {
+					refNode = discordUsers.at(-1);
+				} else if (nonDiscordUsers.length > 0) {
+					refNode = nonDiscordUsers.at(-1);
+				}
+
+				if (refNode) {
+					document
+						.querySelector("#onlinelist")
+						.insertBefore(userElement, refNode);
+				} else {
+					document.querySelector("#onlinelist").append(userElement);
+				}
 			}
 
 			// Online -> Offline
@@ -756,8 +808,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 			},
 		});
 		const data = await onlineResponse.json();
-		// Sort alphabetical
-		data.sort((a, b) => a.email.localeCompare(b.email));
+		// Sort alphabetical, prioritize non-discord
+		data.sort((a, b) => {
+			if (a.discord && !b.discord) return 1;
+			if (!a.discord && b.discord) return -1;
+			return a.email.localeCompare(b.email);
+		});
 		const onlineUsersContainer = document.querySelector("#onlinelist");
 		onlineUsersContainer.innerHTML = ""; // Clear existing users
 		for (const user of data) {
