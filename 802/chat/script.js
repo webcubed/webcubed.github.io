@@ -605,7 +605,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			// Update the status of an online DISCORD user
 			if (!data.data.email || !data.data.discord) return;
 			let userElement = document.querySelector(
-				`.onlineUser[data-email="${data.data.email}"][data-discord="true]`
+				`.onlineUser[data-email="${data.data.email}"][data-discord="true"]`
 			);
 			if (userElement) {
 				userElement.dataset.status = data.data.status;
