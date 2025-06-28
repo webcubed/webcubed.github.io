@@ -595,7 +595,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 		function handleMessageTypeDisconnect(data) {
 			// Another user disconnected, remove from online user list
 			for (const userElement of document.querySelectorAll(`.onlineUser`)) {
-				if (userElement.dataset.email === data.data.email) {
+				if (
+					userElement.dataset.email === data.data.email &&
+					userElement.dataset.discord === data.data.discord.toString()
+				) {
 					userElement.remove();
 				}
 			}
@@ -611,6 +614,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 				userElement.dataset.status = data.data.status;
 				userElement.querySelector(".status").className =
 					`status ${data.data.status}`;
+				userElement.querySelector(".status").textContent =
+					`(${data.data.status})`;
 			} else {
 				// If offline user comes online
 				userElement = document.createElement("div");
