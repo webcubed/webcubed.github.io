@@ -602,48 +602,28 @@ document.addEventListener("DOMContentLoaded", async () => {
 		}
 
 		function handleMessageTypePresenceUpdate(data) {
-			// Update the status of an online user
+			// Update the status of an online DISCORD user
+			if (!data.data.email || !data.data.discord) return;
 			let userElement = document.querySelector(
-				`.onlineUser[data-email="${data.data.email}"]`
+				`.onlineUser[data-email="${data.data.email}"][data-discord="true]`
 			);
-			if (userElement && userElement.dataset.discord === data.data.discord) {
-				// Update the status
+			if (userElement) {
 				userElement.dataset.status = data.data.status;
-				userElement.querySelector(".status").textContent =
-					`(${data.data.status})`;
-				userElement
-					.querySelector(".status")
-					.classList.remove("online", "idle", "dnd", "offline");
-				userElement.querySelector(".status").classList.add(data.data.status);
+				userElement.querySelector(".status").className =
+					`status ${data.data.status}`;
 			} else {
-				// Create new user
+				// If offline user comes online
 				userElement = document.createElement("div");
-				userElement.className = "onlineUser";
+				userElement.className = "onlineUser discord";
 				userElement.dataset.email = data.data.email;
 				userElement.dataset.status = data.data.status;
-				if (data.data.discord) {
-					userElement.dataset.discord = data.data.discord;
-					userElement.classList.add("discord");
-				} else {
-					userElement.dataset.discord = "";
-				}
-
+				userElement.dataset.discord = "true";
 				userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
 				document.querySelector("#onlinelist").append(userElement);
 			}
 
-			if (data.data.discord) {
-				userElement.dataset.discord = data.data.discord;
-				userElement.querySelector(".status").classList.add("discord");
-			} else if (userElement) {
-				userElement.querySelector(".status").classList.remove("discord");
-			}
-
-			if (
-				(data.data.status === "offline" || data.data.status === "invisible") &&
-				userElement &&
-				userElement.discord === "true"
-			) {
+			// Online -> Offline
+			if (data.data.status === "offline") {
 				userElement.remove();
 			}
 
