@@ -491,6 +491,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			WSStatusElement.classList.remove("error");
 			WSStatusElement.classList.add("success");
 			if (retryCount > 0) {
+				updateServerVersion();
 				new Toast(
 					"success",
 					"Websocket Connection restored",
