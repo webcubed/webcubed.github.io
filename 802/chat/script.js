@@ -479,17 +479,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 		return;
 	}
 
-	const versionResponse = await fetch(`${apiBaseUrl}/currentVersion`, {
-		method: "GET",
-	});
-	const versionData = await versionResponse.text();
-	if (versionData !== localStorage.getItem("version")) {
-		document.querySelector("#revid").innerHTML =
-			`${versionData.slice(0, 7)} <span class="red">(outdated)</span>`;
-		document.querySelector("#revid").title =
-			`Your version (${localStorage.getItem("version")}) is outdated. The latest revision is ${versionData.slice(0, 7)}.`;
-	}
-
 	const messagesContainer = document.querySelector("#messages");
 	const WSStatusElement = document.querySelector("#websocketstatus");
 	function connectToWebsocket() {
@@ -839,6 +828,33 @@ document.addEventListener("DOMContentLoaded", async () => {
 			fetchMessages(continueId);
 		}
 	});
+	async function updateClientVersion() {
+		// Get latest commit hash of repo
+		const versionResponse = await fetch("/version.txt", {
+			method: "GET",
+		});
+		const versionText = await versionResponse.text();
+		const revidElement = document.querySelector("#revid");
+		revidElement.innerHTML = `${localStorage.getItem("version")} <span class="red">(outdated)</span>`;
+		revidElement.title = `Your version (${localStorage.getItem("version")}) is outdated. The latest revision is ${versionText.slice(0, 7)}.`;
+	}
+
+	async function updateServerVersion() {
+		const serverVersionResponse = await fetch(`${apiBaseUrl}/currentVersion`, {
+			method: "GET",
+		});
+		const serverVersionData = await serverVersionResponse.text();
+		// Server rev id
+		document.querySelector("#serverrevid").textContent =
+			`Server Revision ID: ${serverVersionData.slice(0, 7)}`;
+		document.querySelector("#serverrevid").title =
+			`Commit SHA: ${serverVersionData}`;
+		document.querySelector("#serverrevid").href =
+			`https://github.com/webcubed/recline-backend/commit/${serverVersionData}`;
+	}
+
+	updateClientVersion();
+	updateServerVersion();
 	/* ---------------------------- get online users ---------------------------- */
 	async function getOnlineMembers() {
 		const onlineResponse = await fetch(`${apiBaseUrl}/online`, {
