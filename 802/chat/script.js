@@ -821,7 +821,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			userElement.className = "onlineUser";
 			userElement.dataset.email = user.email;
 			userElement.dataset.status = user.status;
-			userElement.dataset.status = user.discord;
+			userElement.dataset.discord = user.discord;
 			if (user.discord) {
 				userElement.classList.add("discord");
 			}
