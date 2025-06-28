@@ -452,6 +452,16 @@ document.addEventListener("DOMContentLoaded", async () => {
 			},
 		});
 		const data = await response.text();
+		// Get response header "version"
+		if (response.headers.get("version")) {
+			document.querySelector("#serverrevid").textContent =
+				`Server Revision ID: ${response.headers.get("version").slice(0, 7)}`;
+			document.querySelector("#serverrevid").title =
+				`Commit SHA: ${response.headers.get("version")}`;
+			document.querySelector("#serverrevid").href =
+				`https://github.com/webcubed/recline-backend/commit/${response.headers.get("version")}`;
+		}
+
 		if (data !== "authorized :>") {
 			globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
 		}
@@ -720,7 +730,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 			if (localVersion && localVersion !== data.data) {
 				const versionElement = document.querySelector("#revid");
 				versionElement.innerHTML = `${versionElement.textContent} <span class="red">(outdated)</span>`;
-				versionElement.title = `Your version (${localVersion}) is outdated. The latest revision is ${data.data}.`;
+				versionElement.title = `Your version (${localVersion}) is outdated. The latest revision is ${data.data.slice(0, 7)}.`;
 			}
 		}
 
