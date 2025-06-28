@@ -185,7 +185,7 @@ body {
 	color: var(--yellow);
 
 }
-.dnd {
+.dnd, .red {
 	color: var(--red);
 }
 .online {

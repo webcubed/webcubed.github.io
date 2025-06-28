@@ -1,4 +1,7 @@
 /* eslint-disable @stylistic/indent */
+
+const { version } = require("react");
+
 /* eslint-disable unicorn/prefer-dom-node-text-content */
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
@@ -322,6 +325,7 @@ async function fetchMessages(LMID = null, initial = false) {
 			headers: {
 				account: localStorage.getItem("email"),
 				code: localStorage.getItem("code"),
+				version: localStorage.getItem("version"),
 			},
 		}
 	);
@@ -706,6 +710,20 @@ document.addEventListener("DOMContentLoaded", async () => {
 			}
 		}
 
+		function handleMessageTypeVersion(data) {
+			// Compare version from data.data with localStorage version
+			const localVersion = localStorage.getItem("version");
+			if (localVersion && localVersion === data.data) {
+				return;
+			}
+
+			if (localVersion && localVersion !== data.data) {
+				const versionElement = document.querySelector("#revid");
+				versionElement.innerHTML = `${versionElement.textContent} <span class="red">(outdated)</span>`;
+				versionElement.title = `Your version (${localVersion}) is outdated. The latest revision is ${data.data}.`;
+			}
+		}
+
 		socket.addEventListener("message", (event) => {
 			const data = JSON.parse(event.data);
 			switch (data.type) {
@@ -736,6 +754,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 				case "updatepresence": {
 					handleMessageTypePresenceUpdate(data);
+					break;
+				}
+
+				case "currentversion": {
+					handleMessageTypeVersion(data);
 					break;
 				}
 				// No default
