@@ -606,7 +606,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 			let userElement = document.querySelector(
 				`.onlineUser[data-email="${data.data.email}"]`
 			);
-			if (userElement) {
+			if (userElement && userElement.dataset.discord === data.data.discord) {
+				// Update the status
 				userElement.dataset.status = data.data.status;
 				userElement.querySelector(".status").textContent =
 					`(${data.data.status})`;
@@ -615,6 +616,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					.classList.remove("online", "idle", "dnd", "offline");
 				userElement.querySelector(".status").classList.add(data.data.status);
 			} else {
+				// Create new user
 				userElement = document.createElement("div");
 				userElement.className = "onlineUser";
 				userElement.dataset.email = data.data.email;
@@ -639,7 +641,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 			if (
 				(data.data.status === "offline" || data.data.status === "invisible") &&
-				userElement
+				userElement &&
+				userElement.discord === "true"
 			) {
 				userElement.remove();
 			}
