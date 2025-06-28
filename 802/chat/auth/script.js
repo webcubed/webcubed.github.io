@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const serverVersionData = await serverVersionResponse.text();
 		// Server rev id
 		document.querySelector("#serverrevid").textContent =
-			`Server Revision ID: ${serverVersionData.slice(0, 7)}`;
+			`${serverVersionData.slice(0, 7)}`;
 		document.querySelector("#serverrevid").title =
 			`Commit SHA: ${serverVersionData}`;
 		document.querySelector("#serverrevid").href =
