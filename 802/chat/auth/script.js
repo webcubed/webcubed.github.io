@@ -67,4 +67,34 @@ document.addEventListener("DOMContentLoaded", async () => {
 		localStorage.setItem("email", document.querySelector("#emailinput").value);
 		localStorage.setItem("code", document.querySelector("#nameinput").value);
 	});
+	async function updateClientVersion() {
+		// Get latest commit hash of repo
+		const versionResponse = await fetch("/version.txt", {
+			method: "GET",
+		});
+		const versionText = await versionResponse.text();
+		const localVersion = localStorage.getItem("version");
+		const revidElement = document.querySelector("#revid");
+		if (versionText !== localVersion) {
+			revidElement.innerHTML = `${localVersion.split(0, 7)} <span class="red">(outdated)</span>`;
+			revidElement.title = `Your version (${localVersion}) is outdated. The latest revision is ${versionText}.`;
+		}
+	}
+
+	async function updateServerVersion() {
+		const serverVersionResponse = await fetch(`${apiBaseUrl}/currentVersion`, {
+			method: "GET",
+		});
+		const serverVersionData = await serverVersionResponse.text();
+		// Server rev id
+		document.querySelector("#serverrevid").textContent =
+			`Server Revision ID: ${serverVersionData.slice(0, 7)}`;
+		document.querySelector("#serverrevid").title =
+			`Commit SHA: ${serverVersionData}`;
+		document.querySelector("#serverrevid").href =
+			`https://github.com/webcubed/recline-backend/commit/${serverVersionData}`;
+	}
+
+	updateClientVersion();
+	updateServerVersion();
 });

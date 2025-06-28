@@ -322,7 +322,6 @@ async function fetchMessages(LMID = null, initial = false) {
 			headers: {
 				account: localStorage.getItem("email"),
 				code: localStorage.getItem("code"),
-				version: localStorage.getItem("version"),
 			},
 		}
 	);
@@ -459,15 +458,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	try {
 		const revidElement = document.querySelector("#revid");
-		// Check for "version" key in localStorage
-		let versionResponse;
-		let versionText;
-		if (localStorage.getItem("version")) {
-			versionText = localStorage.getItem("version");
-		} else {
-			versionResponse = await fetch("/version.txt");
-			versionText = await versionResponse.text();
-		}
+		const versionText = localStorage.getItem("version");
 
 		revidElement.textContent = versionText.slice(0, 7);
 		revidElement.title = `Commit SHA: ${versionText}`;
