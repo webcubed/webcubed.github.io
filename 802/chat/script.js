@@ -483,14 +483,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 		method: "GET",
 	});
 	const versionData = await versionResponse.text();
-	if (versionData && versionData) {
-		document.querySelector("#serverrevid").textContent = versionData.slice(
-			0,
-			7
-		);
-		document.querySelector("#serverrevid").title = `Commit SHA: ${versionData}`;
-		document.querySelector("#serverrevid").href =
-			`https://github.com/webcubed/recline-backend/commit/${versionData}`;
+	if (versionData !== localStorage.getItem("version")) {
+		document.querySelector("#revid").innerHTML =
+			`${versionData.slice(0, 7)} <span class="red">(outdated)</span>`;
+		document.querySelector("#revid").title =
+			`Your version (${localStorage.getItem("version")}) is outdated. The latest revision is ${versionData.slice(0, 7)}.`;
 	}
 
 	const messagesContainer = document.querySelector("#messages");
