@@ -439,6 +439,19 @@ document.addEventListener(
 	{ once: true }
 );
 document.addEventListener("DOMContentLoaded", async () => {
+	const versionResponse = await fetch(`${apiBaseUrl}/currentVersion`, {
+		method: "GET",
+	});
+	const versionData = await versionResponse.json();
+	if (versionData.version && versionData.version) {
+		document.querySelector("#serverrevid").textContent =
+			`Server Revision ID: ${versionData.version.slice(0, 7)}`;
+		document.querySelector("#serverrevid").title =
+			`Commit SHA: ${versionData.version}`;
+		document.querySelector("#serverrevid").href =
+			`https://github.com/webcubed/recline-backend/commit/${versionData.version}`;
+	}
+
 	/* ----------------------------- authentication ----------------------------- */
 	if (localStorage.getItem("code") && localStorage.getItem("email")) {
 		const response = await fetch(`${apiBaseUrl}/checkSession`, {
@@ -449,15 +462,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 			},
 		});
 		const data = await response.text();
-		// Get response header "version"
-		if (response.headers.get("version")) {
-			document.querySelector("#serverrevid").textContent =
-				`Server Revision ID: ${response.headers.get("version").slice(0, 7)}`;
-			document.querySelector("#serverrevid").title =
-				`Commit SHA: ${response.headers.get("version")}`;
-			document.querySelector("#serverrevid").href =
-				`https://github.com/webcubed/recline-backend/commit/${response.headers.get("version")}`;
-		}
 
 		if (data !== "authorized :>") {
 			globalThis.location.href = `${globalThis.location.origin}/802/chat/auth`;
