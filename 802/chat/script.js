@@ -439,19 +439,6 @@ document.addEventListener(
 	{ once: true }
 );
 document.addEventListener("DOMContentLoaded", async () => {
-	const versionResponse = await fetch(`${apiBaseUrl}/currentVersion`, {
-		method: "GET",
-	});
-	const versionData = await versionResponse.json();
-	if (versionData.version && versionData.version) {
-		document.querySelector("#serverrevid").textContent =
-			`Server Revision ID: ${versionData.version.slice(0, 7)}`;
-		document.querySelector("#serverrevid").title =
-			`Commit SHA: ${versionData.version}`;
-		document.querySelector("#serverrevid").href =
-			`https://github.com/webcubed/recline-backend/commit/${versionData.version}`;
-	}
-
 	/* ----------------------------- authentication ----------------------------- */
 	if (localStorage.getItem("code") && localStorage.getItem("email")) {
 		const response = await fetch(`${apiBaseUrl}/checkSession`, {
@@ -490,6 +477,19 @@ document.addEventListener("DOMContentLoaded", async () => {
 		revidElement.title = "This is a development version of the site.";
 		revidElement.classList.add("dev");
 		return;
+	}
+
+	const versionResponse = await fetch(`${apiBaseUrl}/currentVersion`, {
+		method: "GET",
+	});
+	const versionData = await versionResponse.json();
+	if (versionData.version && versionData.version) {
+		document.querySelector("#serverrevid").textContent =
+			`Server Revision ID: ${versionData.version.slice(0, 7)}`;
+		document.querySelector("#serverrevid").title =
+			`Commit SHA: ${versionData.version}`;
+		document.querySelector("#serverrevid").href =
+			`https://github.com/webcubed/recline-backend/commit/${versionData.version}`;
 	}
 
 	const messagesContainer = document.querySelector("#messages");
@@ -724,14 +724,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 		function handleMessageTypeVersion(data) {
 			// Compare version from data.data with localStorage version
 			const localVersion = localStorage.getItem("version");
-			if (localVersion && localVersion === data.data) {
+			const newVersion = data.data.version;
+			if (localVersion && localVersion === newVersion) {
 				return;
 			}
 
-			if (localVersion && localVersion !== data.data) {
+			if (localVersion && localVersion !== newVersion) {
 				const versionElement = document.querySelector("#revid");
 				versionElement.innerHTML = `${versionElement.textContent} <span class="red">(outdated)</span>`;
-				versionElement.title = `Your version (${localVersion}) is outdated. The latest revision is ${data.data.slice(0, 7)}.`;
+				versionElement.title = `Your version (${localVersion}) is outdated. The latest revision is ${newVersion.slice(0, 7)}.`;
 			}
 		}
 
