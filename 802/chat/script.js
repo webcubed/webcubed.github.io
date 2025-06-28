@@ -769,7 +769,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 					break;
 				}
 
-				case "currentversion": {
+				case "newVersion": {
 					handleMessageTypeVersion(data);
 					break;
 				}
