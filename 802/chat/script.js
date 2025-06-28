@@ -1,7 +1,4 @@
 /* eslint-disable @stylistic/indent */
-
-const { version } = require("react");
-
 /* eslint-disable unicorn/prefer-dom-node-text-content */
 const apiBaseUrl = "https://recline-backend.onrender.com";
 let continueId;
