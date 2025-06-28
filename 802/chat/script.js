@@ -457,8 +457,15 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 	try {
 		const revidElement = document.querySelector("#revid");
-		const versionResponse = await fetch("/version.txt");
-		const versionText = await versionResponse.text();
+		// Check for "version" key in localStorage
+		let versionResponse;
+		let versionText;
+		if (localStorage.getItem("version")) {
+			versionText = localStorage.getItem("version");
+		} else {
+			versionResponse = await fetch("/version.txt");
+			versionText = await versionResponse.text();
+		}
 
 		revidElement.textContent = versionText.slice(0, 7);
 		revidElement.title = `Commit SHA: ${versionText}`;
