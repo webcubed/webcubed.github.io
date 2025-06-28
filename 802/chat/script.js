@@ -482,14 +482,13 @@ document.addEventListener("DOMContentLoaded", async () => {
 	const versionResponse = await fetch(`${apiBaseUrl}/currentVersion`, {
 		method: "GET",
 	});
-	const versionData = await versionResponse.json();
-	if (versionData.version && versionData.version) {
+	const versionData = await versionResponse.text();
+	if (versionData && versionData) {
 		document.querySelector("#serverrevid").textContent =
-			`Server Revision ID: ${versionData.version.slice(0, 7)}`;
-		document.querySelector("#serverrevid").title =
-			`Commit SHA: ${versionData.version}`;
+			`Server Revision ID: ${versionData.slice(0, 7)}`;
+		document.querySelector("#serverrevid").title = `Commit SHA: ${versionData}`;
 		document.querySelector("#serverrevid").href =
-			`https://github.com/webcubed/recline-backend/commit/${versionData.version}`;
+			`https://github.com/webcubed/recline-backend/commit/${versionData}`;
 	}
 
 	const messagesContainer = document.querySelector("#messages");
