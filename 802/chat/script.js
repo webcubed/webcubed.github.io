@@ -657,12 +657,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 				userElement.dataset.status = data.data.status;
 				userElement.dataset.discord = "true";
 				userElement.innerHTML = /* html */ `<p>${data.data.email} <span class="status ${data.data.status}">(${data.data.status})</span></p>`;
-				const discordUsers = document.querySelectorAll(
-					'.onlineUser.discord:not([data-email="' + data.data.email + '"])'
-				);
-				const nonDiscordUsers = document.querySelectorAll(
-					'.onlineUser:not(.discord)[data-email!="' + data.data.email + '"]'
-				);
+				const discordUsers = [
+					...document.querySelectorAll(".onlineUser.discord"),
+				].filter((user) => user.dataset.email !== data.data.email);
+				const nonDiscordUsers = [
+					...document.querySelectorAll(".onlineUser:not(.discord)"),
+				].filter((user) => user.dataset.email !== data.data.email);
 				let refNode;
 				if (discordUsers.length > 0) {
 					refNode = discordUsers.at(-1);
