@@ -523,8 +523,17 @@ document.addEventListener("DOMContentLoaded", async () => {
 				}
 			}
 
+			const isAtBottom =
+				messagesContainer.scrollTop + messagesContainer.clientHeight ===
+				messagesContainer.scrollHeight;
 			const messageElement = createMessageElement(message);
 			messagesContainer.append(messageElement);
+			messageElement.addEventListener("load", () => {
+				// If was scrolled to bottom, scroll to bottom
+				if (isAtBottom) {
+					scrollToBottom();
+				}
+			});
 			scrollToBottom();
 			// Push notification
 			if (sendNotifications) {
