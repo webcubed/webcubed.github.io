@@ -832,7 +832,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 		const localVersion = localStorage.getItem("version");
 		const revidElement = document.querySelector("#revid");
 		if (versionText !== localVersion) {
-			revidElement.innerHTML = `${localVersion.split(0, 7)} <span class="red">(outdated)</span>`;
+			revidElement.innerHTML = `${localVersion.slice(0, 7)} <span class="red">(outdated)</span>`;
 			revidElement.title = `Your version (${localVersion}) is outdated. The latest revision is ${versionText}.`;
 		}
 	}
