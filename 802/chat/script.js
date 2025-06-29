@@ -240,7 +240,8 @@ function appendEmbeds(messageElement, message, initial) {
 
 				case "gifv": {
 					const embedElement = document.createElement("video");
-					embedElement.src = embed.url;
+					embedElement.src = embed.video.proxyURL;
+					// If error, use video.url
 					embedElement.controls = true;
 					embedElement.className = "messageEmbedVideo";
 					embedElement.referrerPolicy = "no-referrer";
@@ -249,7 +250,9 @@ function appendEmbeds(messageElement, message, initial) {
 						if (initial) scrollToBottom();
 					});
 					embedElement.addEventListener("error", () => {
-						embedElement.remove();
+						if (embedElement.src !== embed.video.url) {
+							embedElement.src = embed.video.url;
+						}
 					});
 					messageElement.append(embedElement);
 					const gifOverlay = document.createElement("div");
