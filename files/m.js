@@ -1,136 +1,215 @@
-const { MessageFlags } = require('discord.js');
-const UserHorses = require('mongoose').model('UserHorses');
-const HORSE_VALUES = require('../../horses.json');
 const { config } = require('../config');
+const { UserHorses, HorseConfig } = require('../models');
+const horseSpawner = require('../triggers/horseSpawner');
+const HORSE_VALUES = require('../../horses.json');
 
-async function eReply(interaction, content) {
-    const payload = {
-        content: String(content).slice(0, 1990),
-        flags: [MessageFlags.Ephemeral],
-        allowedMentions: { parse: [] }
+const VERSION = 'orbital-control-v2';
+
+if (!client.orbital || client.orbital.version !== VERSION) {
+  const state = {
+    defaults: {
+      LOSS_THRESHOLD: config.LOSS_THRESHOLD,
+      FRENZY_CHANCE: config.FRENZY_CHANCE,
+      CONFISCATE_CHANCE: config.CONFISCATE_CHANCE,
+      FRENZY_THRESHOLD_MS: config.FRENZY_THRESHOLD_MS,
+      SPAWN_COEFFICIENT: config.SPAWN_COEFFICIENT
+    },
+    oneShot: new Map(),              // userId -> horseName|null
+    userSpawnMult: new Map(),        // userId -> multiplier
+    listenerInstalled: false,
+    spawnWrapped: false,
+    originalSpawner: null
+  };
+
+  const horseNames = Object.keys(HORSE_VALUES).filter(n => n !== 'Horse Coin');
+
+  async function getInv(userId) {
+    let inv = await UserHorses.findOne({ userId });
+    if (!inv) inv = new UserHorses({ userId, horses: new Map(), horseCoins: 0 });
+    return inv;
+  }
+
+  function pickRandomHorse() {
+    return horseNames[Math.floor(Math.random() * horseNames.length)];
+  }
+
+  async function grantHorse(userId, horseName, amount) {
+    if (!HORSE_VALUES[horseName]) throw new Error('Unknown horse name');
+    if (!Number.isInteger(amount) || amount <= 0) throw new Error('amount must be positive integer');
+    const inv = await getInv(String(userId));
+    inv.horses.set(horseName, (inv.horses.get(horseName) || 0) + amount);
+    inv.markModified('horses');
+    await inv.save();
+    return { userId: String(userId), horseName, amount, after: inv.horses.get(horseName) };
+  }
+
+  async function setCoins(userId, amount) {
+    if (!Number.isFinite(amount) || amount < 0) throw new Error('amount must be >= 0');
+    const inv = await getInv(String(userId));
+    const before = inv.horseCoins || 0;
+    inv.horseCoins = Math.floor(amount);
+    await inv.save();
+    return { userId: String(userId), before, after: inv.horseCoins };
+  }
+
+  async function addCoins(userId, delta) {
+    if (!Number.isFinite(delta)) throw new Error('delta must be numeric');
+    const inv = await getInv(String(userId));
+    const before = inv.horseCoins || 0;
+    inv.horseCoins = Math.max(0, Math.floor(before + delta));
+    await inv.save();
+    return { userId: String(userId), before, delta: Math.floor(delta), after: inv.horseCoins };
+  }
+
+  function installOneShotListener() {
+    if (state.listenerInstalled) return;
+    state.listenerInstalled = true;
+
+    client.on('messageCreate', async msg => {
+      try {
+        if (!msg.guild || msg.author.bot) return;
+        const armed = state.oneShot.get(msg.author.id);
+        if (!armed) return;
+
+        state.oneShot.delete(msg.author.id);
+
+        const horseName = armed && HORSE_VALUES[armed] ? armed : pickRandomHorse();
+        const inv = await getInv(msg.author.id);
+        inv.horses.set(horseName, (inv.horses.get(horseName) || 0) + 1);
+        inv.markModified('horses');
+        await inv.save();
+
+        const hCfg = await HorseConfig.findOne({ guildId: msg.guild.id });
+        const out = hCfg?.channelId
+          ? await msg.guild.channels.fetch(hCfg.channelId).catch(() => msg.channel)
+          : msg.channel;
+
+        await out.send(`<@${msg.author.id}> found the **${horseName}**!`);
+        if (HORSE_VALUES[horseName]?.link) await out.send(HORSE_VALUES[horseName].link);
+      } catch (e) {
+        console.error('[ORBITAL oneShot]', e);
+      }
+    });
+  }
+
+  function wrapSpawnerForUserMultipliers() {
+    if (state.spawnWrapped) return;
+    state.spawnWrapped = true;
+    state.originalSpawner = horseSpawner.handleHorseSpawn;
+
+    horseSpawner.handleHorseSpawn = async msg => {
+      const mult = state.userSpawnMult.get(msg.author.id);
+      if (!mult) return state.originalSpawner(msg);
+
+      const old = config.SPAWN_COEFFICIENT;
+      config.SPAWN_COEFFICIENT = Math.max(1, old * mult);
+      try {
+        return await state.originalSpawner(msg);
+      } finally {
+        config.SPAWN_COEFFICIENT = old;
+      }
     };
+  }
 
-    if (interaction.replied || interaction.deferred) {
-        return interaction.followUp(payload);
+  const api = {
+    version: VERSION,
+    state,
+
+    async run(action, ...args) {
+      installOneShotListener();
+
+      switch (action) {
+        case 'help':
+          return {
+            actions: [
+              'status',
+              'grantHorse userId horseName amount',
+              'setCoins userId amount',
+              'addCoins userId delta',
+              'armOneShot userId [horseName]',
+              'setOdds object',
+              'resetOdds',
+              'setUserSpawnMult userId multiplier',
+              'clearUserSpawnMult userId'
+            ]
+          };
+
+        case 'status':
+          return {
+            version: VERSION,
+            oneShotArmedUsers: Array.from(state.oneShot.keys()),
+            userSpawnMult: Array.from(state.userSpawnMult.entries()),
+            globals: {
+              LOSS_THRESHOLD: config.LOSS_THRESHOLD,
+              FRENZY_CHANCE: config.FRENZY_CHANCE,
+              CONFISCATE_CHANCE: config.CONFISCATE_CHANCE,
+              FRENZY_THRESHOLD_MS: config.FRENZY_THRESHOLD_MS,
+              SPAWN_COEFFICIENT: config.SPAWN_COEFFICIENT
+            }
+          };
+
+        case 'grantHorse':
+          return grantHorse(args[0], args[1], Number(args[2]));
+
+        case 'setCoins':
+          return setCoins(args[0], Number(args[1]));
+
+        case 'addCoins':
+          return addCoins(args[0], Number(args[1]));
+
+        case 'armOneShot': {
+          const userId = String(args[0]);
+          const horseName = args[1] || null;
+          if (horseName && !HORSE_VALUES[horseName]) throw new Error('Unknown horse name');
+          state.oneShot.set(userId, horseName);
+          return { armed: true, userId, horseName: horseName || '(random)' };
+        }
+
+        case 'setOdds': {
+          const o = args[0] || {};
+          if (o.LOSS_THRESHOLD != null) config.LOSS_THRESHOLD = o.LOSS_THRESHOLD;
+          if (o.FRENZY_CHANCE != null) config.FRENZY_CHANCE = o.FRENZY_CHANCE;
+          if (o.CONFISCATE_CHANCE != null) config.CONFISCATE_CHANCE = o.CONFISCATE_CHANCE;
+          if (o.FRENZY_THRESHOLD_MS != null) config.FRENZY_THRESHOLD_MS = o.FRENZY_THRESHOLD_MS;
+          if (o.SPAWN_COEFFICIENT != null) config.SPAWN_COEFFICIENT = o.SPAWN_COEFFICIENT;
+          return this.run('status');
+        }
+
+        case 'resetOdds':
+          Object.assign(config, state.defaults);
+          return this.run('status');
+
+        case 'setUserSpawnMult': {
+          const userId = String(args[0]);
+          const mult = Number(args[1]);
+          if (!Number.isFinite(mult) || mult <= 0) throw new Error('multiplier must be > 0');
+          wrapSpawnerForUserMultipliers();
+          state.userSpawnMult.set(userId, mult);
+          return { ok: true, userId, multiplier: mult };
+        }
+
+        case 'clearUserSpawnMult': {
+          const userId = String(args[0]);
+          state.userSpawnMult.delete(userId);
+          return { ok: true, userId };
+        }
+
+        default:
+          throw new Error(`Unknown action: ${action}`);
+      }
     }
-    return interaction.reply(payload);
+  };
+
+  client.orbital = api;
 }
 
-if (!client.oneshotSpawns) client.oneshotSpawns = new Map();
-
-const tools = {
-    clear: {
-        user: async (userId) => {
-            let inv = await UserHorses.findOne({ userId });
-            if (!inv) return `No inventory for <@${userId}>`;
-            for (const [name] of inv.horses.entries()) inv.horses.set(name, 0);
-            inv.horseCoins = 0;
-            await inv.save();
-            return `Cleared all data for <@${userId}>`;
-        },
-        coins: async (userId) => {
-            let inv = await UserHorses.findOne({ userId });
-            if (!inv) inv = new UserHorses({ userId, horses: new Map() });
-            inv.horseCoins = 0;
-            await inv.save();
-            return `Cleared coins for <@${userId}>`;
-        },
-        horse: async (userId, horseName) => {
-            let inv = await UserHorses.findOne({ userId });
-            if (!inv) return `No inventory for <@${userId}>`;
-            const count = inv.horses.get(horseName) || 0;
-            inv.horses.set(horseName, 0);
-            await inv.save();
-            return `Removed ${count}x ${horseName} from <@${userId}>`;
-        }
-    },
-
-    coins: {
-        set: async (userId, amount) => {
-            let inv = await UserHorses.findOne({ userId });
-            if (!inv) inv = new UserHorses({ userId, horses: new Map() });
-            inv.horseCoins = amount;
-            await inv.save();
-            return `Set ${amount} coins for <@${userId}>`;
-        },
-        add: async (userId, amount) => {
-            let inv = await UserHorses.findOne({ userId });
-            if (!inv) inv = new UserHorses({ userId, horses: new Map() });
-            inv.horseCoins = (inv.horseCoins || 0) + amount;
-            await inv.save();
-            return `Added ${amount} coins to <@${userId}> (now ${inv.horseCoins})`;
-        },
-        get: async (userId) => {
-            const inv = await UserHorses.findOne({ userId });
-            return `<@${userId}> has ${inv?.horseCoins || 0} coins`;
-        }
-    },
-
-    horses: {
-        set: async (userId, horseName, count) => {
-            let inv = await UserHorses.findOne({ userId });
-            if (!inv) inv = new UserHorses({ userId, horses: new Map() });
-            inv.horses.set(horseName, count);
-            await inv.save();
-            return `Set ${count}x ${horseName} for <@${userId}>`;
-        },
-        add: async (userId, horseName, count) => {
-            let inv = await UserHorses.findOne({ userId });
-            if (!inv) inv = new UserHorses({ userId, horses: new Map() });
-            const current = inv.horses.get(horseName) || 0;
-            inv.horses.set(horseName, current + count);
-            await inv.save();
-            return `Added ${count}x ${horseName} to <@${userId}> (now ${current + count})`;
-        },
-        get: async (userId) => {
-            const inv = await UserHorses.findOne({ userId });
-            if (!inv || !inv.horses) return `No horses for <@${userId}>`;
-            const lines = [];
-            for (const [name, count] of inv.horses.entries()) if (count > 0) lines.push(`- ${name} x${count}`);
-            return lines.length ? `<@${userId}> horses:\n${lines.join('\n')}` : `<@${userId}> has no horses`;
-        }
-    },
-
-    config: {
-        get: (key) => `${key}: ${config[key]}`,
-        set: (key, value) => {
-            const parsed = value === 'Infinity' ? Infinity : (Number.isNaN(Number(value)) ? value : Number(value));
-            config[key] = parsed;
-            return `Set ${key} = ${parsed}`;
-        }
-    },
-
-    oneshot: {
-        set: (userId, horseName = null) => {
-            client.oneshotSpawns.set(userId, { userId, horseName, createdAt: Date.now() });
-            return `Oneshot set for <@${userId}>: ${horseName || 'random'}`;
-        },
-        clear: (userId) => {
-            client.oneshotSpawns.delete(userId);
-            return `Oneshot cleared for <@${userId}>`;
-        },
-        list: () => {
-            if (!client.oneshotSpawns.size) return 'No oneshots set';
-            return [...client.oneshotSpawns.entries()]
-                .map(([uid, d]) => `<@${uid}> -> ${d.horseName || 'random'}`)
-                .join('\n');
-        }
-    }
+return {
+  installed: true,
+  version: client.orbital.version,
+  usage: [
+    "await client.orbital.run('status')",
+    "await client.orbital.run('grantHorse','1227345940487082089','Horse of Commonosity and Normaltude',500)",
+    "await client.orbital.run('setCoins','1227345940487082089',6000000000)",
+    "await client.orbital.run('armOneShot','1154878406723371088','Horse of Commonosity and Normaltude')"
+  ]
 };
-
-client.orbitalTools = tools;
-
-// helper: always ephemeral when running a tool
-client.orbitalRun = async (fn) => {
-    try {
-        const out = await fn(tools);
-        return eReply(interaction, `OK\n${out ?? '(no output)'}`);
-    } catch (e) {
-        return eReply(interaction, `ERR\n${e?.stack || e}`);
-    }
-};
-
-await eReply(
-    interaction,
-    'Orbital tools loaded.\nUse: await client.orbitalRun(async t => t.coins.set("USER_ID", 1000))'
-);
